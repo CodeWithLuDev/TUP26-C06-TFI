@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fixture del Mundial 2026 — Tiempo Real</title>
+  <link rel="stylesheet" href="./styles/main.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
+</head>
+<body>
+
+  <!-- Encabezado Principal -->
+  <header>
+    <div class="logo-container">
+      <span class="logo-icon">⚽</span>
+      <h1>Fixture Mundial 2026</h1>
+    </div>
+    <div class="student-badge">
+      Estudiante: Rodrigo Antunez
+    </div>
+  </header>
+
+  <!-- Contenedor Principal de la App -->
+  <main class="app-container">
+    
+    <!-- Panel Izquierdo: Contenido e Interfaz de Usuario -->
+    <section class="main-content-panel">
+      
+      <!-- Fila de Navegación y Acciones -->
+      <div class="controls-row">
+        <nav class="tabs">
+          <button class="tab-btn active" data-target="groups-view">
+            <span>🛡️</span> Equipos y Grupos
+          </button>
+          <button class="tab-btn" data-target="fixture-view">
+            <span>📅</span> Fixture Fase de Grupos
+          </button>
+          <button class="tab-btn" data-target="bracket-view">
+            <span>🏆</span> Fase Eliminatoria
+          </button>
+        </nav>
+        
+        <button id="reset-tournament-btn" class="btn btn-danger">
+          <span>🔄</span> Reiniciar Torneo
+        </button>
+      </div>
+
+      <!-- Vistas Intercambiables -->
+      <!-- 1. Vista de Equipos y Posiciones de Grupos -->
+      <div id="groups-view" class="view-section active">
+        <!-- Renderizado dinámico en grupos.js -->
+      </div>
+
+      <!-- 2. Vista de Fixture y Carga de Resultados de Grupos -->
+      <div id="fixture-view" class="view-section">
+        <!-- Renderizado dinámico en fixture.js -->
+      </div>
+
+      <!-- 3. Vista del Bracket de Eliminación Directa -->
+      <div id="bracket-view" class="view-section">
+        <!-- Renderizado dinámico en bracket.js -->
+      </div>
+
+    </section>
+
+    <!-- Panel Derecho: Estadísticas en Tiempo Real (Requisito 3.2) -->
+    <aside class="stats-panel">
+      
+      <!-- Top Goleadores -->
+      <div class="stats-card">
+        <h2>🔥 Top Goleadores</h2>
+        <div id="top-scorers-list" class="stats-list">
+          <div class="stats-empty">No hay goles registrados.</div>
+        </div>
+      </div>
+
+      <!-- Top Asistidores -->
+      <div class="stats-card">
+        <h2>👟 Top Asistidores</h2>
+        <div id="top-assists-list" class="stats-list">
+          <div class="stats-empty">No hay asistencias registradas.</div>
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- Modal Flotante de Carga de Marcadores (Requisito 2.4 y 3.2) -->
+  <div id="score-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-match-title" class="modal-title">Carga de Marcador</h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      
+      <form autocomplete="off">
+        
+        <!-- Marcador del Encuentro -->
+        <div class="score-inputs-row">
+          <div class="team-input-label">
+            <span id="modal-home-flag" class="team-input-flag"></span>
+            <span id="modal-home-name" class="team-input-name"></span>
+          </div>
+          
+          <input type="number" id="modal-home-score" class="score-input" min="0" required placeholder="0">
+          <span class="score-divider">vs</span>
+          <input type="number" id="modal-away-score" class="score-input" min="0" required placeholder="0">
+          
+          <div class="team-input-label">
+            <span id="modal-away-flag" class="team-input-flag"></span>
+            <span id="modal-away-name" class="team-input-name"></span>
+          </div>
+        </div>
+
+        <!-- Tanda de Penales (Visible solo en empates en fase de Playoff) -->
+        <div id="modal-penalties-section" class="penalties-section">
+          <div class="penalties-title">Definición por Penales</div>
+          <div class="penalties-inputs">
+            <input type="number" id="modal-home-penalties" class="penalty-input" min="0" placeholder="0">
+            <span class="score-divider">vs</span>
+            <input type="number" id="modal-away-penalties" class="penalty-input" min="0" placeholder="0">
+          </div>
+        </div>
+
+        <!-- Registro de Goleadores (Requisito 3.2) -->
+        <div class="event-reg-section">
+          <h4 class="event-reg-title">⚽ Goles del Partido</h4>
+          <div id="scorers-list" class="event-list">
+            <!-- Filas dinámicas -->
+          </div>
+          <button type="button" id="add-scorer-btn" class="add-event-btn">
+            + Registrar Gol
+          </button>
+        </div>
+
+        <!-- Registro de Asistidores (Requisito 3.2) -->
+        <div class="event-reg-section">
+          <h4 class="event-reg-title">👟 Asistencias del Partido</h4>
+          <div id="assists-list" class="event-list">
+            <!-- Filas dinámicas -->
+          </div>
+          <button type="button" id="add-assist-btn" class="add-event-btn">
+            + Registrar Asistencia
+          </button>
+        </div>
+
+        <!-- Acciones del Formulario -->
+        <div class="form-actions">
+          <button type="button" id="modal-cancel-btn" class="btn btn-danger">Cancelar</button>
+          <button type="submit" id="modal-save-btn" class="btn btn-primary">Guardar Resultado</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Punto de Entrada Principal -->
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
