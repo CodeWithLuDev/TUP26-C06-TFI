@@ -108,20 +108,23 @@ export function renderFixtureView(container, matchesList, onEditMatch) {
     });
   }
 
-  // Render inicial de partidos
-  const activeGroup = document.getElementById('filter-group-select').value;
-  const activeMatchday = document.getElementById('filter-matchday-select').value;
-  const activeStatus = document.getElementById('filter-status-select').value;
+  // Render inicial / re-render: leer filtros del DOM si existen, sino usar defaults
+  const groupSelect = document.getElementById('filter-group-select');
+  const matchdaySelect = document.getElementById('filter-matchday-select');
+  const statusSelect = document.getElementById('filter-status-select');
+
+  // Valores por defecto seguros (por si aún no existen en el DOM)
+  const activeGroup = groupSelect ? groupSelect.value : 'ALL';
+  const activeMatchday = matchdaySelect ? matchdaySelect.value : 'ALL';
+  const activeStatus = statusSelect ? statusSelect.value : 'ALL';
 
   const currentFiltered = matchesList.filter(m => {
     const matchesGroup = activeGroup === 'ALL' || m.group === activeGroup;
     const matchesMatchday = activeMatchday === 'ALL' || String(m.matchday) === activeMatchday;
-    
     const isPlayed = m.homeScore !== null && m.homeScore !== undefined;
-    const matchesStatus = activeStatus === 'ALL' || 
-      (activeStatus === 'PLAYED' && isPlayed) || 
+    const matchesStatus = activeStatus === 'ALL' ||
+      (activeStatus === 'PLAYED' && isPlayed) ||
       (activeStatus === 'PENDING' && !isPlayed);
-
     return matchesGroup && matchesMatchday && matchesStatus;
   });
 
