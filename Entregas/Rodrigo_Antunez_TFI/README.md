@@ -25,7 +25,7 @@ La aplicación es una Single Page Application (SPA) que permite visualizar y act
 6. **Banderas Reales en Windows**: Integración nativa con [FlagCDN](https://flagcdn.com/) para renderizar imágenes reales de las banderas nacionales en formato PNG de alta calidad, solucionando el problema de falta de renderizado de emojis de banderas característico del sistema operativo Windows.
 7. **Conversión de Zona Horaria**: Los partidos están precargados en UTC y la aplicación convierte de manera automática la hora programada a la zona horaria del sistema local de quien visualiza el sitio (ej. GMT-3), mostrando explícitamente el desplazamiento horario.
 8. **Persistencia Local**: Uso de `LocalStorage` (bajo la clave `tfi_mundial_2026_state`) para garantizar la persistencia de todos los datos ingresados al actualizar o cerrar la pestaña.
-9. **Diseño Premium**: Interfaz oscura moderna y elegante con estética *Glassmorphism*, transiciones animadas y un diseño 100% responsivo.
+9. **Diseño Premium**: Interfaz oscura profesional tipo dashboard deportivo (estilo ESPN/FIFA) con fondo hexagonal, scorecard en tiempo real, navegación mobile con hamburger menu, y diseño 100% responsivo.
 
 ---
 
