@@ -40,8 +40,13 @@ export function renderBracketView(container, playoffMatches, onEditMatch) {
     roundCol.appendChild(roundTitle);
 
     rounds[key].forEach(m => {
+      const isPlayed = m.homeScore !== null && m.homeScore !== undefined;
+
       const matchWrapper = document.createElement('div');
       matchWrapper.className = 'bracket-match-wrapper';
+      if (isPlayed && m.round !== 'final' && m.round !== 'tercer-puesto') {
+        matchWrapper.classList.add('active-path');
+      }
 
       const matchDiv = document.createElement('div');
       matchDiv.className = 'bracket-match';
@@ -50,14 +55,13 @@ export function renderBracketView(container, playoffMatches, onEditMatch) {
       const homeTeam = m.home ? teams.find(t => t.id === m.home) : null;
       const awayTeam = m.away ? teams.find(t => t.id === m.away) : null;
 
-      const isPlayed = m.homeScore !== null && m.homeScore !== undefined;
       const winnerId = isPlayed ? getMatchWinner(m) : null;
 
       const getTeamRowHTML = (team, placeholder, isHome) => {
         if (!team) {
           return `
             <div class="bracket-team-row">
-              <span class="bracket-team-info placeholder-team">❓ ${placeholder}</span>
+              <span class="bracket-team-info placeholder-team">${placeholder}</span>
               <span class="bracket-score">-</span>
             </div>
           `;
@@ -88,12 +92,12 @@ export function renderBracketView(container, playoffMatches, onEditMatch) {
         `;
       };
 
-      const matchLabel = m.round === 'tercer-puesto' ? 'Tercer Puesto 🥉' : m.round === 'final' ? 'Final 🏆' : `${m.name}`;
+      const matchLabel = m.round === 'tercer-puesto' ? 'Tercer Puesto' : m.round === 'final' ? 'Final' : `${m.name}`;
 
       matchDiv.innerHTML = `
         <div class="bracket-match-info">
           <span>${matchLabel}</span>
-          <span>${isPlayed ? '✓ Finalizado' : '⏳ Pendiente'}</span>
+          <span>${isPlayed ? 'Finalizado' : 'Pendiente'}</span>
         </div>
         ${getTeamRowHTML(homeTeam, m.homePlaceholder, true)}
         ${getTeamRowHTML(awayTeam, m.awayPlaceholder, false)}
@@ -103,9 +107,8 @@ export function renderBracketView(container, playoffMatches, onEditMatch) {
       matchDiv.addEventListener('click', () => {
         if (m.home && m.away) {
           onEditMatch(m);
-        } else {
-          alert(`Este partido se definirá al clasificar los equipos correspondientes de la ronda previa (${m.homePlaceholder} y ${m.awayPlaceholder}).`);
         }
+        // Si los equipos no están definidos, el clic simplemente no hace nada (no molesta al usuario)
       });
 
       matchWrapper.appendChild(matchDiv);
