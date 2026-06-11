@@ -21,6 +21,11 @@ class MusicPlayer {
         url: 'https://people.csail.mit.edu/karger/J/Collect/Waka%20Waka%20(Esto%20es%20Africa).mp3'
       },
       {
+        title: 'Balada (Tchê Tcherere Tchê Tchê)',
+        artist: 'Gusttavo Lima',
+        url: 'https://archive.org/download/2012-various-artists-the-dome-summer-2012/220_gusttavo_lima_-_balada_%28tche_techerere_teche_tcech%29_%28a-class_special_radio_mix%29.mp3'
+      },
+      {
         title: "Wavin' Flag",
         artist: "K'Naan",
         url: 'https://archive.org/download/2010-various-artists-the-dome-summer-2010/03.%20K%27naan%20-%20Wavin%27%20flag.mp3'
