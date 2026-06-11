@@ -37,150 +37,135 @@ class MusicPlayer {
       }
     ];
     this.currentIndex = 0;
-    this.isPlaying = false;
-    this.isMuted = false;
-    
+    this.isPlaying    = false;
+    this.isMuted      = false;
+
     this.audio = new Audio();
-    this.audio.volume = 0.4;
-    this.audio.preload = 'metadata';
-    
-    this.widget = document.getElementById('music-player-widget');
-    this.toggleBtn = document.getElementById('player-toggle-btn');
+    this.audio.volume  = 0.4;
+    this.audio.preload = 'none'; // no precargar hasta que el usuario dé play
+
+    this.widget      = document.getElementById('music-player-widget');
+    this.toggleBtn   = document.getElementById('player-toggle-btn');
     this.collapseBtn = document.getElementById('player-collapse-btn');
-    this.playBtn = document.getElementById('player-play-btn');
-    this.nextBtn = document.getElementById('player-next-btn');
-    this.muteBtn = document.getElementById('player-mute-btn');
-    this.trackTitle = document.getElementById('player-track-title');
+    this.playBtn     = document.getElementById('player-play-btn');
+    this.nextBtn     = document.getElementById('player-next-btn');
+    this.muteBtn     = document.getElementById('player-mute-btn');
+    this.trackTitle  = document.getElementById('player-track-title');
     this.trackArtist = document.getElementById('player-track-artist');
     this.progressBar = document.getElementById('player-progress-bar');
-    this.progressWrap = document.getElementById('player-progress-wrap');
-    this.vinylDisc = document.getElementById('player-vinyl-disc');
+    this.progressWrap= document.getElementById('player-progress-wrap');
+    this.vinylDisc   = document.getElementById('player-vinyl-disc');
   }
-  
+
   init() {
     if (!this.widget) return;
-    
-    this.loadTrack(this.currentIndex);
-    
-    this.toggleBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.expand();
-    });
-    this.collapseBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.collapse();
-    });
-    
-    this.widget.addEventListener('click', () => {
-      if (this.widget.classList.contains('collapsed')) {
-        this.expand();
-      }
-    });
-    
-    this.playBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.togglePlay();
-    });
-    
-    this.nextBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
+
+    // Mostrar la primera pista
+    this._updateInfo();
+
+    // Si la canción de Joy Crookes falla (URL no disponible), saltar a la siguiente
+    this.audio.addEventListener('error', () => {
+      console.warn('[MusicPlayer] Error cargando pista, saltando a la siguiente...');
       this.nextTrack();
     });
-    
-    this.muteBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.toggleMute();
+
+    // Eventos del audio
+    this.audio.addEventListener('timeupdate', () => this._updateProgress());
+    this.audio.addEventListener('ended',      () => this.nextTrack());
+
+    // Controles
+    this.toggleBtn.addEventListener('click',   (e) => { e.stopPropagation(); this.expand(); });
+    this.collapseBtn.addEventListener('click', (e) => { e.stopPropagation(); this.collapse(); });
+    this.widget.addEventListener('click', () => {
+      if (this.widget.classList.contains('collapsed')) this.expand();
     });
-    
+    this.playBtn.addEventListener('click', (e) => { e.stopPropagation(); this.togglePlay(); });
+    this.nextBtn.addEventListener('click', (e) => { e.stopPropagation(); this.nextTrack(); });
+    this.muteBtn.addEventListener('click', (e) => { e.stopPropagation(); this.toggleMute(); });
+
     this.progressWrap.addEventListener('click', (e) => {
       e.stopPropagation();
-      const rect = this.progressWrap.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const percent = clickX / rect.width;
-      if (this.audio.duration) {
-        this.audio.currentTime = percent * this.audio.duration;
-      }
+      const rect    = this.progressWrap.getBoundingClientRect();
+      const pct     = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      if (this.audio.duration) this.audio.currentTime = pct * this.audio.duration;
     });
-    
-    this.audio.addEventListener('timeupdate', () => this.updateProgress());
-    this.audio.addEventListener('ended', () => this.nextTrack());
   }
-  
-  loadTrack(index) {
-    const track = this.playlist[index];
-    this.audio.src = track.url;
-    this.audio.load();
-    this.trackTitle.textContent = track.title;
-    this.trackArtist.textContent = track.artist;
+
+  /* ── privados ── */
+  _updateInfo() {
+    const t = this.playlist[this.currentIndex];
+    this.trackTitle.textContent  = t.title;
+    this.trackArtist.textContent = t.artist;
     this.progressBar.style.width = '0%';
-    this.updateUI();
   }
-  
-  expand() {
-    this.widget.classList.remove('collapsed');
-    this.widget.classList.add('expanded');
-  }
-  
-  collapse() {
-    this.widget.classList.remove('expanded');
-    this.widget.classList.add('collapsed');
-  }
-  
-  togglePlay() {
-    if (this.isPlaying) {
-      this.audio.pause();
-      this.isPlaying = false;
-    } else {
-      this.audio.play().then(() => {
-        this.isPlaying = true;
-        this.updateUI();
-      }).catch(err => {
-        console.warn("Playback failed, user interaction required: ", err);
-      });
-    }
-    this.updateUI();
-  }
-  
-  nextTrack() {
-    this.currentIndex = (this.currentIndex + 1) % this.playlist.length;
-    this.loadTrack(this.currentIndex);
-    if (this.isPlaying) {
-      this.audio.play().then(() => {
-        this.isPlaying = true;
-        this.updateUI();
-      }).catch(err => {
-        console.warn("Next track play failed: ", err);
-        this.isPlaying = false;
-        this.updateUI();
-      });
-    }
-  }
-  
-  toggleMute() {
-    this.isMuted = !this.isMuted;
-    this.audio.muted = this.isMuted;
-    if (this.isMuted) {
-      this.muteBtn.classList.add('muted');
-    } else {
-      this.muteBtn.classList.remove('muted');
-    }
-  }
-  
-  updateProgress() {
+
+  _updateProgress() {
     if (this.audio.duration) {
       const pct = (this.audio.currentTime / this.audio.duration) * 100;
       this.progressBar.style.width = `${pct}%`;
     }
   }
-  
-  updateUI() {
+
+  _updateUI() {
+    this.playBtn.classList.toggle('playing', this.isPlaying);
+    this.vinylDisc.classList.toggle('playing', this.isPlaying);
+  }
+
+  /* ── API pública ── */
+  expand()  {
+    this.widget.classList.remove('collapsed');
+    this.widget.classList.add('expanded');
+  }
+
+  collapse() {
+    this.widget.classList.remove('expanded');
+    this.widget.classList.add('collapsed');
+  }
+
+  loadTrack(index) {
+    this.currentIndex = index;
+    this.audio.src = this.playlist[index].url;
+    this.audio.load();
+    this._updateInfo();
+    this._updateUI();
+  }
+
+  togglePlay() {
     if (this.isPlaying) {
-      this.playBtn.classList.add('playing');
-      this.vinylDisc.classList.add('playing');
+      this.audio.pause();
+      this.isPlaying = false;
+      this._updateUI();
     } else {
-      this.playBtn.classList.remove('playing');
-      this.vinylDisc.classList.remove('playing');
+      // Si no hay src cargado aún, cargarlo
+      if (!this.audio.src) {
+        this.audio.src = this.playlist[this.currentIndex].url;
+      }
+      this.audio.play()
+        .then(() => {
+          this.isPlaying = true;
+          this._updateUI();
+        })
+        .catch(err => {
+          console.warn('[MusicPlayer] Play falló:', err.message);
+        });
     }
+  }
+
+  nextTrack() {
+    const wasPlaying  = this.isPlaying;
+    this.currentIndex = (this.currentIndex + 1) % this.playlist.length;
+    this.loadTrack(this.currentIndex);
+    if (wasPlaying) {
+      this.audio.play()
+        .then(() => { this.isPlaying = true; this._updateUI(); })
+        .catch(err => { console.warn('[MusicPlayer] Next track falló:', err.message); });
+    }
+  }
+
+  toggleMute() {
+    this.isMuted      = !this.isMuted;
+    this.audio.muted  = this.isMuted;
+    this.muteBtn.classList.toggle('muted', this.isMuted);
   }
 }
 
