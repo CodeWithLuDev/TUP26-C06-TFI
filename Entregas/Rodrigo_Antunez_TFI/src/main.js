@@ -18,7 +18,7 @@ class MusicPlayer {
       {
         title: 'Waka Waka (Esto es África)',
         artist: 'Shakira',
-        url: 'https://archive.org/download/waka-waka/Waka%20Waka.mp3'
+        url: 'https://people.csail.mit.edu/karger/J/Collect/Waka%20Waka%20(Esto%20es%20Africa).mp3'
       },
       {
         title: "Wavin' Flag",
