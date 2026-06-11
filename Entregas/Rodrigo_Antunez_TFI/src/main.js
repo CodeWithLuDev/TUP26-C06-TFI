@@ -26,6 +26,11 @@ class MusicPlayer {
         url: 'https://archive.org/download/2012-various-artists-the-dome-summer-2012/220_gusttavo_lima_-_balada_%28tche_techerere_teche_tcech%29_%28a-class_special_radio_mix%29.mp3'
       },
       {
+        title: 'Ai Se Eu Te Pego',
+        artist: 'Michel Teló',
+        url: 'https://archive.org/download/2012-various-artists-the-dome-summer-2012/222_michel_telo_-_ai_se_eu_pego.mp3'
+      },
+      {
         title: "Wavin' Flag",
         artist: "K'Naan",
         url: 'https://archive.org/download/2010-various-artists-the-dome-summer-2010/03.%20K%27naan%20-%20Wavin%27%20flag.mp3'
