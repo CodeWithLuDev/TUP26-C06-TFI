@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import * as Flags from 'country-flag-icons/react/3x2'
+import { sedes } from '../data/sedes'
 import { partidos } from '../data/partidos'
 import '../styles/inicio.css'
 
@@ -23,6 +25,50 @@ function horaLocal(horaUTC) {
   return fecha.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) + ' (hora local)'
 }
 
+function ModalSede({ sede, onCerrar }) {
+  return (
+    <div className="auth-modal-overlay" onClick={onCerrar}>
+      <div className="sede-modal" onClick={e => e.stopPropagation()}>
+        <div className="sede-modal-header">
+          <img src={sede.foto} alt={sede.pais} className="sede-modal-foto" />
+          <div className="sede-modal-titulo">
+            <h2>Sedes de {sede.pais}</h2>
+            <p>{sede.estadios.length} estadios</p>
+          </div>
+          <button className="sede-modal-cerrar" onClick={onCerrar}>✕</button>
+        </div>
+        <div className="sede-modal-lista">
+          {sede.estadios.map((e, i) => (
+            <div key={i} className="sede-estadio">
+              <p className="estadio-nombre">🏟️ {e.nombre}</p>
+              <p className="estadio-detalle">{e.ciudad} · {e.capacidad.toLocaleString()} esp.</p>
+              {e.nota && <p className="estadio-nota">⭐ {e.nota}</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function CardSede({ sede }) {
+  const [abierta, setAbierta] = useState(false)
+
+  return (
+    <>
+      <div className="sede-card" onClick={() => setAbierta(true)}>
+        <div className="sede-pais-badge">{sede.pais}</div>
+        <img src={sede.foto} alt={sede.pais} className="sede-foto" />
+        <div className="sede-info">
+          <h3>Sedes de {sede.pais}</h3>
+          <span className="sede-expandir">▼ Ver estadios</span>
+        </div>
+      </div>
+      {abierta && <ModalSede sede={sede} onCerrar={() => setAbierta(false)} />}
+    </>
+  )
+}
+
 function Inicio() {
   const jugados = partidos.filter(p => p.resultado !== null)
   const proximos = partidos.filter(p => p.resultado === null)
@@ -32,7 +78,6 @@ function Inicio() {
   return (
     <div className="inicio">
 
-      {/* Hero section */}
       <section className="hero">
         <div className="hero-texto">
           <h1>Copa Mundial 2026</h1>
@@ -60,7 +105,6 @@ function Inicio() {
         )}
       </section>
 
-      {/* Últimos partidos */}
       <section className="ultimos">
         <h2>Últimos resultados</h2>
         <div className="ultimos-grid">
@@ -87,6 +131,16 @@ function Inicio() {
                 </div>
               )}
             </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="sedes">
+        <h2>Sedes Oficiales del Mundial 2026</h2>
+        <p className="sedes-sub">Conoce los imponentes escenarios de Norteamérica donde se escribirá la historia.</p>
+        <div className="sedes-grid">
+          {sedes.map((s, i) => (
+            <CardSede key={i} sede={s} />
           ))}
         </div>
       </section>

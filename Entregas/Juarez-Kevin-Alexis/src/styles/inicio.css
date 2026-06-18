@@ -171,3 +171,166 @@
   color: rgba(255,255,255,0.6);
   margin-bottom: 0.3rem;
 }
+
+/* Sedes */
+.sedes {
+  margin-top: 3rem;
+}
+
+.sedes h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--blanco);
+  margin-bottom: 0.5rem;
+}
+
+.sedes-sub {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.sedes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+
+.sede-card {
+  background: #0a1628;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.sede-card:hover {
+  border-color: rgba(255,255,255,0.2);
+}
+
+.sede-pais-badge {
+  position: absolute;
+  background: var(--rojo);
+  color: var(--blanco);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0 0 8px 0;
+}
+
+.sede-foto {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.sede-info {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sede-info h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--blanco);
+}
+
+.sede-expandir {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+}
+
+.sede-lista {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.sede-estadio {
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+}
+
+.estadio-nombre {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--blanco);
+}
+
+.estadio-detalle {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  margin-top: 0.2rem;
+}
+
+.estadio-nota {
+  font-size: 0.78rem;
+  color: #f1c40f;
+  margin-top: 0.2rem;
+}
+
+.sede-modal {
+  background: #0a1628;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  width: 500px;
+  max-width: 95vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+
+.sede-modal-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.sede-modal-foto {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.sede-modal-titulo h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--blanco);
+}
+
+.sede-modal-titulo p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.4);
+}
+
+.sede-modal-cerrar {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.sede-modal-cerrar:hover {
+  color: var(--blanco);
+}
+
+.sede-modal-lista {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
