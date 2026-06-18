@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import * as Flags from 'country-flag-icons/react/3x2'
 import { useAuth } from '../context/AuthContext'
 import { useTorneo } from '../context/TorneoContext'
@@ -251,10 +251,60 @@ function FilaPartido({ partido, onCargar, onBorrar }) {
 
 const FILTROS = ['Todos', 'Grupos', 'Playoffs']
 
+function BotonHerramienta({ onClick, color, children, disabled }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      style={{
+        display: 'flex', alignItems: 'center', gap: 8, padding: '10px 18px',
+        borderRadius: 10, fontWeight: 700, fontSize: 13.5, cursor: disabled ? 'not-allowed' : 'pointer',
+        fontFamily: 'inherit', border: `1px solid ${color}55`, background: `${color}1a`,
+        color, transition: 'filter 0.15s, transform 0.1s', opacity: disabled ? 0.5 : 1,
+      }}
+      onMouseEnter={e => { if (!disabled) e.currentTarget.style.filter = 'brightness(1.25)' }}
+      onMouseLeave={e => { e.currentTarget.style.filter = 'none' }}
+    >
+      {children}
+    </button>
+  )
+}
+
 function PanelAdmin() {
   const { usuario } = useAuth()
-  const { partidos, cargarResultado, borrarResultado, reiniciarTorneo } = useTorneo()
+  const { partidos, cargarResultado, borrarResultado, reiniciarTorneo, generarTorneoAleatorio, exportarTorneo, importarTorneo } = useTorneo()
   const [filtro, setFiltro] = useState('Todos')
+  const [mensaje, setMensaje] = useState('')
+  const inputArchivoRef = useRef(null)
+
+  function manejarAleatorio() {
+    const ok = confirm('Esto va a generar resultados aleatorios para TODO el torneo (grupos y eliminación directa), reemplazando lo que haya cargado. ¿Continuar?')
+    if (!ok) return
+    generarTorneoAleatorio()
+    setMensaje('Se generaron resultados aleatorios para todo el torneo.')
+  }
+
+  function manejarExportar() {
+    exportarTorneo()
+  }
+
+  function manejarImportarClick() {
+    inputArchivoRef.current?.click()
+  }
+
+  async function manejarArchivoSeleccionado(e) {
+    const archivo = e.target.files?.[0]
+    if (!archivo) return
+    try {
+      await importarTorneo(archivo)
+      setMensaje('Fixture importado correctamente.')
+    } catch (err) {
+      setMensaje(`Error al importar: ${err.message}`)
+    } finally {
+      e.target.value = ''
+    }
+  }
 
   const filtrados = useMemo(() => {
     if (filtro === 'Grupos')   return partidos.filter(p => p.fase?.startsWith('Grupo'))
@@ -297,6 +347,32 @@ function PanelAdmin() {
           <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>partidos cargados</span>
         </div>
       </div>
+
+      {/* Herramientas: aleatorio, exportar, importar */}
+      <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
+        <BotonHerramienta onClick={manejarAleatorio} color="#9b59b6">
+          🎲 Aleatorio
+        </BotonHerramienta>
+        <BotonHerramienta onClick={manejarExportar} color="#2ecc71">
+          ⬇ Exportar
+        </BotonHerramienta>
+        <BotonHerramienta onClick={manejarImportarClick} color="#3498db">
+          ⬆ Importar
+        </BotonHerramienta>
+        <input
+          ref={inputArchivoRef}
+          type="file"
+          accept="application/json"
+          onChange={manejarArchivoSeleccionado}
+          style={{ display: 'none' }}
+        />
+      </div>
+
+      {mensaje && (
+        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, marginBottom: 16, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: '8px 12px' }}>
+          {mensaje}
+        </p>
+      )}
 
       {/* Filtros */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>

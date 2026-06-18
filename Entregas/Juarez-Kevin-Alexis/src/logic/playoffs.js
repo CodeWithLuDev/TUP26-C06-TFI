@@ -1,155 +1,104 @@
 import { equipos, grupos } from '../data/equipos'
 import { calcularPosiciones } from './posiciones'
 
-// Cruces estándar de octavos de final (formato de 8 grupos, 16 clasificados).
-// Cada entrada indica [grupo del 1°, grupo del 2°] que se enfrentan.
-const CRUCES_OCTAVOS = [
-  ['A', 'B'], // 1A vs 2B
-  ['C', 'D'], // 1C vs 2D
-  ['E', 'F'], // 1E vs 2F
-  ['G', 'H'], // 1G vs 2H
-  ['B', 'A'], // 1B vs 2A
-  ['D', 'C'], // 1D vs 2C
-  ['F', 'E'], // 1F vs 2E
-  ['H', 'G'], // 1H vs 2G
-]
+// Mundial 2026: 12 grupos de 4 equipos = 48 equipos
+// Clasifican: 1° y 2° de cada grupo (24) + 8 mejores terceros = 32
+// Rondas: Ronda de 32 → Octavos → Cuartos → Semis → Final
 
 function obtenerEquipo(id) {
   return equipos.find(e => e.id === id) || null
 }
 
-// Determina si la fase de grupos está completa: todos los partidos de
-// fase de grupos cargados con resultado.
 export function faseDeGruposCompleta(partidosGrupos) {
   return partidosGrupos.length > 0 && partidosGrupos.every(p => p.resultado !== null)
 }
 
-// Devuelve, para cada grupo, la tabla ordenada (usa la misma lógica que
-// la tabla de posiciones visible en la fase de grupos).
 function obtenerClasificadosPorGrupo(partidosTodos) {
-  const tablasPorGrupo = {}
+  const tablas = {}
   grupos.forEach(g => {
-    const equiposGrupo = equipos.filter(e => e.grupo === g)
-    const partidosGrupo = partidosTodos.filter(p => p.grupo === g && p.fase === `Grupo ${g}`)
-    tablasPorGrupo[g] = calcularPosiciones(equiposGrupo, partidosGrupo)
+    const eqs = equipos.filter(e => e.grupo === g)
+    const parts = partidosTodos.filter(p => p.grupo === g && p.fase === `Grupo ${g}`)
+    tablas[g] = calcularPosiciones(eqs, parts)
   })
-  return tablasPorGrupo
+  return tablas
 }
 
-// Determina el ganador de un partido de eliminación directa.
-// Si hubo penales, esos definen; si no, el resultado en los 90 (o tiempo extra).
-export function ganadorDePartido(partido) {
-  if (!partido || !partido.resultado) return null
-  const { local, visitante } = partido.resultado
-  if (local > visitante) return { id: partido.localId, nombre: partido.local, codigo: partido.codigoLocal }
-  if (visitante > local) return { id: partido.visitanteId, nombre: partido.visitante, codigo: partido.codigoVisitante }
-  // Empate en el marcador reglamentario: debe haber penales para definir
-  if (partido.penales) {
-    const { local: pl, visitante: pv } = partido.penales
-    if (pl > pv) return { id: partido.localId, nombre: partido.local, codigo: partido.codigoLocal }
-    if (pv > pl) return { id: partido.visitanteId, nombre: partido.visitante, codigo: partido.codigoVisitante }
-  }
-  return null // empate sin definir todavía
+// Obtiene los 8 mejores terceros de entre los 12 grupos
+function obtenerMejoresTerceros(tablas) {
+  const terceros = grupos
+    .map(g => tablas[g]?.[2])
+    .filter(Boolean)
+    .sort((a, b) => {
+      if (b.PTS !== a.PTS) return b.PTS - a.PTS
+      if (b.DG  !== a.DG)  return b.DG  - a.DG
+      if (b.GF  !== a.GF)  return b.GF  - a.GF
+      return a.nombre.localeCompare(b.nombre)
+    })
+  return terceros.slice(0, 8)
 }
 
-// Genera los 8 partidos de octavos de final a partir de las tablas de grupos.
-// Devuelve null si la fase de grupos todavía no terminó.
-export function generarOctavos(partidosTodos) {
-  const partidosFaseDeGrupos = partidosTodos.filter(p => p.fase && p.fase.startsWith('Grupo'))
-  if (!faseDeGruposCompleta(partidosFaseDeGrupos)) return null
+// Genera los 32 partidos de Ronda de 32 según cruces del Mundial 2026
+// Orden de cruces: 1A vs mejor3, 1B vs 2A, etc.
+// Para simplificar, usamos: 1°(grupos 1-12) vs 2°/3° (espejo)
+export function generarRondaDe32(partidosTodos) {
+  const partidosGrupo = partidosTodos.filter(p => p.fase && p.fase.startsWith('Grupo'))
+  if (!faseDeGruposCompleta(partidosGrupo)) return null
 
   const tablas = obtenerClasificadosPorGrupo(partidosTodos)
+  const mejoresTerceros = obtenerMejoresTerceros(tablas)
 
-  return CRUCES_OCTAVOS.map((cruce, i) => {
-    const [grupoPrimero, grupoSegundo] = cruce
-    const primero = tablas[grupoPrimero]?.[0]
-    const segundo = tablas[grupoSegundo]?.[1]
-    if (!primero || !segundo) return null
+  // 24 primeros + 24 segundos = 24 cruces 1° vs 2°
+  // + 8 cruces 1° vs mejor 3°  (los 8 primeros por pts entre los primeros vs los 8 mejores 3°)
+  // Para el torneo académico: emparejamos los 12 primeros vs los 12 segundos (24 partidos)
+  // y los 8 primeros por puntos vs los 8 mejores terceros (8 partidos) = 32 partidos
 
-    const eqLocal = obtenerEquipo(primero.id)
-    const eqVisitante = obtenerEquipo(segundo.id)
+  // Ordenar primeros por puntos para el emparejamiento vs terceros
+  const primerosPorPts = grupos
+    .map(g => tablas[g]?.[0])
+    .filter(Boolean)
+    .sort((a, b) => b.PTS - a.PTS)
 
-    return {
-      id: `octavos-${i + 1}`,
-      fase: 'Octavos de Final',
-      ronda: 'octavos',
-      orden: i,
-      local: eqLocal.nombre,
-      localId: eqLocal.id,
-      codigoLocal: eqLocal.codigo,
-      visitante: eqVisitante.nombre,
-      visitanteId: eqVisitante.id,
-      codigoVisitante: eqVisitante.codigo,
-      resultado: null,
-      penales: null,
-      tiempoExtra: false,
-      goles: [],
-    }
-  }).filter(Boolean)
-}
+  const partidos32 = []
 
-// Genera la siguiente ronda (cuartos, semis, final) a partir de los
-// partidos de la ronda anterior, emparejando ganadores consecutivos.
-// etiquetaRonda: 'Cuartos de Final' | 'Semifinales' | 'Final'
-export function generarSiguienteRonda(partidosRondaAnterior, etiquetaRonda, claveRonda) {
-  if (!partidosRondaAnterior || partidosRondaAnterior.length === 0) return null
-
-  const ordenados = [...partidosRondaAnterior].sort((a, b) => a.orden - b.orden)
-  const todosConGanador = ordenados.every(p => ganadorDePartido(p) !== null)
-  if (!todosConGanador) return null
-
-  const siguiente = []
-  for (let i = 0; i < ordenados.length; i += 2) {
-    const partidoA = ordenados[i]
-    const partidoB = ordenados[i + 1]
-    if (!partidoB) break
-    const ganadorA = ganadorDePartido(partidoA)
-    const ganadorB = ganadorDePartido(partidoB)
-
-    siguiente.push({
-      id: `${claveRonda}-${siguiente.length + 1}`,
-      fase: etiquetaRonda,
-      ronda: claveRonda,
-      orden: siguiente.length,
-      local: ganadorA.nombre,
-      localId: ganadorA.id,
-      codigoLocal: ganadorA.codigo,
-      visitante: ganadorB.nombre,
-      visitanteId: ganadorB.id,
-      codigoVisitante: ganadorB.codigo,
-      resultado: null,
-      penales: null,
-      tiempoExtra: false,
-      goles: [],
-    })
-  }
-  return siguiente
-}
-
-// Genera el partido por el tercer puesto a partir de los perdedores de semis
-export function generarTercerPuesto(partidosSemis) {
-  if (!partidosSemis || partidosSemis.length !== 2) return null
-  const ganadores = partidosSemis.map(ganadorDePartido)
-  if (ganadores.some(g => g === null)) return null
-
-  const perdedores = partidosSemis.map(p => {
-    const g = ganadorDePartido(p)
-    return g.id === p.localId
-      ? { id: p.visitanteId, nombre: p.visitante, codigo: p.codigoVisitante }
-      : { id: p.localId, nombre: p.local, codigo: p.codigoLocal }
+  // 12 partidos: 1° grupo X vs 2° grupo Y (cruces cruzados)
+  const ordenCruces = [
+    ['A','B'], ['C','D'], ['E','F'], ['G','H'], ['I','J'], ['K','L'],
+    ['B','A'], ['D','C'], ['F','E'], ['H','G'], ['J','I'], ['L','K'],
+  ]
+  ordenCruces.forEach(([g1, g2], i) => {
+    const primero  = tablas[g1]?.[0]
+    const segundo  = tablas[g2]?.[1]
+    if (!primero || !segundo) return
+    const eqL = obtenerEquipo(primero.id)
+    const eqV = obtenerEquipo(segundo.id)
+    partidos32.push(crearPartido(`r32-${i + 1}`, 'Ronda de 32', 'ronda32', i, eqL, eqV))
   })
 
+  // 8 partidos: los 8 mejores primeros vs los 8 mejores terceros
+  for (let i = 0; i < 8; i++) {
+    const primero = primerosPorPts[i]
+    const tercero = mejoresTerceros[i]
+    if (!primero || !tercero) continue
+    const eqL = obtenerEquipo(primero.id)
+    const eqV = obtenerEquipo(tercero.id)
+    partidos32.push(crearPartido(`r32-${13 + i}`, 'Ronda de 32', 'ronda32', 12 + i, eqL, eqV))
+  }
+
+  return partidos32.length > 0 ? partidos32 : null
+}
+
+function crearPartido(id, fase, ronda, orden, eqLocal, eqVisitante) {
   return {
-    id: 'tercer-puesto-1',
-    fase: 'Tercer Puesto',
-    ronda: 'tercerPuesto',
-    orden: 0,
-    local: perdedores[0].nombre,
-    localId: perdedores[0].id,
-    codigoLocal: perdedores[0].codigo,
-    visitante: perdedores[1].nombre,
-    visitanteId: perdedores[1].id,
-    codigoVisitante: perdedores[1].codigo,
+    id,
+    fase,
+    ronda,
+    orden,
+    local: eqLocal.nombre,
+    localId: eqLocal.id,
+    codigoLocal: eqLocal.codigo,
+    visitante: eqVisitante.nombre,
+    visitanteId: eqVisitante.id,
+    codigoVisitante: eqVisitante.codigo,
     resultado: null,
     penales: null,
     tiempoExtra: false,
@@ -157,10 +106,68 @@ export function generarTercerPuesto(partidosSemis) {
   }
 }
 
+export function ganadorDePartido(partido) {
+  if (!partido || !partido.resultado) return null
+  const { local, visitante } = partido.resultado
+  if (local > visitante) return { id: partido.localId,     nombre: partido.local,     codigo: partido.codigoLocal }
+  if (visitante > local) return { id: partido.visitanteId, nombre: partido.visitante, codigo: partido.codigoVisitante }
+  if (partido.penales) {
+    const { local: pl, visitante: pv } = partido.penales
+    if (pl > pv) return { id: partido.localId,     nombre: partido.local,     codigo: partido.codigoLocal }
+    if (pv > pl) return { id: partido.visitanteId, nombre: partido.visitante, codigo: partido.codigoVisitante }
+  }
+  return null
+}
+
+export function generarSiguienteRonda(partidosRondaAnterior, etiquetaRonda, claveRonda) {
+  if (!partidosRondaAnterior || partidosRondaAnterior.length === 0) return null
+  const ordenados = [...partidosRondaAnterior].sort((a, b) => a.orden - b.orden)
+  if (!ordenados.every(p => ganadorDePartido(p) !== null)) return null
+
+  const siguiente = []
+  for (let i = 0; i < ordenados.length; i += 2) {
+    const pA = ordenados[i]
+    const pB = ordenados[i + 1]
+    if (!pB) break
+    const gA = ganadorDePartido(pA)
+    const gB = ganadorDePartido(pB)
+    siguiente.push({
+      id: `${claveRonda}-${siguiente.length + 1}`,
+      fase: etiquetaRonda,
+      ronda: claveRonda,
+      orden: siguiente.length,
+      local: gA.nombre, localId: gA.id, codigoLocal: gA.codigo,
+      visitante: gB.nombre, visitanteId: gB.id, codigoVisitante: gB.codigo,
+      resultado: null, penales: null, tiempoExtra: false, goles: [],
+    })
+  }
+  return siguiente.length > 0 ? siguiente : null
+}
+
+export function generarTercerPuesto(partidosSemis) {
+  if (!partidosSemis || partidosSemis.length !== 2) return null
+  if (partidosSemis.some(p => ganadorDePartido(p) === null)) return null
+
+  const perdedores = partidosSemis.map(p => {
+    const g = ganadorDePartido(p)
+    return g.id === p.localId
+      ? { id: p.visitanteId, nombre: p.visitante, codigo: p.codigoVisitante }
+      : { id: p.localId,     nombre: p.local,     codigo: p.codigoLocal }
+  })
+
+  return {
+    id: 'tercer-puesto-1', fase: 'Tercer Puesto', ronda: 'tercerPuesto', orden: 0,
+    local: perdedores[0].nombre, localId: perdedores[0].id, codigoLocal: perdedores[0].codigo,
+    visitante: perdedores[1].nombre, visitanteId: perdedores[1].id, codigoVisitante: perdedores[1].codigo,
+    resultado: null, penales: null, tiempoExtra: false, goles: [],
+  }
+}
+
 export const ETIQUETAS_RONDAS = {
-  octavos: 'Octavos de Final',
-  cuartos: 'Cuartos de Final',
-  semis: 'Semifinales',
-  final: 'Final',
-  tercerPuesto: 'Tercer Puesto',
+  ronda32:     'Ronda de 32',
+  octavos:     'Octavos de Final',
+  cuartos:     'Cuartos de Final',
+  semis:       'Semifinales',
+  final:       'Final',
+  tercerPuesto:'Tercer Puesto',
 }

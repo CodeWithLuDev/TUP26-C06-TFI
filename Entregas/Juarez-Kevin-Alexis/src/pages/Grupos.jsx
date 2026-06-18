@@ -7,7 +7,7 @@ import { calcularGoleadores, calcularAsistidores } from '../logic/estadisticas'
 import Bracket from '../components/Bracket'
 import '../styles/grupos.css'
 
-const GRUPOS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+const GRUPOS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
 
 function Bandera({ codigo, size = 24 }) {
   const Flag = Flags[codigo]
