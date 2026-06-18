@@ -125,3 +125,45 @@
 .auth-submit:hover {
   opacity: 0.85;
 }
+
+.auth-logueado {
+  text-align: center;
+}
+
+.auth-bienvenida {
+  font-size: 1rem;
+  color: var(--blanco);
+  margin-bottom: 0.4rem;
+}
+
+.auth-rol {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 1rem;
+}
+
+.auth-error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
+
+.auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-modal {
+  background: #0a1628;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 340px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
