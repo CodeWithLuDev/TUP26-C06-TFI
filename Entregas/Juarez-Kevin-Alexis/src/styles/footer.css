@@ -1,0 +1,17 @@
+.footer {
+  background-color: var(--rojo);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+
+.footer-left img {
+  height: 45px;
+  object-fit: contain;
+}
+
+.footer-right p {
+  color: var(--blanco);
+  font-size: 0.85rem;
+}

@@ -1,0 +1,127 @@
+.header {
+  background-color: var(--azul);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.header-nav {
+  display: flex;
+  gap: 2rem;
+}
+
+.header-logo img {
+  height: 55px;
+  object-fit: contain;
+}
+
+.header-nav a {
+  color: var(--blanco);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  transition: color 0.2s;
+}
+
+.header-nav a:hover {
+  color: var(--rojo);
+}
+
+.header-user-btn {
+  background: none;
+  border: none;
+  color: var(--blanco);
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.header-user-btn:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.auth-panel {
+  position: fixed;
+  top: 75px;
+  right: 2rem;
+  background: var(--azul);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 300px;
+  z-index: 200;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.auth-tabs {
+  display: flex;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.auth-tabs button {
+  flex: 1;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.95rem;
+  padding: 0.6rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.auth-tabs button.active {
+  color: var(--blanco);
+  border-bottom: 2px solid var(--rojo);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.auth-form input {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  color: var(--blanco);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.auth-form input:focus {
+  border-color: var(--rojo);
+}
+
+.auth-submit {
+  background: var(--rojo);
+  color: var(--blanco);
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 0.4rem;
+  transition: opacity 0.2s;
+}
+
+.auth-submit:hover {
+  opacity: 0.85;
+}

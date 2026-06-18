@@ -1,0 +1,173 @@
+.inicio {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 3rem 0;
+}
+
+.hero-texto h1 {
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--blanco);
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.7);
+  margin-top: 1rem;
+  max-width: 400px;
+}
+
+/* Próximo partido */
+.proximo-partido {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  min-width: 300px;
+  text-align: center;
+}
+
+.proximo-badge {
+  background: var(--rojo);
+  color: var(--blanco);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.proximo-fase {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85rem;
+  margin-top: 0.8rem;
+}
+
+.proximo-equipos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+
+.proximo-equipo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.vs {
+  color: var(--rojo);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.proximo-fecha {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.9rem;
+}
+
+.proximo-hora {
+  color: var(--blanco);
+  font-weight: 600;
+  margin-top: 0.3rem;
+}
+
+/* Últimos resultados */
+.ultimos {
+  margin-top: 2rem;
+}
+
+.ultimos h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--blanco);
+}
+
+.ultimos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+
+.partido-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 1.2rem;
+}
+
+.partido-fase {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
+
+.partido-resultado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.equipo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-align: center;
+  width: 100px;
+}
+
+.equipo-derecha {
+  align-items: center;
+}
+
+.marcador {
+  background: var(--azul);
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--blanco);
+}
+
+.partido-cuando {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+
+.partido-goles {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 0.8rem;
+}
+
+.gol {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 0.3rem;
+}
