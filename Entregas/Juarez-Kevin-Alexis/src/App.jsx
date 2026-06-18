@@ -7,6 +7,7 @@ import Inicio from './pages/Inicio'
 import Grupos from './pages/Grupos'
 import Equipos from './pages/Equipos'
 import Noticias from './pages/Noticias'
+import PanelAdmin from './pages/PanelAdmin'
 
 function App() {
   const [introVista, setIntroVista] = useState(false)
@@ -25,6 +26,7 @@ function App() {
           <Route path="/grupos" element={<Grupos />} />
           <Route path="/equipos" element={<Equipos />} />
           <Route path="/noticias" element={<Noticias />} />
+          <Route path="/admin" element={<PanelAdmin />} />
         </Routes>
       </main>
       <Footer />

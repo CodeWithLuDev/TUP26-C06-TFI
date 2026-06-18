@@ -1,0 +1,231 @@
+.grupos-page {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.grupos-page h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--blanco);
+  margin-bottom: 0.4rem;
+}
+
+.grupos-sub {
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 1.5rem;
+}
+
+/* Tabs */
+.grupos-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.grupo-tab {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.6);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.grupo-tab:hover {
+  background: rgba(255,255,255,0.1);
+  color: var(--blanco);
+}
+
+.grupo-tab.active {
+  background: var(--rojo);
+  border-color: var(--rojo);
+  color: var(--blanco);
+}
+
+/* Card del grupo */
+.grupo-card {
+  background: #0a1628;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.grupo-titulo {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--blanco);
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+}
+
+/* Tabla */
+.tabla-posiciones {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-posiciones th {
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.4);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.6rem 0.8rem;
+  text-align: center;
+}
+
+.tabla-posiciones th:nth-child(2) {
+  text-align: left;
+}
+
+.tabla-posiciones td {
+  padding: 0.7rem 0.8rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--blanco);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.tabla-posiciones tbody tr:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+.tabla-posiciones tbody tr.clasificado {
+  border-left: 3px solid #2ecc71;
+}
+
+.pos-num {
+  color: rgba(255,255,255,0.4);
+  font-weight: 700;
+  width: 30px;
+}
+
+.pos-equipo {
+  display: flex !important;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: left !important;
+  font-weight: 600;
+}
+
+.pts {
+  font-weight: 800;
+  color: var(--blanco);
+}
+
+/* Partidos del grupo */
+.grupo-partidos {
+  padding: 1.2rem 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.grupo-partidos h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.grupo-partido {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.grupo-partido:last-child {
+  border-bottom: none;
+}
+
+.gp-equipos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.gp-equipo {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  width: 140px;
+}
+
+.gp-equipo-der {
+  justify-content: flex-end;
+}
+
+.gp-marcador {
+  background: rgba(255,255,255,0.08);
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.gp-fecha {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.3);
+  text-align: center;
+}
+
+/* Estadísticas (goleadores / asistidores) */
+.estadisticas-titulo {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--blanco);
+}
+
+.estadisticas-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+.estadistica-card {
+  background: #0a1628;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.tabla-estadistica th:nth-child(2),
+.tabla-estadistica td:nth-child(2) {
+  text-align: left;
+}
+
+.estadistica-vacio {
+  text-align: center;
+  color: rgba(255,255,255,0.3);
+  padding: 1rem;
+  font-style: italic;
+}
+
+@media (max-width: 700px) {
+  .estadisticas-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bracket-section {
+  margin-top: 2.5rem;
+}
+
+.bracket-subtitulo {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--rojo);
+  margin-top: -0.6rem;
+  margin-bottom: 1.5rem;
+}

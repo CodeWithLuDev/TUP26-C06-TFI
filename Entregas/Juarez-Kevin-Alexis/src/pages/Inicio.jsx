@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import * as Flags from 'country-flag-icons/react/3x2'
 import { sedes } from '../data/sedes'
-import { partidos } from '../data/partidos'
+import { useTorneo } from '../context/TorneoContext'
 import '../styles/inicio.css'
 
 function Bandera({ codigo, size = 32 }) {
@@ -70,9 +70,14 @@ function CardSede({ sede }) {
 }
 
 function Inicio() {
-  const jugados = partidos.filter(p => p.resultado !== null)
-  const proximos = partidos.filter(p => p.resultado === null)
-  const ultimosCuatro = jugados.slice(-4).reverse()
+  const { partidos } = useTorneo()
+  const jugados = partidos.filter(p => p.resultado !== null && p.fechaFin)
+  const proximos = partidos
+    .filter(p => p.resultado === null && p.horaUTC)
+    .sort((a, b) => new Date(a.horaUTC) - new Date(b.horaUTC))
+  const ultimosCuatro = [...jugados]
+    .sort((a, b) => new Date(b.fechaFin) - new Date(a.fechaFin))
+    .slice(0, 4)
   const proximoPartido = proximos[0]
 
   return (

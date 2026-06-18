@@ -1,0 +1,606 @@
+.admin-page {
+  padding: 2.5rem 2rem 4rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.admin-eyebrow {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--rojo);
+  margin-bottom: 0.5rem;
+}
+
+.admin-encabezado {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.admin-encabezado h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--blanco);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.5px;
+}
+
+.admin-sub {
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 480px;
+}
+
+.admin-aviso {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.5rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.admin-bloqueado {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.admin-bloqueado-icono {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.admin-bloqueado h1 {
+  margin-bottom: 0.8rem;
+}
+
+.admin-bloqueado .admin-aviso {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* Progreso */
+.admin-progreso {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  min-width: 160px;
+}
+
+.admin-progreso-numeros {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.admin-progreso-numeros strong {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--blanco);
+  line-height: 1;
+}
+
+.admin-progreso-numeros span {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.4);
+}
+
+.admin-progreso-barra-wrap {
+  width: 160px;
+  height: 5px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.admin-progreso-barra {
+  height: 100%;
+  background: #2ecc71;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+  min-width: 4px;
+}
+
+.admin-progreso-label {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Filtros */
+.admin-filtros {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-filtro {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 0.5rem 1.1rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.15s;
+}
+
+.admin-filtro:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--blanco);
+}
+
+.admin-filtro.active {
+  background: var(--rojo);
+  border-color: var(--rojo);
+  color: var(--blanco);
+}
+
+.admin-filtro-reset {
+  margin-left: auto;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.admin-filtro-reset:hover {
+  border-color: rgba(192, 57, 43, 0.5);
+  color: #e74c3c;
+}
+
+/* Lista de partidos */
+.admin-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.admin-partido {
+  background: #0a1628;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-left: 3px solid transparent;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.admin-partido-pendiente {
+  border-left-color: rgba(192, 57, 43, 0.5);
+}
+
+.admin-partido-cargado {
+  border-left-color: #2ecc71;
+}
+
+.admin-partido-abierto {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.admin-partido-header {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.85rem 1.2rem;
+  cursor: pointer;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+}
+
+.admin-partido-estado-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(192, 57, 43, 0.6);
+  flex-shrink: 0;
+}
+
+.admin-partido-cargado .admin-partido-estado-dot {
+  background: #2ecc71;
+}
+
+.admin-partido-fase {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 700;
+  width: 110px;
+  flex-shrink: 0;
+}
+
+.admin-partido-equipos {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.92rem;
+  min-width: 0;
+}
+
+.admin-equipo-nombre {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-equipo-visitante {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.admin-vs {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-partido-cargado .admin-vs {
+  background: rgba(46, 204, 113, 0.12);
+  color: #2ecc71;
+}
+
+.admin-partido-toggle {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 1.2rem;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.admin-partido-form {
+  padding: 1.4rem 1.2rem 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+/* Scoreboard estilo videoboard de estadio */
+.scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  background: #020810;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 1.4rem 2rem;
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.4);
+}
+
+.scoreboard-equipo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.scoreboard-nombre {
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.scoreboard-separador {
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+/* Stepper — quita flechas nativas del input */
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.stepper-btn {
+  width: 34px;
+  height: 44px;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  color: var(--blanco);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s;
+  flex-shrink: 0;
+}
+
+.stepper-btn:last-child {
+  border-right: none;
+  border-left: 1px solid rgba(255,255,255,0.1);
+}
+
+.stepper-btn:hover {
+  background: var(--rojo);
+}
+
+.stepper-btn:active {
+  background: #9b1f14;
+}
+
+.stepper-input {
+  width: 52px;
+  text-align: center;
+  padding: 0.5rem 0;
+  border: none;
+  background: transparent;
+  color: var(--blanco);
+  font-weight: 800;
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+}
+
+/* Quitar flechas nativas en Chrome/Safari/Edge */
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.stepper-input:focus {
+  outline: none;
+}
+
+/* Eliminación directa: extras */
+.admin-seccion-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.admin-opciones-eliminacion {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+}
+
+.admin-checks {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.admin-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+}
+
+.admin-check input {
+  accent-color: var(--rojo);
+}
+
+.admin-penales-form {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 0.8rem;
+}
+
+.admin-penales-separador {
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+}
+
+.admin-error {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-top: 0.6rem;
+}
+
+/* Goleadores */
+.admin-goles-lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+
+.admin-goles-lista li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.gol-icono {
+  flex-shrink: 0;
+}
+
+.gol-jugador {
+  font-weight: 700;
+  color: var(--blanco);
+}
+
+.gol-equipo {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.78rem;
+}
+
+.gol-minuto {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.gol-asistencia {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+.admin-gol-quitar {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.admin-gol-quitar:hover {
+  color: #e74c3c;
+}
+
+.admin-gol-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-gol-form input,
+.admin-gol-form select {
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--blanco);
+  font-size: 0.85rem;
+}
+
+.admin-gol-form input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.admin-gol-minuto {
+  width: 60px;
+}
+
+.admin-btn-secundario {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--blanco);
+  border-radius: 8px;
+  padding: 0.48rem 1rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.admin-btn-secundario:hover {
+  background: rgba(255, 255, 255, 0.13);
+  border-color: rgba(255,255,255,0.25);
+}
+
+/* Acciones finales */
+.admin-acciones {
+  display: flex;
+  gap: 0.7rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.admin-btn-confirmar {
+  background: var(--rojo);
+  border: none;
+  color: var(--blanco);
+  border-radius: 10px;
+  padding: 0.75rem 1.6rem;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: filter 0.15s, transform 0.1s;
+  box-shadow: 0 2px 12px rgba(192,57,43,0.35);
+}
+
+.admin-btn-confirmar:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.admin-btn-confirmar:active {
+  transform: translateY(0);
+  filter: brightness(0.95);
+}
+
+.admin-btn-confirmar:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.admin-btn-borrar {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  padding: 0.75rem 1.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.admin-btn-borrar:hover {
+  border-color: rgba(192, 57, 43, 0.6);
+  color: #e74c3c;
+  background: rgba(192,57,43,0.06);
+}
+
+@media (max-width: 640px) {
+  .admin-partido-fase {
+    display: none;
+  }
+  .admin-equipo-nombre span:last-child {
+    display: none;
+  }
+}

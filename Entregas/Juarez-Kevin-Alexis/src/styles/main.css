@@ -52,3 +52,7 @@ body {
 @import './footer.css';
 @import './inicio.css';
 @import './intro.css';
+@import './grupos.css';
+@import './playoffs.css';
+@import './admin.css';
+@import './equipos.css';

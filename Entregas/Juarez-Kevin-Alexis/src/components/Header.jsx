@@ -41,6 +41,7 @@ function Header() {
             <Link to="/grupos">Clasificatoria y Grupos</Link>
             <Link to="/equipos">Equipos</Link>
             <Link to="/noticias">Noticias</Link>
+            {usuario?.rol === 'admin' && <Link to="/admin">Panel Admin</Link>}
           </nav>
 
           <button className="header-user-btn" onClick={() => setPanelAbierto(!panelAbierto)}>

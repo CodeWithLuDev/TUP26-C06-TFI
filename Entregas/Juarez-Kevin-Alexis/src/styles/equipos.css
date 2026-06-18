@@ -1,0 +1,113 @@
+.equipos-page {
+  padding: 2.5rem 2rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.equipos-page h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--blanco);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.5px;
+}
+
+.equipos-sub {
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 2.5rem;
+  font-size: 0.95rem;
+}
+
+/* Grid de 4 grupos por fila en desktop */
+.eq-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+/* Tarjeta de grupo */
+.eq-grupo {
+  background: #0a1628;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.eq-grupo-header {
+  background: var(--azul);
+  padding: 0.6rem 1rem;
+  border-bottom: 2px solid var(--rojo);
+}
+
+.eq-grupo-letra {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.eq-grupo-equipos {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tarjeta individual de equipo */
+.eq-tarjeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.15s;
+}
+
+.eq-tarjeta:last-child {
+  border-bottom: none;
+}
+
+.eq-tarjeta:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.eq-bandera-wrap {
+  flex-shrink: 0;
+  width: 34px;
+  height: 22px;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.eq-bandera {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.eq-bandera-fallback {
+  font-size: 1.2rem;
+}
+
+.eq-nombre {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .eq-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .eq-grid {
+    grid-template-columns: 1fr;
+  }
+}
