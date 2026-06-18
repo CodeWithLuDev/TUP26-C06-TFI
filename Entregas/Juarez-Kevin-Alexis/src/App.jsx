@@ -17,6 +17,7 @@ function App() {
 
   return (
     <div className="app">
+      <div className="bg-overlay" />
       <Header />
       <main className="main-content">
         <Routes>
@@ -30,5 +31,4 @@ function App() {
     </div>
   )
 }
-
 export default App

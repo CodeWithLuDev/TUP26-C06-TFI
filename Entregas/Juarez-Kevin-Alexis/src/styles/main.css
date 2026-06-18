@@ -31,15 +31,21 @@ body {
   position: relative;
 }
 
-.bg-image {
+.bg-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.15;
+  inset: 0;
+  background-image: url('/fondo-m26.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   z-index: -1;
+}
+
+.bg-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 40, 20, 0.75);
 }
 
 @import './header.css';
