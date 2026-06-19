@@ -1,9 +1,15 @@
 import { equipos, grupos } from '../data/equipos'
 import { calcularPosiciones } from './posiciones'
 
-// Mundial 2026: 12 grupos de 4 equipos = 48 equipos
-// Clasifican: 1° y 2° de cada grupo (24) + 8 mejores terceros = 32
-// Rondas: Ronda de 32 → Octavos → Cuartos → Semis → Final
+/*
+  MUNDIAL 2026 — Formato oficial FIFA
+  ─────────────────────────────────────
+  48 equipos · 12 grupos de 4
+  Clasifican: 1° y 2° de cada grupo (24) + 8 mejores terceros = 32 clasificados
+  Fase eliminatoria:
+    Dieciseisavos (16 partidos) → Octavos (8) → Cuartos (4) → Semis (2) → Final (1) + 3er Puesto (1)
+  Total: 72 + 16 + 8 + 4 + 2 + 1 + 1 = 104 partidos ✓
+*/
 
 function obtenerEquipo(id) {
   return equipos.find(e => e.id === id) || null
@@ -23,9 +29,9 @@ function obtenerClasificadosPorGrupo(partidosTodos) {
   return tablas
 }
 
-// Obtiene los 8 mejores terceros de entre los 12 grupos
+// 8 mejores terceros de los 12 grupos (por PTS, DG, GF, nombre)
 function obtenerMejoresTerceros(tablas) {
-  const terceros = grupos
+  return grupos
     .map(g => tablas[g]?.[2])
     .filter(Boolean)
     .sort((a, b) => {
@@ -34,12 +40,65 @@ function obtenerMejoresTerceros(tablas) {
       if (b.GF  !== a.GF)  return b.GF  - a.GF
       return a.nombre.localeCompare(b.nombre)
     })
-  return terceros.slice(0, 8)
+    .slice(0, 8)
 }
 
-// Genera los 32 partidos de Ronda de 32 según cruces del Mundial 2026
-// Orden de cruces: 1A vs mejor3, 1B vs 2A, etc.
-// Para simplificar, usamos: 1°(grupos 1-12) vs 2°/3° (espejo)
+function crearPartido(id, fase, ronda, orden, eqLocal, eqVisitante) {
+  return {
+    id, fase, ronda, orden,
+    local:            eqLocal.nombre,
+    localId:          eqLocal.id,
+    codigoLocal:      eqLocal.codigo,
+    visitante:        eqVisitante.nombre,
+    visitanteId:      eqVisitante.id,
+    codigoVisitante:  eqVisitante.codigo,
+    resultado: null, penales: null, tiempoExtra: false, goles: [],
+  }
+}
+
+/*
+  GENERA LOS 16 DIECISEISAVOS
+  ─────────────────────────────
+  32 clasificados:
+    Primeros:  1A 1B 1C 1D 1E 1F 1G 1H 1I 1J 1K 1L   (12)
+    Segundos:  2A 2B 2C 2D 2E 2F 2G 2H 2I 2J 2K 2L   (12)
+    Terceros:  los 8 mejores 3°                         (8)
+
+  Cruces (orden FIFA simplificado):
+    Lado izquierdo del bracket  (órdenes 0-7):
+      0: 1A vs 2B
+      1: 1C vs 2D
+      2: 1E vs 2F
+      3: 1G vs 2H
+      4: 1I vs 2J
+      5: 1K vs 2L
+      6: mejor 3° #1 vs mejor 3° #8
+      7: mejor 3° #2 vs mejor 3° #7
+
+    Lado derecho del bracket  (órdenes 8-15):
+      8:  1B vs 2A
+      9:  1D vs 2C
+      10: 1F vs 2E
+      11: 1H vs 2G
+      12: 1J vs 2I
+      13: 1L vs 2K
+      14: mejor 3° #3 vs mejor 3° #6
+      15: mejor 3° #4 vs mejor 3° #5
+
+  Así: 8 partidos por lado, bracket perfectamente simétrico 8-8.
+
+  IMPORTANTE — por qué los terceros se cruzan ENTRE SÍ y no contra
+  un "peor primero": los 12 primeros de grupo ya quedan emparejados
+  exactamente una vez cada uno en los cruces 0-5 y 8-13 (cada 1X
+  aparece una sola vez). Si a un tercero se lo cruzara contra "el
+  primero con menos puntos", ese primero terminaría apareciendo DOS
+  veces en los Dieciseisavos (una vez en su cruce normal y otra vez
+  como rival del tercero), generando un equipo duplicado en el
+  bracket que eventualmente puede chocar contra sí mismo en una
+  ronda posterior. Cruzando los 8 mejores terceros entre sí se
+  garantiza matemáticamente que los 32 equipos sean distintos:
+  12 primeros + 12 segundos + 8 terceros = 32, sin repetidos.
+*/
 export function generarRondaDe32(partidosTodos) {
   const partidosGrupo = partidosTodos.filter(p => p.fase && p.fase.startsWith('Grupo'))
   if (!faseDeGruposCompleta(partidosGrupo)) return null
@@ -47,63 +106,40 @@ export function generarRondaDe32(partidosTodos) {
   const tablas = obtenerClasificadosPorGrupo(partidosTodos)
   const mejoresTerceros = obtenerMejoresTerceros(tablas)
 
-  // 24 primeros + 24 segundos = 24 cruces 1° vs 2°
-  // + 8 cruces 1° vs mejor 3°  (los 8 primeros por pts entre los primeros vs los 8 mejores 3°)
-  // Para el torneo académico: emparejamos los 12 primeros vs los 12 segundos (24 partidos)
-  // y los 8 primeros por puntos vs los 8 mejores terceros (8 partidos) = 32 partidos
+  // Helpers
+  const p1 = (g) => obtenerEquipo(tablas[g]?.[0]?.id)  // 1° del grupo g
+  const p2 = (g) => obtenerEquipo(tablas[g]?.[1]?.id)  // 2° del grupo g
+  const t3 = (i) => obtenerEquipo(mejoresTerceros[i]?.id) // i-ésimo mejor 3°
 
-  // Ordenar primeros por puntos para el emparejamiento vs terceros
-  const primerosPorPts = grupos
-    .map(g => tablas[g]?.[0])
-    .filter(Boolean)
-    .sort((a, b) => b.PTS - a.PTS)
-
-  const partidos32 = []
-
-  // 12 partidos: 1° grupo X vs 2° grupo Y (cruces cruzados)
-  const ordenCruces = [
-    ['A','B'], ['C','D'], ['E','F'], ['G','H'], ['I','J'], ['K','L'],
-    ['B','A'], ['D','C'], ['F','E'], ['H','G'], ['J','I'], ['L','K'],
+  // 16 cruces: órdenes 0-7 lado izq, 8-15 lado der
+  const cruces = [
+    // Lado izquierdo (0-7)
+    [p1('A'), p2('B')],
+    [p1('C'), p2('D')],
+    [p1('E'), p2('F')],
+    [p1('G'), p2('H')],
+    [p1('I'), p2('J')],
+    [p1('K'), p2('L')],
+    [t3(0), t3(7)],
+    [t3(1), t3(6)],
+    // Lado derecho (8-15)
+    [p1('B'), p2('A')],
+    [p1('D'), p2('C')],
+    [p1('F'), p2('E')],
+    [p1('H'), p2('G')],
+    [p1('J'), p2('I')],
+    [p1('L'), p2('K')],
+    [t3(2), t3(5)],
+    [t3(3), t3(4)],
   ]
-  ordenCruces.forEach(([g1, g2], i) => {
-    const primero  = tablas[g1]?.[0]
-    const segundo  = tablas[g2]?.[1]
-    if (!primero || !segundo) return
-    const eqL = obtenerEquipo(primero.id)
-    const eqV = obtenerEquipo(segundo.id)
-    partidos32.push(crearPartido(`r32-${i + 1}`, 'Ronda de 32', 'ronda32', i, eqL, eqV))
+
+  const partidos = []
+  cruces.forEach(([local, visitante], orden) => {
+    if (!local || !visitante) return
+    partidos.push(crearPartido(`r32-${orden + 1}`, 'Dieciseisavos', 'ronda32', orden, local, visitante))
   })
 
-  // 8 partidos: los 8 mejores primeros vs los 8 mejores terceros
-  for (let i = 0; i < 8; i++) {
-    const primero = primerosPorPts[i]
-    const tercero = mejoresTerceros[i]
-    if (!primero || !tercero) continue
-    const eqL = obtenerEquipo(primero.id)
-    const eqV = obtenerEquipo(tercero.id)
-    partidos32.push(crearPartido(`r32-${13 + i}`, 'Ronda de 32', 'ronda32', 12 + i, eqL, eqV))
-  }
-
-  return partidos32.length > 0 ? partidos32 : null
-}
-
-function crearPartido(id, fase, ronda, orden, eqLocal, eqVisitante) {
-  return {
-    id,
-    fase,
-    ronda,
-    orden,
-    local: eqLocal.nombre,
-    localId: eqLocal.id,
-    codigoLocal: eqLocal.codigo,
-    visitante: eqVisitante.nombre,
-    visitanteId: eqVisitante.id,
-    codigoVisitante: eqVisitante.codigo,
-    resultado: null,
-    penales: null,
-    tiempoExtra: false,
-    goles: [],
-  }
+  return partidos.length > 0 ? partidos : null
 }
 
 export function ganadorDePartido(partido) {
@@ -164,10 +200,10 @@ export function generarTercerPuesto(partidosSemis) {
 }
 
 export const ETIQUETAS_RONDAS = {
-  ronda32:     'Ronda de 32',
-  octavos:     'Octavos de Final',
-  cuartos:     'Cuartos de Final',
-  semis:       'Semifinales',
-  final:       'Final',
-  tercerPuesto:'Tercer Puesto',
+  ronda32:      'Dieciseisavos',
+  octavos:      'Octavos de Final',
+  cuartos:      'Cuartos de Final',
+  semis:        'Semifinales',
+  final:        'Final',
+  tercerPuesto: 'Tercer Puesto',
 }

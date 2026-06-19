@@ -142,29 +142,36 @@ function Grupos() {
   const { partidos } = useTorneo()
 
   return (
-    <div className="grupos-page">
-      <h1>Clasificatoria y Grupos</h1>
-      <p className="grupos-sub">Seguí el estado de cada grupo en tiempo real</p>
+    <>
+      <div className="grupos-page">
+        <h1>Clasificatoria y Grupos</h1>
+        <p className="grupos-sub">Seguí el estado de cada grupo en tiempo real</p>
 
-      <div className="grupos-tabs">
-        {GRUPOS.map(g => (
-          <button
-            key={g}
-            className={`grupo-tab ${grupoActivo === g ? 'active' : ''}`}
-            onClick={() => setGrupoActivo(g)}
-          >
-            Grupo {g}
-          </button>
-        ))}
+        <div className="grupos-tabs">
+          {GRUPOS.map(g => (
+            <button
+              key={g}
+              className={`grupo-tab ${grupoActivo === g ? 'active' : ''}`}
+              onClick={() => setGrupoActivo(g)}
+            >
+              Grupo {g}
+            </button>
+          ))}
+        </div>
+
+        <TablaGrupo grupo={grupoActivo} partidos={partidos} />
+
+        <h2 className="estadisticas-titulo">Estadísticas del Torneo</h2>
+        <TablaEstadisticas partidos={partidos} />
       </div>
 
-      <TablaGrupo grupo={grupoActivo} partidos={partidos} />
-
-      <h2 className="estadisticas-titulo">Estadísticas del Torneo</h2>
-      <TablaEstadisticas partidos={partidos} />
-
-      <Bracket />
-    </div>
+      {/* Fuera de .grupos-page a propósito: el bracket necesita mucho más
+          ancho que la columna de lectura de 900px para no obligar a
+          desplazarse horizontalmente. */}
+      <div className="bracket-section-full">
+        <Bracket />
+      </div>
+    </>
   )
 }
 

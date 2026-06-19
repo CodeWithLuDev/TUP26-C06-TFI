@@ -3,6 +3,14 @@ import { createContext, useContext, useState, useEffect } from 'react'
 const NoticiasContext = createContext()
 const CLAVE = 'mundial2026_noticias'
 
+function slugify(texto) {
+  return texto
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim().replace(/\s+/g, '-')
+}
+
 function cargar() {
   try {
     const g = localStorage.getItem(CLAVE)
@@ -19,9 +27,11 @@ export function NoticiasProvider({ children }) {
   }, [noticias])
 
   function agregarNoticia(noticia) {
+    const id = Date.now()
     const nueva = {
       ...noticia,
-      id: Date.now(),
+      id,
+      slug: `${slugify(noticia.titulo)}-${id}`,
       creadoEn: new Date().toISOString(),
     }
     setNoticias(prev => [nueva, ...prev])
@@ -29,7 +39,11 @@ export function NoticiasProvider({ children }) {
   }
 
   function editarNoticia(id, datos) {
-    setNoticias(prev => prev.map(n => n.id === id ? { ...n, ...datos, editadoEn: new Date().toISOString() } : n))
+    setNoticias(prev => prev.map(n =>
+      n.id === id
+        ? { ...n, ...datos, slug: `${slugify(datos.titulo)}-${id}`, editadoEn: new Date().toISOString() }
+        : n
+    ))
   }
 
   function borrarNoticia(id) {

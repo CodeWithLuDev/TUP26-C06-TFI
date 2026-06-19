@@ -33,6 +33,10 @@ function Header() {
       <header className="header">
         <Link to="/" className="header-logo">
           <img src="/logo-m26.jpg" alt="Mundial 2026" />
+          <div className="header-titulo">
+            <span className="header-titulo-copa">Copa Mundial</span>
+            <span className="header-titulo-anio">2026</span>
+          </div>
         </Link>
 
         <div className="header-right">

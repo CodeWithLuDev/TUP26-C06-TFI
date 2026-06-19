@@ -4,6 +4,15 @@
   margin: 0 auto;
 }
 
+/* El bracket vive fuera de .grupos-page para poder estirarse de punta
+   a punta de la pantalla en vez de quedar atado a la columna de 900px
+   de lectura. Tope generoso para no deformarse en monitores ultra anchos. */
+.bracket-section-full {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 .grupos-page h1 {
   font-size: 2rem;
   font-weight: 800;

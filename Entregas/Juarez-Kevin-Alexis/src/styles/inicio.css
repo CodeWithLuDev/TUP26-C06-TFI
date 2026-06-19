@@ -337,3 +337,20 @@
   flex-direction: column;
   gap: 0.8rem;
 }
+/* Proximos partidos */
+.proximos-section { margin-top: 2rem; }
+.proximos-section h2 { font-size: 1.5rem; font-weight: 700; color: var(--blanco); margin-bottom: 1.2rem; }
+.proximos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.proximo-card {
+  background: #0a1628; border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 1.4rem 1.6rem; text-align: center;
+}
+.proximo-card .proximo-badge {
+  background: var(--rojo); color: #fff; font-size: 0.72rem; font-weight: 700;
+  padding: 0.25rem 0.7rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px;
+}
+.proximo-card .proximo-fase { color: rgba(255,255,255,0.5); font-size: 0.82rem; margin-top: 0.7rem; }
+.proximo-card .proximo-equipos { display: flex; align-items: center; justify-content: center; gap: 1.2rem; margin: 0.9rem 0; }
+.proximo-card .proximo-equipo { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; font-size: 0.9rem; font-weight: 700; }
+.proximo-card .vs { color: var(--rojo); font-size: 1rem; font-weight: 800; }
+.proximo-card .proximo-hora { color: rgba(255,255,255,0.75); font-size: 0.85rem; font-weight: 600; margin-top: 0.5rem; }

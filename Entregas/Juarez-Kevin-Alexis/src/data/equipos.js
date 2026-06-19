@@ -15,7 +15,7 @@ export const equipos = [
   { id: 9,  nombre: 'Brasil',        codigo: 'BR', grupo: 'C' },
   { id: 10, nombre: 'Marruecos',     codigo: 'MA', grupo: 'C' },
   { id: 11, nombre: 'Haití',         codigo: 'HT', grupo: 'C' },
-  { id: 12, nombre: 'Escocia',       codigo: 'GB-SCT', grupo: 'C' },
+  { id: 12, nombre: 'Escocia',       codigo: 'GB_SCT', grupo: 'C' },
 
   // Grupo D
   { id: 13, nombre: 'E. Unidos',     codigo: 'US', grupo: 'D' },
@@ -66,7 +66,7 @@ export const equipos = [
   { id: 44, nombre: 'Colombia',      codigo: 'CO', grupo: 'K' },
 
   // Grupo L
-  { id: 45, nombre: 'Inglaterra',    codigo: 'GB-ENG', grupo: 'L' },
+  { id: 45, nombre: 'Inglaterra',    codigo: 'GB_ENG', grupo: 'L' },
   { id: 46, nombre: 'Croacia',       codigo: 'HR', grupo: 'L' },
   { id: 47, nombre: 'Ghana',         codigo: 'GH', grupo: 'L' },
   { id: 48, nombre: 'Panamá',        codigo: 'PA', grupo: 'L' },

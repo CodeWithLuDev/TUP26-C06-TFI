@@ -13,6 +13,16 @@ const TorneoContext = createContext()
 const CLAVE_STORAGE = 'mundial2026_partidos'
 const ORDEN_RONDAS = ['ronda32', 'octavos', 'cuartos', 'semis', 'final', 'tercerPuesto']
 
+// Fechas base para cada ronda eliminatoria (Mundial 2026 real aproximado)
+const FECHAS_ELIMINATORIAS = {
+  ronda32:     '2026-06-27',
+  octavos:     '2026-07-02',
+  cuartos:     '2026-07-07',
+  semis:       '2026-07-11',
+  final:       '2026-07-15',
+  tercerPuesto:'2026-07-14',
+}
+
 function cargarPartidosGuardados() {
   try {
     const guardado = localStorage.getItem(CLAVE_STORAGE)
@@ -99,6 +109,18 @@ function generarGolesDelPartido(local, visitante, gl, gv) {
   return goles.sort((a, b) => a.minuto - b.minuto)
 }
 
+/* Genera una fecha ISO aleatoria dentro de un rango de días desde la fechaBase */
+function fechaAleatoria(fechaBase, rangoDias = 3) {
+  const base = new Date(fechaBase + 'T00:00:00Z')
+  const diasExtra = Math.floor(Math.random() * (rangoDias + 1))
+  base.setUTCDate(base.getUTCDate() + diasExtra)
+  // Hora aleatoria entre 16:00 y 22:00 UTC
+  const hora = 16 + Math.floor(Math.random() * 7)
+  const min = Math.random() > 0.5 ? 30 : 0
+  base.setUTCHours(hora, min, 0, 0)
+  return base.toISOString()
+}
+
 function completarConResultadoAleatorio(partido, esEliminacion) {
   const gl = golesAleatorios()
   const gv = golesAleatorios()
@@ -111,7 +133,12 @@ function completarConResultadoAleatorio(partido, esEliminacion) {
     if (pl === pv) pv += 1
     penales = { local: pl, visitante: pv }
   }
-  return { ...partido, resultado: { local: gl, visitante: gv }, goles, penales, tiempoExtra, fechaFin: new Date().toISOString() }
+  // Asignar fecha aleatoria según ronda si no tiene una
+  const ronda = partido.ronda
+  const horaUTC = partido.horaUTC || (ronda && FECHAS_ELIMINATORIAS[ronda]
+    ? fechaAleatoria(FECHAS_ELIMINATORIAS[ronda])
+    : fechaAleatoria(partido.fecha || '2026-06-27'))
+  return { ...partido, resultado: { local: gl, visitante: gv }, goles, penales, tiempoExtra, horaUTC, fechaFin: new Date().toISOString() }
 }
 
 export function TorneoProvider({ children }) {
@@ -123,11 +150,11 @@ export function TorneoProvider({ children }) {
 
   const partidosCompletos = useMemo(() => construirPartidosCompletos(partidos), [partidos])
 
-  function cargarResultado(idPartido, { golesLocal, golesVisitante, penales = null, tiempoExtra = false, goles = [] }) {
+  function cargarResultado(idPartido, { golesLocal, golesVisitante, penales = null, tiempoExtra = false, goles = [], horaUTC, horaManual }) {
     setPartidos(prev => {
       const partidoBase = construirPartidosCompletos(prev).find(p => p.id === idPartido)
       if (!partidoBase) return prev
-      const actualizado = { ...partidoBase, resultado: { local: golesLocal, visitante: golesVisitante }, penales, tiempoExtra, goles, fechaFin: new Date().toISOString() }
+      const actualizado = { ...partidoBase, resultado: { local: golesLocal, visitante: golesVisitante }, penales, tiempoExtra, goles, fechaFin: new Date().toISOString(), ...(horaUTC ? { horaUTC, horaManual: !!horaManual } : {}) }
       const yaExistia = prev.some(p => p.id === idPartido)
       let siguientes = yaExistia
         ? prev.map(p => (p.id === idPartido ? actualizado : p))
@@ -165,7 +192,7 @@ export function TorneoProvider({ children }) {
   function generarTorneoAleatorio() {
     let actuales = partidosIniciales.map(p => completarConResultadoAleatorio(p, false))
 
-    const simularRonda = (rondaPartidos, clave, etiqueta) => {
+    const simularRonda = (rondaPartidos) => {
       const conRes = rondaPartidos.map(p => completarConResultadoAleatorio(p, true))
       actuales = [...actuales, ...conRes]
       return conRes
@@ -173,22 +200,22 @@ export function TorneoProvider({ children }) {
 
     let r32 = generarRondaDe32(actuales)
     if (!r32) return
-    r32 = simularRonda(r32, 'ronda32', ETIQUETAS_RONDAS.ronda32)
+    r32 = simularRonda(r32)
 
     let oct = generarSiguienteRonda(r32, ETIQUETAS_RONDAS.octavos, 'octavos')
     if (!oct) return
-    oct = simularRonda(oct, 'octavos', ETIQUETAS_RONDAS.octavos)
+    oct = simularRonda(oct)
 
     let cua = generarSiguienteRonda(oct, ETIQUETAS_RONDAS.cuartos, 'cuartos')
     if (!cua) return
-    cua = simularRonda(cua, 'cuartos', ETIQUETAS_RONDAS.cuartos)
+    cua = simularRonda(cua)
 
     let sem = generarSiguienteRonda(cua, ETIQUETAS_RONDAS.semis, 'semis')
     if (!sem) return
-    sem = simularRonda(sem, 'semis', ETIQUETAS_RONDAS.semis)
+    sem = simularRonda(sem)
 
     let fin = generarSiguienteRonda(sem, ETIQUETAS_RONDAS.final, 'final')
-    if (fin) simularRonda(fin, 'final', ETIQUETAS_RONDAS.final)
+    if (fin) simularRonda(fin)
 
     let tp = generarTercerPuesto(sem)
     if (tp) actuales = [...actuales, completarConResultadoAleatorio(tp, true)]

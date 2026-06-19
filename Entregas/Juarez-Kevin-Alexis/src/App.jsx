@@ -7,6 +7,7 @@ import Inicio from './pages/Inicio'
 import Grupos from './pages/Grupos'
 import Equipos from './pages/Equipos'
 import Noticias from './pages/Noticias'
+import NoticiaDetalle from './pages/NoticiaDetalle'
 import PanelAdmin from './pages/PanelAdmin'
 
 function App() {
@@ -22,15 +23,17 @@ function App() {
       <Header />
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<Inicio />} />
-          <Route path="/grupos" element={<Grupos />} />
-          <Route path="/equipos" element={<Equipos />} />
-          <Route path="/noticias" element={<Noticias />} />
-          <Route path="/admin" element={<PanelAdmin />} />
+          <Route path="/"           element={<Inicio />} />
+          <Route path="/grupos"     element={<Grupos />} />
+          <Route path="/equipos"    element={<Equipos />} />
+          <Route path="/noticias"   element={<Noticias />} />
+          <Route path="/noticias/:slug" element={<NoticiaDetalle />} />
+          <Route path="/admin"      element={<PanelAdmin />} />
         </Routes>
       </main>
       <Footer />
     </div>
   )
 }
+
 export default App
