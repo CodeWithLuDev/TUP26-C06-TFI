@@ -1,26 +1,9 @@
-/**
- * /src/ui/scoreForm.js
- * ─────────────────────────────────────────────────────────────
- * Maneja el formulario #formulario-resultado:
- *   1. Puebla el <select> con partidos pendientes.
- *   2. Al hacer submit, muta el array `partidos` en memoria.
- *   3. Persiste en LocalStorage.
- *   4. Dispara el re-renderizado de fixture y grupos.
- * ─────────────────────────────────────────────────────────────
- *
- * NOTA: partidos.js usa IDs en MAYÚSCULAS ('ARG', 'MEX'…) pero
- * equipos.js los tiene en minúsculas ('arg', 'mex'…). posiciones.js
- * hace `tabla.find(e => e.id === partido.equipoLocal)`, así que esa
- * comparación falla. La corrección está en poblarSelectPartidos():
- * mostramos el nombre real buscando con .toUpperCase() en ambos lados.
- * La solución definitiva es normalizar los IDs en partidos.js a
- * minúsculas (ver comentario al final del archivo).
- */
-
 import { partidos }      from '../data/partidos.js';
 import { equipos }       from '../data/equipos.js';
 import { renderFixture } from './fixture.js';
 import { renderGrupos }  from './grupos.js';
+import { renderEstadisticas } from './renderEstadisticas.js';
+
 
 // ── Clave de LocalStorage ─────────────────────────────────────
 const LS_KEY = 'mundial26_partidos';
@@ -106,6 +89,7 @@ export function poblarSelectPartidos() {
 function actualizarVistas() {
   renderFixture();
   renderGrupos();
+  renderEstadisticas();
   poblarSelectPartidos();
 }
 
@@ -218,17 +202,3 @@ export function initScoreForm() {
   form.addEventListener('submit', handleSubmit);
 }
 
-/*
- * ─────────────────────────────────────────────────────────────
- * BUG A CORREGIR EN partidos.js (fuera del alcance de este archivo):
- *
- * Los IDs en partidos.js están en MAYÚSCULAS ('ARG', 'MEX') pero en
- * equipos.js están en minúsculas ('arg', 'mex'). posiciones.js hace:
- *   tabla.find(e => e.id === partido.equipoLocal)
- * → esa comparación FALLA porque 'arg' !== 'ARG'.
- *
- * Solución definitiva: en partidos.js cambiar todos los equipoLocal /
- * equipoVisitante a minúsculas:
- *   'ARG' → 'arg' | 'MEX' → 'mex' | 'FRA' → 'fra' | 'ESP' → 'esp'
- * ─────────────────────────────────────────────────────────────
- */
