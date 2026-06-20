@@ -31,14 +31,21 @@ body {
   position: relative;
 }
 
+@keyframes fondoZoom {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.07); }
+  100% { transform: scale(1); }
+}
+
 .bg-overlay {
   position: fixed;
   inset: 0;
   background-image: url('/fondo-m26.jpg');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
   z-index: -1;
+  animation: fondoZoom 20s ease-in-out infinite;
+  transform-origin: center center;
 }
 
 .bg-overlay::after {
@@ -55,4 +62,6 @@ body {
 @import './grupos.css';
 @import './playoffs.css';
 @import './admin.css';
-@import './equipos.css';@import './noticias.css';
+@import './equipos.css';
+@import './noticias.css';
+@import './bracket.css';

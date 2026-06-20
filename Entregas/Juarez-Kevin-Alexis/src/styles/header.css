@@ -70,6 +70,17 @@
 
 .header-nav a:hover {
   color: var(--rojo);
+  transform: translateY(-2px);
+}
+
+.header-nav a {
+  color: var(--blanco);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  transition: color 0.2s, transform 0.2s;
+  display: inline-block;
 }
 
 .header-user-btn {
@@ -77,13 +88,23 @@
   border: none;
   color: var(--blanco);
   cursor: pointer;
-  padding: 0.4rem;
+  padding: 0.3rem;
   border-radius: 50%;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .header-user-btn:hover {
   background: rgba(255,255,255,0.1);
+  transform: scale(1.12);
+}
+
+.perfil-icon {
+  width: 36px;
+  height: 36px;
+  display: block;
 }
 
 .auth-panel {

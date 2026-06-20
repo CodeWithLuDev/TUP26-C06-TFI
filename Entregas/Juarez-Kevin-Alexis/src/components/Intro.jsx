@@ -24,7 +24,7 @@ function Intro({ onFinish }) {
       {/* Contenido central */}
       <div className="intro-content">
         <img
-          src="/logo-m26.jpg"
+          src="/logo-m26.png"
           alt="Copa Mundial 2026"
           className="intro-logo"
         />

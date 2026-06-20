@@ -72,10 +72,25 @@ function CardSede({ sede }) {
 export default function Inicio() {
   const { partidos } = useTorneo()
 
+  const ORDEN_RONDA = {
+    final: 0,
+    tercerPuesto: 1,
+    semis: 2,
+    cuartos: 3,
+    octavos: 4,
+    ronda32: 5,
+    grupos: 6,
+  }
+
   const jugados = partidos
     .filter(p => p.resultado !== null && p.fechaFin)
-    .sort((a, b) => new Date(b.fechaFin) - new Date(a.fechaFin))
-    .slice(0, 4)
+    .sort((a, b) => {
+      const ra = ORDEN_RONDA[a.ronda] ?? 7
+      const rb = ORDEN_RONDA[b.ronda] ?? 7
+      if (ra !== rb) return ra - rb
+      return new Date(b.fechaFin) - new Date(a.fechaFin)
+    })
+    .slice(0, 6)
 
   // Próximos: solo partidos sin resultado que tienen fecha/hora cargada manualmente
   const proximos = partidos

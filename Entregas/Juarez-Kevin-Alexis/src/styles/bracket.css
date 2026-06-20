@@ -1,0 +1,80 @@
+/* ───────────────────────────────────────────────
+   Animaciones del Tournament Bracket
+   ─────────────────────────────────────────────── */
+
+@keyframes bracket-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bracket-trophy-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-6px) rotate(-2deg); }
+}
+
+@keyframes bracket-winner-glow {
+  0%, 100% { box-shadow: 0 0 0 rgba(46,204,113,0); }
+  50%      { box-shadow: 0 0 16px rgba(46,204,113,0.45); }
+}
+
+@keyframes bracket-champion-glow {
+  0%, 100% { box-shadow: 0 0 14px rgba(241,196,15,0.15); }
+  50%      { box-shadow: 0 0 26px rgba(241,196,15,0.5); }
+}
+
+/* Columnas y título: entran con un leve fade + slide, escalonado por orden */
+.bracket-anim-in {
+  animation: bracket-fade-in 0.45s ease both;
+}
+
+/* Tarjetas de partido: hover dinámico */
+.bracket-card {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.bracket-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.4);
+  z-index: 2;
+}
+
+/* Fila de equipo ganador: brillo pulsante sutil */
+.bracket-fila-ganador {
+  animation: bracket-winner-glow 2.6s ease-in-out infinite;
+}
+
+/* Trofeo: flota suavemente */
+.bracket-trophy-img {
+  animation: bracket-trophy-float 3.2s ease-in-out infinite;
+}
+
+/* Tarjeta de la final, cuando ya hay campeón: glow dorado pulsante */
+.bracket-card-campeon {
+  animation: bracket-champion-glow 2.4s ease-in-out infinite;
+}
+
+/* Separadores verticales: se "dibujan" de arriba hacia abajo al entrar */
+@keyframes bracket-sep-draw {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+.bracket-sep {
+  animation: bracket-sep-draw 0.6s ease both;
+  transform-origin: top;
+}
+
+/* Respeta la preferencia de movimiento reducido del usuario */
+@media (prefers-reduced-motion: reduce) {
+  .bracket-anim-in,
+  .bracket-trophy-img,
+  .bracket-fila-ganador,
+  .bracket-card-campeon,
+  .bracket-sep {
+    animation: none !important;
+  }
+  .bracket-card {
+    transition: none;
+  }
+  .bracket-card:hover {
+    transform: none;
+  }
+}

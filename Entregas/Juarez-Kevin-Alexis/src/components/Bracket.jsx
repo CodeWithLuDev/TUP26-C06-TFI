@@ -7,6 +7,17 @@ function Bandera({ codigo, size = 16 }) {
   return <Flag style={{ width: size, height: 'auto', borderRadius: '2px', display: 'block', flexShrink: 0 }} />
 }
 
+function Trofeo({ size = 42, flotante = true, opacidad = 1 }) {
+  return (
+    <img
+      src="/copa-m26.png"
+      alt="Copa del Mundial 2026"
+      className={flotante ? 'bracket-trophy-img' : ''}
+      style={{ width: size, height: 'auto', opacity: opacidad, filter: 'drop-shadow(0 0 14px rgba(255,215,0,0.55))', display: 'block' }}
+    />
+  )
+}
+
 function ganadorId(p) {
   if (!p?.resultado) return null
   const { local, visitante } = p.resultado
@@ -18,7 +29,7 @@ function ganadorId(p) {
 
 function EquipoFila({ nombre, codigo, goles, esGanador }) {
   return (
-    <div style={{
+    <div className={esGanador ? 'bracket-fila-ganador' : ''} style={{
       display: 'flex', alignItems: 'center', gap: 5,
       padding: '5px 8px', minHeight: 28, fontSize: 11, fontWeight: esGanador ? 700 : 500,
       background: esGanador ? 'rgba(46,204,113,0.15)' : '#0c1e38',
@@ -37,14 +48,15 @@ function EquipoFila({ nombre, codigo, goles, esGanador }) {
   )
 }
 
-function PartidoCard({ p }) {
+function PartidoCard({ p, delayMs = 0 }) {
   const ganId = ganadorId(p)
   const conRes = !!p?.resultado
   return (
-    <div style={{
+    <div className="bracket-card bracket-anim-in" style={{
       width: '100%', borderRadius: 7, overflow: 'hidden',
       border: `1px solid ${conRes ? 'rgba(46,204,113,0.25)' : 'rgba(255,255,255,0.1)'}`,
       boxShadow: conRes ? '0 0 10px rgba(46,204,113,0.06)' : 'none',
+      animationDelay: `${delayMs}ms`,
     }}>
       <EquipoFila nombre={p?.local}     codigo={p?.codigoLocal}     goles={conRes ? p.resultado.local     : undefined} esGanador={!!p && ganId === p.localId} />
       <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
@@ -53,21 +65,22 @@ function PartidoCard({ p }) {
   )
 }
 
-function RondaCol({ label, partidos, align = 'left' }) {
+function RondaCol({ label, partidos, align = 'left', delayBase = 0 }) {
   if (!partidos || partidos.length === 0) return null
   const ordenados = [...partidos].sort((a, b) => a.orden - b.orden)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
-      <div style={{
+      <div className="bracket-anim-in" style={{
         textAlign: 'center', fontSize: 9, fontWeight: 800, letterSpacing: '1.2px',
         textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)',
         padding: '0 4px 10px', borderBottom: '1px solid rgba(255,255,255,0.07)', marginBottom: 8,
+        animationDelay: `${delayBase}ms`,
       }}>{label}</div>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
-        {ordenados.map(p => (
+        {ordenados.map((p, i) => (
           <div key={p.id}
             style={{ display: 'flex', justifyContent: align === 'right' ? 'flex-end' : 'flex-start', padding: '4px 6px' }}>
-            <PartidoCard p={p} />
+            <PartidoCard p={p} delayMs={delayBase + i * 60} />
           </div>
         ))}
       </div>
@@ -75,8 +88,8 @@ function RondaCol({ label, partidos, align = 'left' }) {
   )
 }
 
-function Sep() {
-  return <div style={{ width: 1, background: 'rgba(255,255,255,0.05)', flexShrink: 0, alignSelf: 'stretch' }} />
+function Sep({ delayMs = 0 }) {
+  return <div className="bracket-sep" style={{ width: 1, background: 'rgba(255,255,255,0.05)', flexShrink: 0, alignSelf: 'stretch', animationDelay: `${delayMs}ms` }} />
 }
 
 function CentroCol({ fin, tp }) {
@@ -90,20 +103,20 @@ function CentroCol({ fin, tp }) {
       justifyContent: 'center', gap: 20, padding: '0 24px',
       flex: '0 1 220px', minWidth: 180,
     }}>
-      <div style={{ fontSize: 42, filter: 'drop-shadow(0 0 14px rgba(255,215,0,0.6))' }}>🏆</div>
+      <Trofeo size={56} />
       <div style={{ textAlign: 'center', width: '100%' }}>
-        <div style={{ fontSize: 9, fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#e74c3c', marginBottom: 8 }}>
+        <div className="bracket-anim-in" style={{ fontSize: 9, fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#e74c3c', marginBottom: 8 }}>
           ⚽ FINAL
         </div>
         {fin ? (
           <>
-            <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(231,76,60,0.35)', boxShadow: '0 0 20px rgba(231,76,60,0.1)' }}>
+            <div className={`bracket-anim-in ${ganFin ? 'bracket-card-campeon' : ''}`} style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(231,76,60,0.35)', boxShadow: '0 0 20px rgba(231,76,60,0.1)' }}>
               <EquipoFila nombre={fin.local}     codigo={fin.codigoLocal}     goles={conFin ? fin.resultado.local     : undefined} esGanador={conFin && ganFin === fin.localId} />
               <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
               <EquipoFila nombre={fin.visitante} codigo={fin.codigoVisitante} goles={conFin ? fin.resultado.visitante : undefined} esGanador={conFin && ganFin === fin.visitanteId} />
             </div>
             {ganFin && (
-              <div style={{ marginTop: 8, fontSize: 10, fontWeight: 700, color: '#f1c40f', letterSpacing: '0.5px' }}>
+              <div className="bracket-anim-in" style={{ marginTop: 8, fontSize: 10, fontWeight: 700, color: '#f1c40f', letterSpacing: '0.5px' }}>
                 🥇 {fin.localId === ganFin ? fin.local : fin.visitante}
               </div>
             )}
@@ -115,11 +128,11 @@ function CentroCol({ fin, tp }) {
         )}
       </div>
       {tp && (
-        <div style={{ textAlign: 'center', width: '100%' }}>
+        <div className="bracket-anim-in" style={{ textAlign: 'center', width: '100%' }}>
           <div style={{ fontSize: 8, fontWeight: 800, letterSpacing: '1.2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 6 }}>
             🥉 3er Puesto
           </div>
-          <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
+          <div className="bracket-card" style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
             <EquipoFila nombre={tp.local}     codigo={tp.codigoLocal}     goles={conTp ? tp.resultado.local     : undefined} esGanador={conTp && ganTp === tp.localId} />
             <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
             <EquipoFila nombre={tp.visitante} codigo={tp.codigoVisitante} goles={conTp ? tp.resultado.visitante : undefined} esGanador={conTp && ganTp === tp.visitanteId} />
@@ -139,8 +152,8 @@ function BracketVacio() {
       borderTop: '1px solid rgba(255,255,255,0.08)',
       borderBottom: '1px solid rgba(255,255,255,0.08)',
     }}>
-      <span style={{ fontSize: 48, opacity: 0.3 }}>🏆</span>
-      <div style={{ textAlign: 'center' }}>
+      <Trofeo size={56} opacidad={0.3} />
+      <div className="bracket-anim-in" style={{ textAlign: 'center', animationDelay: '120ms' }}>
         <p style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 700, fontSize: 16, margin: '0 0 6px' }}>
           El bracket se genera automáticamente
         </p>
@@ -186,9 +199,10 @@ export default function Bracket() {
 
   return (
     <section style={{ padding: '0 0 3rem' }}>
-      <div style={{ padding: '2rem 0 1rem', display: 'flex', alignItems: 'baseline', gap: 12 }}>
+      <div style={{ padding: '2rem 0 1rem', display: 'flex', alignItems: 'center', gap: 12 }}>
+        <Trofeo size={26} flotante />
         <h2 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#fff', margin: 0 }}>
-          🏆 Tournament Bracket
+          Tournament Bracket
         </h2>
         <span style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.35)', fontWeight: 500 }}>
           Mundial 2026 — Fase Eliminatoria
@@ -210,23 +224,23 @@ export default function Bracket() {
 
             {/* ── IZQUIERDA: Dieciseisavos → Semis (convergiendo al centro) ── */}
             <div style={{ display: 'flex', alignItems: 'stretch', flex: 1, minWidth: 0 }}>
-              <RondaCol label="Dieciseisavos" partidos={r32i} align="left" />
-              {octi.length > 0 && <><Sep /><RondaCol label="Octavos"  partidos={octi} align="left" /></>}
-              {cuai.length > 0 && <><Sep /><RondaCol label="Cuartos"  partidos={cuai} align="left" /></>}
-              {semi.length > 0 && <><Sep /><RondaCol label="Semis"    partidos={semi} align="left" /></>}
+              <RondaCol label="Dieciseisavos" partidos={r32i} align="left" delayBase={0} />
+              {octi.length > 0 && <><Sep delayMs={80} /><RondaCol label="Octavos"  partidos={octi} align="left" delayBase={80} /></>}
+              {cuai.length > 0 && <><Sep delayMs={160} /><RondaCol label="Cuartos"  partidos={cuai} align="left" delayBase={160} /></>}
+              {semi.length > 0 && <><Sep delayMs={240} /><RondaCol label="Semis"    partidos={semi} align="left" delayBase={240} /></>}
             </div>
 
             {/* ── CENTRO ── */}
-            <Sep />
+            <Sep delayMs={320} />
             <CentroCol fin={fin} tp={tp} />
-            <Sep />
+            <Sep delayMs={320} />
 
             {/* ── DERECHA: Semis → Dieciseisavos (espejo) ── */}
             <div style={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'stretch', flex: 1, minWidth: 0 }}>
-              <RondaCol label="Dieciseisavos" partidos={r32d} align="right" />
-              {octd.length > 0 && <><Sep /><RondaCol label="Octavos"  partidos={octd} align="right" /></>}
-              {cuad.length > 0 && <><Sep /><RondaCol label="Cuartos"  partidos={cuad} align="right" /></>}
-              {semd.length > 0 && <><Sep /><RondaCol label="Semis"    partidos={semd} align="right" /></>}
+              <RondaCol label="Dieciseisavos" partidos={r32d} align="right" delayBase={0} />
+              {octd.length > 0 && <><Sep delayMs={80} /><RondaCol label="Octavos"  partidos={octd} align="right" delayBase={80} /></>}
+              {cuad.length > 0 && <><Sep delayMs={160} /><RondaCol label="Cuartos"  partidos={cuad} align="right" delayBase={160} /></>}
+              {semd.length > 0 && <><Sep delayMs={240} /><RondaCol label="Semis"    partidos={semd} align="right" delayBase={240} /></>}
             </div>
 
           </div>
