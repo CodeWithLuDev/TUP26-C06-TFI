@@ -662,3 +662,132 @@ a:hover { text-decoration: underline; }
   .contenedor { padding-inline: var(--espacio-md); }
   .logo__texto { font-size: 1rem; }
 }
+
+/* ── 19. Bracket de playoffs ──────────────────────────────── */
+.bracket-wrapper {
+  display: flex;
+  gap: var(--espacio-xl);
+  align-items: flex-start;
+  overflow-x: auto;
+  padding-bottom: var(--espacio-lg);
+  min-height: 400px;
+}
+
+.bracket-columna {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-md);
+  min-width: 200px;
+  flex-shrink: 0;
+}
+
+.bracket-columna__titulo {
+  font-family: var(--fuente-titulo);
+  font-size: 0.85rem;
+  color: var(--color-acento);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+  padding-bottom: var(--espacio-sm);
+  border-bottom: 1px solid var(--color-borde);
+  margin-bottom: var(--espacio-sm);
+}
+
+.bracket-cruce {
+  background: var(--color-panel);
+  border-radius: var(--radio-card);
+  overflow: hidden;
+  box-shadow: var(--sombra-card);
+  border: 1px solid var(--color-borde);
+  transition: transform var(--transicion);
+}
+.bracket-cruce:hover { transform: translateY(-2px); }
+.bracket-cruce--jugado { border-color: rgba(14,143,78,0.4); }
+
+.bracket-equipo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-sm);
+  padding: var(--espacio-sm) var(--espacio-md);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background var(--transicion);
+}
+.bracket-equipo:last-of-type { border-bottom: none; }
+
+.bracket-equipo--ganador {
+  background: rgba(14,143,78,0.15);
+}
+.bracket-equipo--perdedor {
+  opacity: 0.45;
+}
+
+.bracket-equipo__escudo,
+.bracket-equipo__placeholder {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.bracket-equipo__nombre {
+  flex: 1;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bracket-equipo__goles {
+  font-family: var(--fuente-numero);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-acento);
+  min-width: 16px;
+  text-align: right;
+}
+
+/* Formulario inline de resultado del bracket */
+.bracket-form {
+  padding: var(--espacio-sm) var(--espacio-md);
+  background: var(--color-panel-alt);
+  border-top: 1px solid var(--color-borde);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-xs);
+}
+
+.bracket-form__inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-sm);
+}
+
+.bracket-form__inputs input {
+  width: 48px;
+  background: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-boton);
+  color: var(--color-texto);
+  font-family: var(--fuente-numero);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: var(--espacio-xs) var(--espacio-sm);
+  text-align: center;
+}
+.bracket-form__inputs input:focus {
+  outline: none;
+  border-color: var(--color-acento);
+}
+
+.bracket-form__btn {
+  padding-block: var(--espacio-xs);
+  font-size: 0.75rem;
+  width: 100%;
+  margin-top: 0;
+}
+
+@media (max-width: 700px) {
+  .bracket-columna { min-width: 160px; }
+  .bracket-equipo__nombre { font-size: 0.72rem; }
+}

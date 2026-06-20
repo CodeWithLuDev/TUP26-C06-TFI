@@ -6,6 +6,7 @@ import { renderFixture } from './ui/fixture.js';
 import { renderGrupos } from './ui/grupos.js';
 import { initScoreForm } from './ui/scoreForm.js';
 import { renderEstadisticas } from './ui/renderEstadisticas.js';
+import { initBracket } from './ui/bracket.js';
 
 // ── Navegación SPA ────────────────────────────────────────────
 const navLinks  = document.querySelectorAll('.nav-principal__link');
@@ -100,4 +101,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderGrupos();
   initScoreForm();
   renderEstadisticas();
+  initBracket();
 });
