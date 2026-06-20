@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  TFI - PLATAFORMA DE TORNEO DE FÚTBOL (SIMULADOR ACADÉMICO)
+  ============================================================================
+  Proyecto académico (Trabajo Final Integrador) construido con HTML5, CSS3
+  y JavaScript Vanilla (ES Modules). Inspirado visualmente en el sitio
+  oficial de FIFA, pero SIN afiliación real con la FIFA.
+
+  IMPORTANTE - Aclaración académica:
+  Los grupos, fixture y resultados que maneja esta app son FICTICIOS y se
+  usan solo con fines didácticos (practicar lógica de tablas de posiciones,
+  llaves de eliminación, etc.). No representan el desarrollo real del
+  Mundial 2026 (cuyos grupos reales son distintos a los que usamos aquí
+  como ejemplo).
+
+  ----------------------------------------------------------------------------
+  ARQUITECTURA DEL PROYECTO (mapa de archivos):
+  ----------------------------------------------------------------------------
+    index.html                  -> Este archivo (estructura + contenedores)
+    /styles/main.css             -> (Pendiente) Estilos generales del sitio
+    /src/main.js                 -> (Pendiente) Punto de entrada de la app
+    /src/data/equipos.js         -> [LISTO] Datos de los equipos + wiki
+    /src/data/partidos.js        -> (Pendiente) Datos de partidos/fixture
+    /src/logic/posiciones.js     -> (Pendiente) Cálculo de tablas de grupo
+    /src/logic/playoffs.js       -> (Pendiente) Lógica del bracket
+    /src/logic/estadisticas.js   -> (Pendiente) Goleadores/asistidores
+    /src/ui/grupos.js            -> (Pendiente) Render de tablas de grupo
+    /src/ui/fixture.js           -> (Pendiente) Render de partidos
+    /src/ui/bracket.js           -> (Pendiente) Render de llaves
+    /src/ui/scoreForm.js         -> (Pendiente) Lógica del form de resultados
+
+  ----------------------------------------------------------------------------
+  ¿POR QUÉ SOLO HAY UN <script type="module">?
+  ----------------------------------------------------------------------------
+  Con ES Modules (la sintaxis import/export de JavaScript moderno) NO hace
+  falta declarar un <script> por cada archivo .js como se hacía antes.
+  Basta con importar "/src/main.js" como módulo de entrada: ese archivo se
+  encargará de hacer `import { ... } from '../data/equipos.js'`, etc. para
+  traer todo lo que necesite. El navegador resuelve automáticamente todo el
+  "árbol" de imports. Esto evita duplicar cargas y mantiene el código
+  modular y ordenado (cada archivo con una sola responsabilidad).
+
+  ----------------------------------------------------------------------------
+  CÓMO EJECUTAR ESTE PROYECTO (muy importante):
+  ----------------------------------------------------------------------------
+  Los ES Modules NO funcionan abriendo el archivo directamente con doble
+  clic (protocolo file://) por restricciones de seguridad (CORS) del propio
+  navegador. Hace falta levantar un servidor local, por ejemplo:
+    - Extensión "Live Server" de VS Code, o
+    - Comando: npx serve .   (con Node.js instalado)
+  ============================================================================
+-->
+<html lang="es">
+<head>
+  <!-- Codificación de caracteres: necesario para tildes, ñ, etc. -->
+  <meta charset="UTF-8" />
+
+  <!-- Viewport: hace que el sitio sea responsive (se adapte a celulares) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Color de la barra del navegador en mobile (acorde a nuestra paleta azul noche) -->
+  <meta name="theme-color" content="#0A1A33" />
+
+  <!-- Metadescripción para buscadores -->
+  <meta
+    name="description"
+    content="Simulador académico de un torneo de fútbol: equipos, tablas de posiciones, fixture, llaves de eliminación, estadísticas, prode y wikis de equipos y estadios."
+  />
+
+  <title>Mundial 26 · Simulador de Torneo (TFI)</title>
+
+  <!-- Favicon simple en formato SVG embebido como data-URI (no requiere archivo aparte) -->
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%BD%3C/text%3E%3C/svg%3E"
+  />
+
+  <!-- Conexión anticipada con Google Fonts para acelerar la carga de tipografías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!--
+    Tipografías elegidas para la identidad visual del proyecto:
+    - Archivo Black -> Títulos grandes, estilo "marcador de estadio"
+    - Inter         -> Texto general (alta legibilidad)
+    - Roboto Mono   -> Números en tablas (estadísticas, posiciones) con
+                        ancho fijo, para que las columnas queden alineadas
+  -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Hoja de estilos principal (se creará en el próximo paso del TFI) -->
+  <link rel="stylesheet" href="/styles/main.css" />
+</head>
+
+<body>
+  <!-- ========================================================================
+       ENLACE DE SALTO ("skip link"): accesibilidad para usuarios de teclado
+       y lectores de pantalla, les permite ir directo al contenido principal
+       sin tener que tabular por toda la navegación.
+  ========================================================================= -->
+  <a href="#contenido-principal" class="enlace-salto">Saltar al contenido principal</a>
+
+  <!-- ========================================================================
+       REGIÓN DE ANUNCIOS (accesibilidad): es un contenedor invisible que los
+       lectores de pantalla "escuchan". Los módulos JS futuros (ej. al guardar
+       un resultado, o cambiar de pestaña) escribirán mensajes acá adentro
+       para que se anuncien sin necesidad de mover el foco del usuario.
+  ========================================================================= -->
+  <div id="anuncios" class="solo-lectores-pantalla" role="status" aria-live="polite"></div>
+
+  <!-- ========================================================================
+       ENCABEZADO DEL SITIO
+       Contiene el logo/marca del torneo y la navegación principal, que
+       funciona como un sistema de "pestañas" (tabs): cada botón muestra
+       una sección distinta (vista) sin recargar la página (SPA simple).
+  ========================================================================= -->
+  <header class="encabezado-sitio" role="banner">
+    <div class="contenedor encabezado-sitio__inner">
+      <!-- Logo / marca del torneo -->
+      <a href="#contenido-principal" class="logo" aria-label="Ir al inicio">
+        <span class="logo__icono" aria-hidden="true">⚽</span>
+        <span class="logo__texto">MUNDIAL<strong>26</strong></span>
+      </a>
+
+      <!--
+        Navegación principal en formato de "tabs".
+        - data-view: identifica qué <section> debe mostrarse al hacer click
+          (lo usará /src/main.js para alternar la visibilidad de las vistas).
+        - aria-current="page": indica cuál es la pestaña activa al cargar.
+        - role="tablist"/"tab": semántica ARIA correcta para un patrón de tabs.
+      -->
+      <nav class="nav-principal" role="navigation" aria-label="Navegación principal del torneo">
+        <ul class="nav-principal__lista" role="tablist">
+          <li role="presentation">
+            <button
+              type="button"
+              class="nav-principal__link nav-principal__link--activo"
+              role="tab"
+              data-view="equipos"
+              aria-controls="vista-equipos"
+              aria-current="page"
+            >
+              Equipos
+            </button>
+          </li>
+          <li role="presentation">
+            <button type="button" class="nav-principal__link" role="tab" data-view="grupos" aria-controls="vista-grupos">
+              Grupos
+            </button>
+          </li>
+          <li role="presentation">
+            <button type="button" class="nav-principal__link" role="tab" data-view="fixture" aria-controls="vista-fixture">
+              Fixture
+            </button>
+          </li>
+          <li role="presentation">
+            <button type="button" class="nav-principal__link" role="tab" data-view="playoffs" aria-controls="vista-playoffs">
+              Playoffs
+            </button>
+          </li>
+          <li role="presentation">
+            <button type="button" class="nav-principal__link" role="tab" data-view="estadisticas" aria-controls="vista-estadisticas">
+              Estadísticas
+            </button>
+          </li>
+          <li role="presentation">
+            <button type="button" class="nav-principal__link" role="tab" data-view="prode" aria-controls="vista-prode">
+              Prode
+            </button>
+          </li>
+          <li role="presentation">
+            <button type="button" class="nav-principal__link" role="tab" data-view="wiki-equipos" aria-controls="vista-wiki-equipos">
+              Wiki Equipos
+            </button>
+          </li>
+          <li role="presentation">
+            <button type="button" class="nav-principal__link" role="tab" data-view="wiki-estadios" aria-controls="vista-wiki-estadios">
+              Wiki Estadios
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Botón de menú hamburguesa para mobile (su comportamiento se programará junto con main.js) -->
+      <button type="button" class="nav-toggle" aria-label="Abrir menú de navegación" aria-expanded="false">
+        <span aria-hidden="true">☰</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       CONTENIDO PRINCIPAL
+       Cada <section class="vista"> representa una "pantalla" de la SPA.
+       Solo una debería estar visible a la vez: eso lo controlará /src/main.js
+       agregando/quitando la clase "vista--activa" (hoy, sin CSS/JS todavía,
+       se ven todas apiladas una debajo de la otra; es esperado en este paso).
+  ========================================================================= -->
+  <main id="contenido-principal" class="contenido-principal">
+
+    <!-- ====================================================================
+         VISTA 1: PANTALLA PRINCIPAL - LISTADO DE EQUIPOS
+         Requerimiento #1. Muestra nombre, escudo y grupo de cada equipo.
+         Los datos vienen de /src/data/equipos.js
+    ===================================================================== -->
+    <section id="vista-equipos" class="vista vista--activa" data-view="equipos" role="tabpanel" aria-labelledby="titulo-equipos">
+      <div class="contenedor">
+        <h1 id="titulo-equipos" class="titulo-vista">Equipos participantes</h1>
+        <p class="subtitulo-vista">
+          Conocé a todos los equipos que forman parte del torneo, organizados por grupo.
+        </p>
+
+        <!--
+          Contenedor donde se inyectarán dinámicamente las tarjetas de equipo.
+          Lo poblará un módulo de UI (ej. src/ui/equipos.js, a definir en un
+          próximo paso) usando los datos de src/data/equipos.js.
+          El texto de acá abajo es un "estado de carga" por defecto, que el
+          JS debe reemplazar apenas arranque la app.
+        -->
+        <div id="grid-equipos" class="grid-equipos" aria-live="polite">
+          <p class="mensaje-vacio">Cargando equipos…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VISTA 2: TABLAS DE POSICIONES POR GRUPO
+         Requerimiento #2. Una tabla por grupo, con Pts, PJ, PG, PE, PP,
+         GF, GC y DG (diferencia de gol), calculadas según reglas FIFA por
+         /src/logic/posiciones.js y renderizadas por /src/ui/grupos.js
+    ===================================================================== -->
+    <section id="vista-grupos" class="vista" data-view="grupos" role="tabpanel" aria-labelledby="titulo-grupos">
+      <div class="contenedor">
+        <h1 id="titulo-grupos" class="titulo-vista">Tablas de posiciones</h1>
+        <p class="subtitulo-vista">
+          Puntos y diferencia de gol se recalculan automáticamente cada vez que se carga un resultado.
+        </p>
+
+        <!-- Acá se va a insertar una <table> por cada grupo (A, B, C, ...) -->
+        <div id="contenedor-tablas-grupos" class="grupos-grid" aria-live="polite">
+          <p class="mensaje-vacio">Cargando tablas de posiciones…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VISTA 3: FIXTURE + PANEL DE CARGA DE RESULTADOS
+         Requerimientos #3. El listado de partidos lo renderiza
+         /src/ui/fixture.js (a partir de /src/data/partidos.js) y el
+         formulario de carga lo maneja /src/ui/scoreForm.js. Al guardar un
+         resultado, TODO el torneo se debe recalcular (posiciones,
+         estadísticas y, si corresponde, el avance de playoffs).
+    ===================================================================== -->
+    <section id="vista-fixture" class="vista" data-view="fixture" role="tabpanel" aria-labelledby="titulo-fixture">
+      <div class="contenedor">
+        <h1 id="titulo-fixture" class="titulo-vista">Fixture y carga de resultados</h1>
+        <p class="subtitulo-vista">
+          Estos son los partidos del torneo. Cargá un resultado para que la app recalcule todo automáticamente.
+        </p>
+
+        <div class="fixture-layout">
+          <!-- Listado de partidos (jugados y pendientes) -->
+          <div id="contenedor-fixture" class="fixture-lista" aria-live="polite">
+            <p class="mensaje-vacio">Cargando partidos…</p>
+          </div>
+
+          <!--
+            Formulario de carga de resultado.
+            Los campos son una base inicial; se van a terminar de ajustar
+            cuando programemos /src/ui/scoreForm.js. Por ahora incluye:
+            - Selector del partido a actualizar.
+            - Goles de cada equipo.
+            - Goleadores/asistidores (texto separado por comas), que
+              alimentarán a /src/logic/estadisticas.js.
+          -->
+          <form id="formulario-resultado" class="panel-carga-resultado" novalidate>
+            <h2 class="panel-carga-resultado__titulo">Cargar resultado</h2>
+
+            <div class="campo-formulario">
+              <label for="select-partido">Partido</label>
+              <!-- Las <option> se generan dinámicamente desde JS según /src/data/partidos.js -->
+              <select id="select-partido" name="partido" required>
+                <option value="">Cargando partidos…</option>
+              </select>
+            </div>
+
+            <div class="campo-formulario campo-formulario--goles">
+              <div>
+                <label for="goles-local">Goles equipo local</label>
+                <input type="number" id="goles-local" name="golesLocal" min="0" step="1" required />
+              </div>
+              <div>
+                <label for="goles-visitante">Goles equipo visitante</label>
+                <input type="number" id="goles-visitante" name="golesVisitante" min="0" step="1" required />
+              </div>
+            </div>
+
+            <div class="campo-formulario">
+              <label for="goleadores">Goleadores (separados por coma)</label>
+              <input type="text" id="goleadores" name="goleadores" placeholder="Ej: Messi, Messi, Mbappé" />
+            </div>
+
+            <div class="campo-formulario">
+              <label for="asistidores">Asistidores (separados por coma)</label>
+              <input type="text" id="asistidores" name="asistidores" placeholder="Ej: Di María, Dembélé" />
+            </div>
+
+            <button type="submit" class="boton boton--primario">Guardar resultado</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VISTA 4: LLAVES DE ELIMINACIÓN (BRACKET DE PLAYOFFS)
+         Requerimiento #4. El armado y avance automático de llaves lo
+         calcula /src/logic/playoffs.js (a partir de los primeros puestos
+         de cada grupo) y lo dibuja /src/ui/bracket.js
+    ===================================================================== -->
+    <section id="vista-playoffs" class="vista" data-view="playoffs" role="tabpanel" aria-labelledby="titulo-playoffs">
+      <div class="contenedor">
+        <h1 id="titulo-playoffs" class="titulo-vista">Llaves de eliminación</h1>
+        <p class="subtitulo-vista">
+          Una vez completada la fase de grupos, los clasificados avanzan automáticamente en la llave.
+        </p>
+
+        <div id="contenedor-bracket" class="bracket" aria-live="polite">
+          <p class="mensaje-vacio">
+            El bracket se generará automáticamente cuando termine la fase de grupos.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VISTA 5: ESTADÍSTICAS (GOLEADORES Y ASISTIDORES)
+         Requerimiento #5. Datos calculados por /src/logic/estadisticas.js
+         en base a lo cargado en el panel de resultados.
+    ===================================================================== -->
+    <section id="vista-estadisticas" class="vista" data-view="estadisticas" role="tabpanel" aria-labelledby="titulo-estadisticas">
+      <div class="contenedor">
+        <h1 id="titulo-estadisticas" class="titulo-vista">Estadísticas del torneo</h1>
+        <p class="subtitulo-vista">Top de goleadores y asistidores, actualizado con cada partido cargado.</p>
+
+        <div class="estadisticas-grid">
+          <div class="panel-estadistica">
+            <h2>Goleadores</h2>
+            <table id="tabla-goleadores" class="tabla-datos">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Jugador</th>
+                  <th scope="col">Goles</th>
+                </tr>
+              </thead>
+              <tbody id="cuerpo-tabla-goleadores">
+                <tr>
+                  <td colspan="3" class="mensaje-vacio">Todavía no hay goles cargados.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="panel-estadistica">
+            <h2>Asistidores</h2>
+            <table id="tabla-asistidores" class="tabla-datos">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Jugador</th>
+                  <th scope="col">Asistencias</th>
+                </tr>
+              </thead>
+              <tbody id="cuerpo-tabla-asistidores">
+                <tr>
+                  <td colspan="3" class="mensaje-vacio">Todavía no hay asistencias cargadas.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VISTA 6 (SECCIÓN EXTRA): PRODE
+         Permite al usuario "adivinar" resultados de partidos todavía no
+         jugados. Esta sección no estaba en la arquitectura de módulos que
+         definimos, así que cuando la programemos vamos a proponer algo
+         como /src/logic/prode.js y /src/ui/prode.js.
+    ===================================================================== -->
+    <section id="vista-prode" class="vista" data-view="prode" role="tabpanel" aria-labelledby="titulo-prode">
+      <div class="contenedor">
+        <h1 id="titulo-prode" class="titulo-vista">Prode</h1>
+        <p class="subtitulo-vista">
+          Predecí el resultado de los próximos partidos y comparalo con lo que realmente pasó.
+        </p>
+
+        <div id="contenedor-prode" class="prode-lista" aria-live="polite">
+          <p class="mensaje-vacio">
+            Sección a desarrollar en un próximo paso (pendiente de definir su módulo de lógica y de UI).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VISTA 7 (SECCIÓN EXTRA): WIKI DE EQUIPOS
+         Historia, mundiales ganados y DT de cada selección. Usa
+         directamente el campo "wiki" de cada objeto en
+         /src/data/equipos.js (ver ese archivo).
+    ===================================================================== -->
+    <section id="vista-wiki-equipos" class="vista" data-view="wiki-equipos" role="tabpanel" aria-labelledby="titulo-wiki-equipos">
+      <div class="contenedor">
+        <h1 id="titulo-wiki-equipos" class="titulo-vista">Wiki de equipos</h1>
+        <p class="subtitulo-vista">Historia, títulos mundiales y cuerpo técnico de cada selección.</p>
+
+        <div id="contenedor-wiki-equipos" class="wiki-grid" aria-live="polite">
+          <p class="mensaje-vacio">Cargando información de los equipos…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VISTA 8 (SECCIÓN EXTRA): WIKI DE ESTADIOS
+         Capacidad y fotos de los estadios. Sus datos vivirán en un futuro
+         archivo /src/data/estadios.js (todavía no creado).
+    ===================================================================== -->
+    <section id="vista-wiki-estadios" class="vista" data-view="wiki-estadios" role="tabpanel" aria-labelledby="titulo-wiki-estadios">
+      <div class="contenedor">
+        <h1 id="titulo-wiki-estadios" class="titulo-vista">Wiki de estadios</h1>
+        <p class="subtitulo-vista">Capacidad, ubicación y fotos de las sedes del torneo.</p>
+
+        <div id="contenedor-wiki-estadios" class="wiki-grid" aria-live="polite">
+          <p class="mensaje-vacio">
+            Sección a desarrollar en un próximo paso (falta crear /src/data/estadios.js).
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       MODAL GENÉRICO REUTILIZABLE
+       Contenedor vacío, oculto por defecto (atributo "hidden"), pensado
+       para mostrar contenido emergente (por ejemplo, el detalle ampliado
+       de un equipo en la wiki, o una confirmación al cargar un resultado).
+       Cualquier módulo de UI podrá inyectarle contenido en #modal-contenido
+       y mostrarlo quitándole el atributo "hidden".
+  ========================================================================= -->
+  <div id="modal-overlay" class="modal-overlay" hidden>
+    <div
+      id="modal-contenido"
+      class="modal-contenido"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-titulo"
+    >
+      <!-- Contenido inyectado dinámicamente por JS -->
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       PLANTILLAS (<template>) PARA CLONAR DESDE JAVASCRIPT
+       Un <template> es HTML que el navegador NO renderiza ni ejecuta hasta
+       que lo clonamos por JS (template.content.cloneNode(true)). Es una
+       buena práctica: separa la "forma" (HTML) de la "lógica" (JS) y evita
+       construir strings de HTML a mano con innerHTML.
+  ========================================================================= -->
+
+  <!-- Plantilla de una tarjeta de equipo (para la vista de Equipos) -->
+  <template id="plantilla-tarjeta-equipo">
+    <article class="tarjeta-equipo">
+      <span class="tarjeta-equipo__grupo">Grupo</span>
+      <img class="tarjeta-equipo__escudo" src="" alt="" />
+      <h3 class="tarjeta-equipo__nombre">Nombre del equipo</h3>
+      <p class="tarjeta-equipo__confederacion">Confederación</p>
+    </article>
+  </template>
+
+  <!-- Plantilla de una fila de tabla de posiciones (para la vista de Grupos) -->
+  <template id="plantilla-fila-posiciones">
+    <tr>
+      <td class="celda-equipo">
+        <img class="celda-equipo__escudo" src="" alt="" />
+        <span class="celda-equipo__nombre">Equipo</span>
+      </td>
+      <td class="pts">0</td>
+      <td>0</td>
+      <!-- PJ -->
+      <td>0</td>
+      <!-- PG -->
+      <td>0</td>
+      <!-- PE -->
+      <td>0</td>
+      <!-- PP -->
+      <td>0</td>
+      <!-- GF -->
+      <td>0</td>
+      <!-- GC -->
+      <td>0</td>
+      <!-- DG -->
+    </tr>
+  </template>
+
+  <!-- ========================================================================
+       PIE DE PÁGINA
+  ========================================================================= -->
+  <footer class="pie-sitio">
+    <div class="contenedor">
+      <p>
+        Proyecto académico (Trabajo Final Integrador) sin fines comerciales.
+        No afiliado ni respaldado por la FIFA. Los datos del torneo
+        (grupos, fixture y resultados) son ficticios y se utilizan
+        únicamente con fines educativos.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       AVISO PARA USUARIOS SIN JAVASCRIPT HABILITADO
+       Toda la app depende de JS (es una SPA), así que avisamos si está
+       deshabilitado en el navegador.
+  ========================================================================= -->
+  <noscript>
+    <p style="text-align: center; padding: 2rem;">
+      Esta aplicación necesita JavaScript habilitado para funcionar correctamente.
+    </p>
+  </noscript>
+
+  <!-- ========================================================================
+       PUNTO DE ENTRADA DE LA APLICACIÓN
+       Único <script>, cargado como type="module". Se ubica al final del
+       <body> para garantizar que todo el HTML ya exista en el DOM antes de
+       que el JS intente manipularlo (aunque con type="module" el script ya
+       se ejecuta en modo "defer" automáticamente, esta ubicación es además
+       una buena práctica de legibilidad).
+  ========================================================================= -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
