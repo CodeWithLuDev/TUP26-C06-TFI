@@ -7,8 +7,8 @@ export const partidos = [
     {
         id: 1,
         grupo: 'A',
-        equipoLocal: 'ARG', // ID coincidente con equipos.js
-        equipoVisitante: 'MEX',
+        equipoLocal: 'arg', // ID coincidente con equipos.js
+        equipoVisitante: 'mex',
         golesLocal: 2,
         golesVisitante: 0,
         estado: 'jugado'
@@ -16,8 +16,8 @@ export const partidos = [
     {
         id: 2,
         grupo: 'A',
-        equipoLocal: 'FRA',
-        equipoVisitante: 'ESP',
+        equipoLocal: 'fra',
+        equipoVisitante: 'esp',
         golesLocal: 1,
         golesVisitante: 1,
         estado: 'jugado'
@@ -25,8 +25,8 @@ export const partidos = [
     {
         id: 3,
         grupo: 'A',
-        equipoLocal: 'ARG',
-        equipoVisitante: 'FRA',
+        equipoLocal: 'arg',
+        equipoVisitante: 'fra',
         golesLocal: null,
         golesVisitante: null,
         estado: 'pendiente'
@@ -34,8 +34,8 @@ export const partidos = [
     {
         id: 4,
         grupo: 'A',
-        equipoLocal: 'ESP',
-        equipoVisitante: 'MEX',
+        equipoLocal: 'esp',
+        equipoVisitante: 'mex',
         golesLocal: null,
         golesVisitante: null,
         estado: 'pendiente'
