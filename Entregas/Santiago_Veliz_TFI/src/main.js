@@ -10,6 +10,8 @@ import { initBracket } from './ui/bracket.js';
 import { renderWiki }  from './ui/wiki.js';
 import { renderProde } from './ui/prode.js';
 import { initReset } from './ui/reset.js';
+import { renderEquipos }     from './ui/renderEquipos.js';
+import { renderWikiEstadios } from './ui/wikiEstadios.js';
 
 // ── Navegación SPA ────────────────────────────────────────────
 const navLinks  = document.querySelectorAll('.nav-principal__link');
@@ -108,4 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderWiki();
   renderProde();
   initReset();
+  renderEquipos();
+  renderWikiEstadios();
 });
