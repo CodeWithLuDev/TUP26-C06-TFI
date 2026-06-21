@@ -9,6 +9,7 @@ import { renderEstadisticas } from './ui/renderEstadisticas.js';
 import { initBracket } from './ui/bracket.js';
 import { renderWiki }  from './ui/wiki.js';
 import { renderProde } from './ui/prode.js';
+import { initReset } from './ui/reset.js';
 
 // ── Navegación SPA ────────────────────────────────────────────
 const navLinks  = document.querySelectorAll('.nav-principal__link');
@@ -106,4 +107,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initBracket();
   renderWiki();
   renderProde();
+  initReset();
 });

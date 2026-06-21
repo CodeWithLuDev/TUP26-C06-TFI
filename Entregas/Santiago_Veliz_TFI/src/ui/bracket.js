@@ -2,8 +2,6 @@
  * /src/ui/bracket.js
  * ─────────────────────────────────────────────────────────────
  * Renderiza la llave de eliminación en #contenedor-bracket.
- * Permite cargar resultados de cada cruce directamente desde
- * la vista de Playoffs.
  * ─────────────────────────────────────────────────────────────
  */
 
@@ -14,22 +12,14 @@ import {
   registrarResultadoBracket,
   RONDAS,
 } from '../logic/playoffs.js';
+import { mostrarBannerCampeon } from './campeon.js';
 
-// Estado en memoria
 let bracket = null;
 
-// ── Init público ──────────────────────────────────────────────
-
-/**
- * Inicializa o restaura el bracket y lo renderiza.
- * Llamar desde main.js en DOMContentLoaded.
- */
 export function initBracket() {
   bracket = cargarBracket() ?? bracketInicial();
   renderBracket();
 }
-
-// ── Render principal ──────────────────────────────────────────
 
 export function renderBracket() {
   const contenedor = document.getElementById('contenedor-bracket');
@@ -40,7 +30,6 @@ export function renderBracket() {
   const wrapper = document.createElement('div');
   wrapper.className = 'bracket-wrapper';
 
-  // Renderizar cada ronda
   [...RONDAS, 'tercerPuesto'].forEach(ronda => {
     const cruces = bracket[ronda];
     if (!cruces) return;
@@ -85,7 +74,6 @@ function crearTarjetaCruce(ronda, indice, cruce) {
     ${cruce.estado === 'pendiente' && esDefinido ? botonCargar(ronda, indice) : ''}
   `;
 
-  // Listener del formulario inline
   const form = card.querySelector('.bracket-form');
   if (form) {
     form.addEventListener('submit', e => handleBracketSubmit(e, ronda, indice));
@@ -98,15 +86,14 @@ function crearTarjetaCruce(ronda, indice, cruce) {
 
 function escudoImg(equipo) {
   if (!equipo.escudo) return `<span class="bracket-equipo__placeholder">🏳️</span>`;
-  return `<img class="bracket-equipo__escudo" src="${equipo.escudo}" alt="${equipo.nombre}" />`;
+  return `<img class="bracket-equipo__escudo" src="${equipo.escudo}" alt="${equipo.nombre}" loading="lazy" />`;
 }
 
 function ganador(cruce, lado) {
   if (cruce.estado !== 'jugado') return '';
-  const esGanador =
-    lado === 'local'
-      ? cruce.golesLocal > cruce.golesVisitante
-      : cruce.golesVisitante > cruce.golesLocal;
+  const esGanador = lado === 'local'
+    ? cruce.golesLocal > cruce.golesVisitante
+    : cruce.golesVisitante > cruce.golesLocal;
   return esGanador ? 'bracket-equipo--ganador' : 'bracket-equipo--perdedor';
 }
 
@@ -123,17 +110,16 @@ function botonCargar(ronda, indice) {
   `;
 }
 
-// ── Handler submit del bracket ────────────────────────────────
+// ── Handler submit ────────────────────────────────────────────
 
 function handleBracketSubmit(e, ronda, indice) {
   e.preventDefault();
-  const form  = e.currentTarget;
+  const form   = e.currentTarget;
   const golesL = parseInt(form.elements['golesLocal'].value,     10);
   const golesV = parseInt(form.elements['golesVisitante'].value, 10);
 
   if (isNaN(golesL) || isNaN(golesV) || golesL < 0 || golesV < 0) return;
 
-  // No se permiten empates en eliminatorias
   if (golesL === golesV) {
     alert('En eliminatorias no puede haber empate. Ingresá un resultado con ganador.');
     return;
@@ -141,4 +127,15 @@ function handleBracketSubmit(e, ronda, indice) {
 
   bracket = registrarResultadoBracket(bracket, ronda, indice, golesL, golesV);
   renderBracket();
+
+  // ── Detectar campeón al terminar la Final ─────────────────
+  if (ronda === 'Final') {
+    const finalJugada = bracket['Final'][0];
+    if (finalJugada?.estado === 'jugado') {
+      const campeon = golesL > golesV
+        ? finalJugada.local
+        : finalJugada.visitante;
+      mostrarBannerCampeon(campeon);
+    }
+  }
 }

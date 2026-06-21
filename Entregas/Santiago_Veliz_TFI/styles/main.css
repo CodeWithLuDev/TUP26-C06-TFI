@@ -1066,3 +1066,146 @@ a:hover { text-decoration: underline; }
   .prode-card__equipo--visitante { flex-direction: row; }
   .prode-banner { gap: var(--espacio-md); }
 }
+
+/* ── 22. Filtros del fixture ──────────────────────────────── */
+.fixture-filtros {
+  display: flex;
+  gap: var(--espacio-sm);
+  margin-bottom: var(--espacio-lg);
+  flex-wrap: wrap;
+}
+.fixture-filtro__select {
+  background: var(--color-panel);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-boton);
+  color: var(--color-texto);
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.85rem;
+  padding: var(--espacio-sm) var(--espacio-md);
+  cursor: pointer;
+  transition: border-color var(--transicion);
+}
+.fixture-filtro__select:focus {
+  outline: none;
+  border-color: var(--color-acento);
+}
+.fixture-grupo__titulo {
+  font-family: var(--fuente-titulo);
+  font-size: 0.8rem;
+  color: var(--color-acento);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: var(--espacio-sm) 0 var(--espacio-xs);
+  border-bottom: 1px solid var(--color-borde);
+  margin-bottom: var(--espacio-sm);
+  margin-top: var(--espacio-lg);
+}
+.fixture-lista__items > .fixture-grupo__titulo:first-child {
+  margin-top: 0;
+}
+
+/* ── 23. Botón reset ──────────────────────────────────────── */
+.btn-reset-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--espacio-xl);
+}
+.boton--reset {
+  background: transparent;
+  border: 1px solid var(--color-negativo);
+  color: var(--color-negativo);
+  font-size: 0.8rem;
+  padding: var(--espacio-xs) var(--espacio-md);
+  border-radius: var(--radio-boton);
+  cursor: pointer;
+  transition: background var(--transicion);
+  font-family: var(--fuente-cuerpo);
+  font-weight: 600;
+}
+.boton--reset:hover { background: rgba(192,57,43,0.12); }
+
+/* ── 24. Banner campeón ───────────────────────────────────── */
+.banner-campeon {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.banner-campeon--visible {
+  opacity: 1;
+  pointer-events: all;
+}
+.banner-campeon__fondo {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center,
+    rgba(10,26,51,0.97) 0%,
+    rgba(10,26,51,0.99) 100%);
+}
+.banner-campeon__contenido {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: var(--espacio-2xl);
+  animation: campeonEntrada 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: 0.1s;
+}
+@keyframes campeonEntrada {
+  from { transform: scale(0.7) translateY(40px); opacity: 0; }
+  to   { transform: scale(1)   translateY(0);    opacity: 1; }
+}
+.banner-campeon__etiqueta {
+  font-family: var(--fuente-titulo);
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  color: var(--color-acento);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: var(--espacio-lg);
+  animation: brillar 2s ease-in-out infinite alternate;
+}
+@keyframes brillar {
+  from { text-shadow: 0 0 8px rgba(212,175,55,0.4); }
+  to   { text-shadow: 0 0 24px rgba(212,175,55,0.9), 0 0 48px rgba(212,175,55,0.4); }
+}
+.banner-campeon__escudo {
+  width: clamp(100px, 20vw, 180px);
+  height: clamp(100px, 20vw, 180px);
+  object-fit: contain;
+  filter: drop-shadow(0 4px 32px rgba(212,175,55,0.5));
+  margin-bottom: var(--espacio-lg);
+}
+.banner-campeon__placeholder { font-size: 8rem; display: block; margin-bottom: var(--espacio-lg); }
+.banner-campeon__nombre {
+  font-family: var(--fuente-titulo);
+  font-size: clamp(2rem, 8vw, 5rem);
+  color: var(--color-texto);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  margin-bottom: var(--espacio-sm);
+}
+.banner-campeon__subtitulo {
+  color: var(--color-texto-suave);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: var(--espacio-xl);
+}
+.banner-campeon__cerrar {
+  background: var(--color-acento);
+  color: var(--color-fondo);
+  border: none;
+  border-radius: var(--radio-boton);
+  font-family: var(--fuente-cuerpo);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: var(--espacio-sm) var(--espacio-xl);
+  cursor: pointer;
+  transition: background var(--transicion), transform var(--transicion);
+}
+.banner-campeon__cerrar:hover { background: var(--color-acento-dim); transform: scale(1.03); }
