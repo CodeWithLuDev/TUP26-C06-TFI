@@ -1,43 +1,103 @@
 /**
- * Módulo de Partidos
- * Contiene el array con los datos iniciales de los encuentros.
- * Algunos tienen estado 'jugado' (con resultados), otros 'pendiente'.
+ * /src/data/partidos.js
+ * Fase de grupos del Mundial 2026 — 36 partidos (3 por grupo × 12 grupos).
+ * Todos los IDs de equipo en MINÚSCULAS para coincidir con equipos.js.
+ * Estado inicial: 'pendiente'. El usuario carga los resultados.
  */
 export const partidos = [
-    {
-        id: 1,
-        grupo: 'A',
-        equipoLocal: 'arg', // ID coincidente con equipos.js
-        equipoVisitante: 'mex',
-        golesLocal: 2,
-        golesVisitante: 0,
-        estado: 'jugado'
-    },
-    {
-        id: 2,
-        grupo: 'A',
-        equipoLocal: 'fra',
-        equipoVisitante: 'esp',
-        golesLocal: 1,
-        golesVisitante: 1,
-        estado: 'jugado'
-    },
-    {
-        id: 3,
-        grupo: 'A',
-        equipoLocal: 'arg',
-        equipoVisitante: 'fra',
-        golesLocal: null,
-        golesVisitante: null,
-        estado: 'pendiente'
-    },
-    {
-        id: 4,
-        grupo: 'A',
-        equipoLocal: 'esp',
-        equipoVisitante: 'mex',
-        golesLocal: null,
-        golesVisitante: null,
-        estado: 'pendiente'
-    }
+  // ── GRUPO A: México · Sudáfrica · Corea del Sur · Chequia ──
+  { id:1,  grupo:'A', equipoLocal:'mex', equipoVisitante:'rsa', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:2,  grupo:'A', equipoLocal:'kor', equipoVisitante:'cze', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:3,  grupo:'A', equipoLocal:'mex', equipoVisitante:'kor', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:4,  grupo:'A', equipoLocal:'cze', equipoVisitante:'rsa', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:5,  grupo:'A', equipoLocal:'mex', equipoVisitante:'cze', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:6,  grupo:'A', equipoLocal:'rsa', equipoVisitante:'kor', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+
+  // ── GRUPO B: Canadá · Bosnia · Catar · Suiza ────────────
+  { id:7,  grupo:'B', equipoLocal:'can', equipoVisitante:'bih', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:8,  grupo:'B', equipoLocal:'qat', equipoVisitante:'sui', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:9,  grupo:'B', equipoLocal:'can', equipoVisitante:'qat', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:10, grupo:'B', equipoLocal:'sui', equipoVisitante:'bih', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:11, grupo:'B', equipoLocal:'can', equipoVisitante:'sui', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:12, grupo:'B', equipoLocal:'bih', equipoVisitante:'qat', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+
+  // ── GRUPO C: Brasil · Marruecos · Haití · Escocia ────────
+  { id:13, grupo:'C', equipoLocal:'bra', equipoVisitante:'mar', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:14, grupo:'C', equipoLocal:'hai', equipoVisitante:'sco', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:15, grupo:'C', equipoLocal:'bra', equipoVisitante:'hai', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:16, grupo:'C', equipoLocal:'sco', equipoVisitante:'mar', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:17, grupo:'C', equipoLocal:'bra', equipoVisitante:'sco', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:18, grupo:'C', equipoLocal:'mar', equipoVisitante:'hai', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+
+  // ── GRUPO D: EEUU · Paraguay · Australia · Turquía ───────
+  { id:19, grupo:'D', equipoLocal:'usa', equipoVisitante:'par', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:20, grupo:'D', equipoLocal:'aus', equipoVisitante:'tur', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:21, grupo:'D', equipoLocal:'usa', equipoVisitante:'aus', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:22, grupo:'D', equipoLocal:'tur', equipoVisitante:'par', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:23, grupo:'D', equipoLocal:'usa', equipoVisitante:'tur', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:24, grupo:'D', equipoLocal:'par', equipoVisitante:'aus', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+
+  // ── GRUPO E: Alemania · Curazao · C. de Marfil · Ecuador ─
+  { id:25, grupo:'E', equipoLocal:'ger', equipoVisitante:'cur', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:26, grupo:'E', equipoLocal:'civ', equipoVisitante:'ecu', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:27, grupo:'E', equipoLocal:'ger', equipoVisitante:'civ', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:28, grupo:'E', equipoLocal:'ecu', equipoVisitante:'cur', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:29, grupo:'E', equipoLocal:'ger', equipoVisitante:'ecu', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:30, grupo:'E', equipoLocal:'cur', equipoVisitante:'civ', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+
+  // ── GRUPO F: Países Bajos · Japón · Suecia · Túnez ───────
+  { id:31, grupo:'F', equipoLocal:'ned', equipoVisitante:'jpn', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:32, grupo:'F', equipoLocal:'swe', equipoVisitante:'tun', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:33, grupo:'F', equipoLocal:'ned', equipoVisitante:'swe', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:34, grupo:'F', equipoLocal:'tun', equipoVisitante:'jpn', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:35, grupo:'F', equipoLocal:'ned', equipoVisitante:'tun', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:36, grupo:'F', equipoLocal:'jpn', equipoVisitante:'swe', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+
+  // ── GRUPO G: Bélgica · Egipto · Irán · Nueva Zelanda ─────
+  { id:37, grupo:'G', equipoLocal:'bel', equipoVisitante:'egy', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:38, grupo:'G', equipoLocal:'iri', equipoVisitante:'nzl', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:39, grupo:'G', equipoLocal:'bel', equipoVisitante:'iri', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:40, grupo:'G', equipoLocal:'nzl', equipoVisitante:'egy', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:41, grupo:'G', equipoLocal:'bel', equipoVisitante:'nzl', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:42, grupo:'G', equipoLocal:'egy', equipoVisitante:'iri', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+
+  // ── GRUPO H: España · Cabo Verde · Arabia Saudí · Uruguay ─
+  { id:43, grupo:'H', equipoLocal:'esp', equipoVisitante:'cpv', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:44, grupo:'H', equipoLocal:'ksa', equipoVisitante:'uru', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:45, grupo:'H', equipoLocal:'esp', equipoVisitante:'ksa', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:46, grupo:'H', equipoLocal:'uru', equipoVisitante:'cpv', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:47, grupo:'H', equipoLocal:'esp', equipoVisitante:'uru', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:48, grupo:'H', equipoLocal:'cpv', equipoVisitante:'ksa', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+
+  // ── GRUPO I: Francia · Senegal · Irak · Noruega ──────────
+  { id:49, grupo:'I', equipoLocal:'fra', equipoVisitante:'sen', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:50, grupo:'I', equipoLocal:'irq', equipoVisitante:'nor', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:51, grupo:'I', equipoLocal:'fra', equipoVisitante:'irq', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:52, grupo:'I', equipoLocal:'nor', equipoVisitante:'sen', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:53, grupo:'I', equipoLocal:'fra', equipoVisitante:'nor', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:54, grupo:'I', equipoLocal:'sen', equipoVisitante:'irq', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+
+  // ── GRUPO J: Argentina · Argelia · Austria · Jordania ────
+  { id:55, grupo:'J', equipoLocal:'arg', equipoVisitante:'alg', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:56, grupo:'J', equipoLocal:'aut', equipoVisitante:'jor', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:57, grupo:'J', equipoLocal:'arg', equipoVisitante:'aut', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:58, grupo:'J', equipoLocal:'jor', equipoVisitante:'alg', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:59, grupo:'J', equipoLocal:'arg', equipoVisitante:'jor', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:60, grupo:'J', equipoLocal:'alg', equipoVisitante:'aut', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+
+  // ── GRUPO K: Portugal · RD Congo · Uzbekistán · Colombia ─
+  { id:61, grupo:'K', equipoLocal:'por', equipoVisitante:'cod', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:62, grupo:'K', equipoLocal:'uzb', equipoVisitante:'col', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:63, grupo:'K', equipoLocal:'por', equipoVisitante:'uzb', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:64, grupo:'K', equipoLocal:'col', equipoVisitante:'cod', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:65, grupo:'K', equipoLocal:'por', equipoVisitante:'col', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:66, grupo:'K', equipoLocal:'cod', equipoVisitante:'uzb', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+
+  // ── GRUPO L: Inglaterra · Croacia · Ghana · Panamá ───────
+  { id:67, grupo:'L', equipoLocal:'eng', equipoVisitante:'cro', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:68, grupo:'L', equipoLocal:'gha', equipoVisitante:'pan', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:69, grupo:'L', equipoLocal:'eng', equipoVisitante:'gha', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:70, grupo:'L', equipoLocal:'pan', equipoVisitante:'cro', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:71, grupo:'L', equipoLocal:'eng', equipoVisitante:'pan', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
+  { id:72, grupo:'L', equipoLocal:'cro', equipoVisitante:'gha', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },
 ];
