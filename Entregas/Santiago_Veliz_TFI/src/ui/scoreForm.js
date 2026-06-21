@@ -3,6 +3,7 @@ import { equipos }       from '../data/equipos.js';
 import { renderFixture } from './fixture.js';
 import { renderGrupos }  from './grupos.js';
 import { renderEstadisticas } from './renderEstadisticas.js';
+import { renderProde } from './prode.js';
 
 
 // ── Clave de LocalStorage ─────────────────────────────────────
@@ -90,6 +91,7 @@ function actualizarVistas() {
   renderFixture();
   renderGrupos();
   renderEstadisticas();
+  renderProde();
   poblarSelectPartidos();
 }
 

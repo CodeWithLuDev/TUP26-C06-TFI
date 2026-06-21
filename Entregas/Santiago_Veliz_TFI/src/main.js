@@ -7,6 +7,8 @@ import { renderGrupos } from './ui/grupos.js';
 import { initScoreForm } from './ui/scoreForm.js';
 import { renderEstadisticas } from './ui/renderEstadisticas.js';
 import { initBracket } from './ui/bracket.js';
+import { renderWiki }  from './ui/wiki.js';
+import { renderProde } from './ui/prode.js';
 
 // ── Navegación SPA ────────────────────────────────────────────
 const navLinks  = document.querySelectorAll('.nav-principal__link');
@@ -102,4 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initScoreForm();
   renderEstadisticas();
   initBracket();
+  renderWiki();
+  renderProde();
 });

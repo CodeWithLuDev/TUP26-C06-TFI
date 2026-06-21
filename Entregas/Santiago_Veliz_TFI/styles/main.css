@@ -791,3 +791,278 @@ a:hover { text-decoration: underline; }
   .bracket-columna { min-width: 160px; }
   .bracket-equipo__nombre { font-size: 0.72rem; }
 }
+
+/* ── 20. Wiki de equipos ──────────────────────────────────── */
+.wiki-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--espacio-lg);
+}
+
+.wiki-card {
+  background: var(--color-panel);
+  border-radius: var(--radio-card);
+  overflow: hidden;
+  box-shadow: var(--sombra-card);
+  cursor: pointer;
+  transition: transform var(--transicion), box-shadow var(--transicion);
+  border: 1px solid transparent;
+}
+.wiki-card:hover,
+.wiki-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(212,175,55,0.2);
+  border-color: var(--color-borde);
+  outline: none;
+}
+
+.wiki-card__encabezado {
+  position: relative;
+  height: 80px;
+  background: linear-gradient(135deg, var(--color-panel-alt) 0%, var(--color-fondo) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wiki-card__escudo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+}
+.wiki-card__grupo {
+  position: absolute;
+  top: var(--espacio-sm);
+  right: var(--espacio-sm);
+  background: var(--color-acento);
+  color: var(--color-fondo);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+.wiki-card__cuerpo { padding: var(--espacio-md); }
+.wiki-card__titulo {
+  font-family: var(--fuente-titulo);
+  font-size: 1rem;
+  color: var(--color-acento);
+  margin-bottom: 2px;
+}
+.wiki-card__confederacion {
+  font-size: 0.72rem;
+  color: var(--color-texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--espacio-sm);
+}
+.wiki-card__datos {
+  display: flex;
+  gap: var(--espacio-md);
+  margin-bottom: var(--espacio-sm);
+}
+.wiki-dato {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+.wiki-dato__icono { font-size: 0.9rem; }
+.wiki-dato__valor { font-family: var(--fuente-numero); font-size: 0.9rem; font-weight: 700; color: var(--color-texto); }
+.wiki-dato__label { font-size: 0.65rem; color: var(--color-texto-suave); text-transform: uppercase; }
+.wiki-card__dt { font-size: 0.8rem; color: var(--color-texto-suave); }
+
+/* Modal equipo */
+.modal-cerrar {
+  position: absolute;
+  top: var(--espacio-md);
+  right: var(--espacio-md);
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: var(--color-texto);
+  font-size: 1.1rem;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background var(--transicion);
+}
+.modal-cerrar:hover { background: rgba(255,255,255,0.18); }
+
+.modal-equipo__header {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-lg);
+  margin-bottom: var(--espacio-lg);
+  padding-right: var(--espacio-xl);
+}
+.modal-equipo__escudo { width: 72px; height: 72px; object-fit: contain; flex-shrink: 0; }
+.modal-equipo__nombre {
+  font-family: var(--fuente-titulo);
+  font-size: 1.4rem;
+  color: var(--color-acento);
+  margin-bottom: 4px;
+}
+.modal-equipo__meta { font-size: 0.8rem; color: var(--color-texto-suave); }
+.modal-equipo__resumen {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--color-texto-suave);
+  margin-bottom: var(--espacio-lg);
+}
+.modal-equipo__stats {
+  display: flex;
+  gap: var(--espacio-lg);
+  flex-wrap: wrap;
+  background: var(--color-panel-alt);
+  border-radius: var(--radio-boton);
+  padding: var(--espacio-md);
+  margin-bottom: var(--espacio-lg);
+}
+.modal-stat { display: flex; flex-direction: column; gap: 2px; }
+.modal-stat__valor {
+  font-family: var(--fuente-titulo);
+  font-size: 1.1rem;
+  color: var(--color-acento);
+}
+.modal-stat__label { font-size: 0.72rem; color: var(--color-texto-suave); text-transform: uppercase; letter-spacing: 0.05em; }
+.modal-equipo__seccion { margin-bottom: var(--espacio-lg); }
+.modal-equipo__subtitulo {
+  font-family: var(--fuente-titulo);
+  font-size: 0.85rem;
+  color: var(--color-acento);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--espacio-sm);
+}
+.modal-equipo__jugadores { list-style: none; display: flex; flex-direction: column; gap: var(--espacio-xs); }
+.modal-jugador { display: flex; justify-content: space-between; font-size: 0.88rem; padding: var(--espacio-xs) 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.modal-jugador__posicion { color: var(--color-texto-suave); font-size: 0.8rem; }
+
+/* ── 21. Prode ────────────────────────────────────────────── */
+.prode-lista { display: flex; flex-direction: column; gap: var(--espacio-xl); }
+
+.prode-banner {
+  display: flex;
+  gap: var(--espacio-xl);
+  align-items: center;
+  background: var(--color-panel);
+  border-radius: var(--radio-card);
+  padding: var(--espacio-lg) var(--espacio-xl);
+  border-left: 4px solid var(--color-acento);
+  flex-wrap: wrap;
+}
+.prode-banner__stat { display: flex; flex-direction: column; align-items: center; }
+.prode-banner__valor {
+  font-family: var(--fuente-titulo);
+  font-size: 2rem;
+  color: var(--color-acento);
+  line-height: 1;
+}
+.prode-banner__valor--sm { font-size: 0.8rem; color: var(--color-texto-suave); }
+.prode-banner__label { font-size: 0.72rem; color: var(--color-texto-suave); text-transform: uppercase; letter-spacing: 0.05em; }
+.prode-banner__stat--info { margin-left: auto; gap: var(--espacio-xs); align-items: flex-start; }
+
+.prode-seccion__titulo {
+  font-family: var(--fuente-titulo);
+  font-size: 1rem;
+  color: var(--color-acento);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--espacio-md);
+}
+
+.prode-card {
+  background: var(--color-panel);
+  border-radius: var(--radio-card);
+  padding: var(--espacio-md) var(--espacio-lg);
+  box-shadow: var(--sombra-card);
+  border-left: 3px solid var(--color-borde);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-sm);
+  margin-bottom: var(--espacio-md);
+}
+.prode-card--exacto   { border-left-color: var(--color-acento); }
+.prode-card--tendencia { border-left-color: var(--color-positivo); }
+.prode-card--error    { border-left-color: var(--color-negativo); }
+
+.prode-card__equipos {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--espacio-md);
+}
+.prode-card__equipo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-sm);
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+.prode-card__equipo--visitante { flex-direction: row-reverse; text-align: right; }
+.prode-card__escudo { width: 24px; height: 24px; object-fit: contain; }
+.prode-card__vs { color: var(--color-texto-suave); font-size: 0.8rem; text-align: center; }
+.prode-card__marcadores {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.prode-marcador {
+  font-family: var(--fuente-titulo);
+  font-size: 1.1rem;
+  text-align: center;
+}
+.prode-marcador--pred  { color: var(--color-texto-suave); font-size: 0.85rem; }
+.prode-marcador--real  { color: var(--color-acento); }
+
+.prode-form {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.prode-input {
+  width: 52px;
+  background: var(--color-panel-alt);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-boton);
+  color: var(--color-texto);
+  font-family: var(--fuente-numero);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: var(--espacio-xs) var(--espacio-sm);
+  text-align: center;
+}
+.prode-input:focus { outline: none; border-color: var(--color-acento); }
+.prode-separador { color: var(--color-texto-suave); }
+.boton--prode {
+  background: transparent;
+  border: 1px solid var(--color-acento);
+  color: var(--color-acento);
+  padding: var(--espacio-xs) var(--espacio-md);
+  border-radius: var(--radio-boton);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background var(--transicion);
+}
+.boton--prode:hover { background: rgba(212,175,55,0.1); }
+
+.prode-grupo { font-size: 0.72rem; color: var(--color-texto-suave); text-align: right; }
+.prode-resultado {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+}
+.prode-resultado--exacto   { color: var(--color-acento); }
+.prode-resultado--tendencia { color: var(--color-positivo); }
+.prode-resultado--error    { color: var(--color-negativo); }
+.prode-resultado--pendiente { color: var(--color-texto-suave); }
+
+@media (max-width: 600px) {
+  .wiki-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .prode-card__equipos { grid-template-columns: 1fr; gap: var(--espacio-sm); }
+  .prode-card__equipo--visitante { flex-direction: row; }
+  .prode-banner { gap: var(--espacio-md); }
+}
