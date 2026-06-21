@@ -12,6 +12,7 @@ import { renderProde } from './ui/prode.js';
 import { initReset } from './ui/reset.js';
 import { renderEquipos }     from './ui/renderEquipos.js';
 import { renderWikiEstadios } from './ui/wikiEstadios.js';
+import { initSimulador } from './ui/simulador.js';
 
 // ── Navegación SPA ────────────────────────────────────────────
 const navLinks  = document.querySelectorAll('.nav-principal__link');
@@ -112,4 +113,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initReset();
   renderEquipos();
   renderWikiEstadios();
+  initSimulador();
 });

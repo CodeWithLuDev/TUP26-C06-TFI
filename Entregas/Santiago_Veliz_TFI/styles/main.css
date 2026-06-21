@@ -1327,3 +1327,38 @@ a:hover { text-decoration: underline; }
   .estadios-grid { grid-template-columns: 1fr; }
   .grid-equipos__items { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 }
+
+/* ── 27. Botón simular ────────────────────────────────────── */
+.btn-simular-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--espacio-xl);
+}
+.boton--simular {
+  background: linear-gradient(135deg, var(--color-positivo) 0%, #0a6e3b 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--radio-boton);
+  font-family: var(--fuente-titulo);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: var(--espacio-md) var(--espacio-2xl);
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(14,143,78,0.4);
+  transition: transform var(--transicion), box-shadow var(--transicion);
+  position: relative;
+  overflow: hidden;
+}
+.boton--simular::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+.boton--simular:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 32px rgba(14,143,78,0.6);
+}
+.boton--simular:active { transform: translateY(0) scale(1); }
