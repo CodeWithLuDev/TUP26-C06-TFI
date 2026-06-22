@@ -1,0 +1,451 @@
+.pred-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.pred-page h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 0.4rem;
+}
+
+.pred-sub {
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 2rem;
+}
+
+/* Tabs */
+.pred-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 0;
+}
+
+.pred-tab {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: -1px;
+}
+
+.pred-tab.active {
+  color: var(--blanco);
+  border-bottom-color: var(--rojo);
+}
+
+.pred-tab:hover {
+  color: var(--blanco);
+}
+
+/* Resumen stats */
+.pred-resumen {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.pred-resumen-item {
+  background: #0a1628;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 1.2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.pred-resumen-num {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--blanco);
+}
+
+.pred-resumen-label {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pred-exacto-txt { color: #f1c40f; }
+.pred-acierto-txt { color: #2ecc71; }
+
+/* Lista de predicciones */
+.pred-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.pred-item {
+  background: #0a1628;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: border-color 0.2s;
+}
+
+.pred-item-exacto { border-color: rgba(241,196,15,0.4); }
+.pred-item-acierto { border-color: rgba(46,204,113,0.3); }
+.pred-item-fallo   { border-color: rgba(231,76,60,0.25); }
+
+.pred-item-partido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pred-equipo-nombre {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.pred-equipo-der {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.pred-marcadores {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  min-width: 90px;
+}
+
+.pred-marcador-tu {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.6);
+}
+
+.pred-marcador-real {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--blanco);
+  background: rgba(255,255,255,0.07);
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+}
+
+.pred-item-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pred-fase {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Badges de estado */
+.pred-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+
+.pred-pendiente { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.45); }
+.pred-exacto    { background: rgba(241,196,15,0.15);  color: #f1c40f; }
+.pred-acierto   { background: rgba(46,204,113,0.15);  color: #2ecc71; }
+.pred-fallo     { background: rgba(231,76,60,0.15);   color: #e74c3c; }
+
+/* Vacío */
+.pred-vacio {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba(255,255,255,0.45);
+}
+
+.pred-vacio-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.pred-vacio-sub {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.pred-sistema {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.35);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.pred-sin-partido {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.9rem;
+}
+
+/* Ranking */
+.ranking-tabla-wrap {
+  overflow-x: auto;
+}
+
+.ranking-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.ranking-tabla thead tr {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.ranking-tabla th {
+  padding: 0.7rem 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 700;
+}
+
+.ranking-tabla td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.85);
+}
+
+.ranking-fila:hover td {
+  background: rgba(255,255,255,0.03);
+}
+
+.ranking-yo td {
+  background: rgba(192,57,43,0.08);
+}
+
+.ranking-pos {
+  font-size: 1.1rem;
+  text-align: center;
+  width: 40px;
+}
+
+.ranking-nombre {
+  font-weight: 700;
+  color: var(--blanco) !important;
+}
+
+.ranking-tu-tag {
+  font-size: 0.75rem;
+  color: var(--rojo);
+  font-weight: 600;
+}
+
+.ranking-pts {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--blanco) !important;
+}
+
+/* Modal predecir (dentro de grupos) */
+.pred-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pred-modal {
+  background: #0a1628;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 360px;
+  max-width: 90vw;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+}
+
+.pred-modal h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+}
+
+.pred-modal-sub {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 1.5rem;
+}
+
+.pred-modal-equipos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.pred-modal-equipo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.pred-modal-equipo span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.pred-modal-equipo input {
+  width: 60px;
+  text-align: center;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 0.6rem;
+  color: var(--blanco);
+  font-size: 1.4rem;
+  font-weight: 900;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.pred-modal-equipo input:focus {
+  border-color: var(--rojo);
+}
+
+.pred-modal-vs {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.3);
+  font-weight: 700;
+  padding-top: 1.5rem;
+}
+
+.pred-modal-acciones {
+  display: flex;
+  gap: 0.7rem;
+}
+
+.pred-modal-confirmar {
+  flex: 1;
+  background: var(--rojo);
+  color: var(--blanco);
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.pred-modal-confirmar:hover { opacity: 0.85; }
+
+.pred-modal-cancelar {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.6);
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pred-modal-cancelar:hover { background: rgba(255,255,255,0.12); }
+
+/* Aviso sin cuenta */
+.pred-modal-info {
+  text-align: center;
+}
+
+.pred-modal-info-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.8rem;
+}
+
+.pred-modal-info h3 {
+  margin-bottom: 0.5rem;
+}
+
+.pred-modal-info p {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.pred-modal-info-btn {
+  background: var(--rojo);
+  color: var(--blanco);
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  width: 100%;
+}
+
+.pred-modal-info-btn:hover { opacity: 0.85; }
+
+/* Botón predecir dentro de partido */
+.btn-predecir {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+}
+
+.btn-predecir:hover {
+  background: rgba(192,57,43,0.2);
+  border-color: var(--rojo);
+  color: var(--blanco);
+}
+
+.btn-predecir.tiene-pred {
+  background: rgba(46,204,113,0.12);
+  border-color: rgba(46,204,113,0.4);
+  color: #2ecc71;
+}
+
+@media (max-width: 600px) {
+  .pred-resumen { grid-template-columns: repeat(2, 1fr); }
+  .pred-item-partido { flex-wrap: wrap; }
+}

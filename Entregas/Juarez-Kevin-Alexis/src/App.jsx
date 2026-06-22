@@ -9,6 +9,8 @@ import Equipos from './pages/Equipos'
 import Noticias from './pages/Noticias'
 import NoticiaDetalle from './pages/NoticiaDetalle'
 import PanelAdmin from './pages/PanelAdmin'
+import Predicciones from './pages/Predicciones'
+import { PrediccionesProvider } from './context/PrediccionesContext'
 
 function App() {
   const [introVista, setIntroVista] = useState(false)
@@ -18,21 +20,24 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <div className="bg-overlay" />
-      <Header />
-      <main className="main-content">
-        <Routes>
-          <Route path="/"           element={<Inicio />} />
-          <Route path="/grupos"     element={<Grupos />} />
-          <Route path="/equipos"    element={<Equipos />} />
-          <Route path="/noticias"   element={<Noticias />} />
-          <Route path="/noticias/:slug" element={<NoticiaDetalle />} />
-          <Route path="/admin"      element={<PanelAdmin />} />
-        </Routes>
-      </main>
-      <Footer />
-    </div>
+    <PrediccionesProvider>
+      <div className="app">
+        <div className="bg-overlay" />
+        <Header />
+        <main className="main-content">
+          <Routes>
+            <Route path="/"           element={<Inicio />} />
+            <Route path="/grupos"     element={<Grupos />} />
+            <Route path="/equipos"    element={<Equipos />} />
+            <Route path="/noticias"   element={<Noticias />} />
+            <Route path="/noticias/:slug" element={<NoticiaDetalle />} />
+            <Route path="/admin"      element={<PanelAdmin />} />
+            <Route path="/predicciones" element={<Predicciones />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </PrediccionesProvider>
   )
 }
 

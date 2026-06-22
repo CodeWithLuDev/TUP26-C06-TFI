@@ -154,7 +154,15 @@ export function TorneoProvider({ children }) {
     setPartidos(prev => {
       const partidoBase = construirPartidosCompletos(prev).find(p => p.id === idPartido)
       if (!partidoBase) return prev
-      const actualizado = { ...partidoBase, resultado: { local: golesLocal, visitante: golesVisitante }, penales, tiempoExtra, goles, fechaFin: new Date().toISOString(), ...(horaUTC ? { horaUTC, horaManual: !!horaManual } : {}) }
+      // fechaFin = la hora real del partido (horaUTC pasada o la que ya tenía), NO new Date()
+      const horaFinal = horaUTC || partidoBase.horaUTC
+      const actualizado = {
+        ...partidoBase,
+        resultado: { local: golesLocal, visitante: golesVisitante },
+        penales, tiempoExtra, goles,
+        fechaFin: horaFinal || new Date().toISOString(),
+        ...(horaUTC ? { horaUTC, horaManual: !!horaManual } : {})
+      }
       const yaExistia = prev.some(p => p.id === idPartido)
       let siguientes = yaExistia
         ? prev.map(p => (p.id === idPartido ? actualizado : p))
@@ -165,6 +173,19 @@ export function TorneoProvider({ children }) {
         siguientes = siguientes.filter(p => !aBorrar.includes(p.ronda))
       }
       return siguientes
+    })
+  }
+
+  // Solo actualiza la fecha/hora del partido sin tocar el resultado
+  function guardarFecha(idPartido, horaUTC) {
+    setPartidos(prev => {
+      const partidoBase = construirPartidosCompletos(prev).find(p => p.id === idPartido)
+      if (!partidoBase) return prev
+      const actualizado = { ...partidoBase, horaUTC, horaManual: true }
+      const yaExistia = prev.some(p => p.id === idPartido)
+      return yaExistia
+        ? prev.map(p => p.id === idPartido ? actualizado : p)
+        : [...prev, actualizado]
     })
   }
 
@@ -247,7 +268,7 @@ export function TorneoProvider({ children }) {
     })
   }
 
-  const value = { partidos: partidosCompletos, cargarResultado, borrarResultado, reiniciarTorneo, generarTorneoAleatorio, exportarTorneo, importarTorneo }
+  const value = { partidos: partidosCompletos, cargarResultado, borrarResultado, guardarFecha, reiniciarTorneo, generarTorneoAleatorio, exportarTorneo, importarTorneo }
   return <TorneoContext.Provider value={value}>{children}</TorneoContext.Provider>
 }
 

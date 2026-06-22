@@ -18,7 +18,7 @@
 
 .header-nav {
   display: flex;
-  gap: 2rem;
+  gap: 1.4rem;
 }
 
 .header-logo {
@@ -59,15 +59,6 @@
   line-height: 1;
 }
 
-.header-nav a {
-  color: var(--blanco);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.5px;
-  transition: color 0.2s;
-}
-
 .header-nav a:hover {
   color: var(--rojo);
   transform: translateY(-2px);
@@ -77,10 +68,11 @@
   color: var(--blanco);
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.5px;
+  font-size: 0.88rem;
+  letter-spacing: 0.3px;
   transition: color 0.2s, transform 0.2s;
   display: inline-block;
+  white-space: nowrap;
 }
 
 .header-user-btn {
@@ -118,6 +110,9 @@
   width: 300px;
   z-index: 200;
   box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .auth-tabs {
@@ -213,6 +208,19 @@
   justify-content: center;
 }
 
+.auth-pred-btn {
+  background: rgba(255,255,255,0.08) !important;
+  margin-bottom: 0.5rem;
+}
+
+.auth-pred-btn:hover {
+  background: rgba(255,255,255,0.14) !important;
+}
+
+.auth-logout-btn {
+  background: var(--rojo);
+}
+
 .auth-modal {
   background: #0a1628;
   border: 1px solid rgba(255,255,255,0.1);
@@ -220,4 +228,70 @@
   padding: 2rem;
   width: 340px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+/* ── Próximos partidos en el header ── */
+.header-proximos {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-left: 1px solid rgba(255,255,255,0.1);
+  padding-left: 1.2rem;
+  margin-left: 0.4rem;
+}
+
+.header-prox-label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--rojo);
+  text-transform: uppercase;
+}
+
+.header-prox-partido {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--blanco);
+}
+
+.header-prox-nombre {
+  white-space: nowrap;
+}
+
+.header-prox-vs {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.35);
+  font-weight: 400;
+}
+
+.header-prox-hora {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.45);
+}
+
+.header-prox-siguientes {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 4px;
+  margin-top: 1px;
+}
+
+.header-prox-mini {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.5);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.header-prox-mini-hora {
+  color: rgba(255,255,255,0.3);
+  font-weight: 400;
+  margin-left: 3px;
 }

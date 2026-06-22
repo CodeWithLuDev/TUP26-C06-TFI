@@ -2,6 +2,7 @@ import { useState } from 'react'
 import * as Flags from 'country-flag-icons/react/3x2'
 import { sedes } from '../data/sedes'
 import { useTorneo } from '../context/TorneoContext'
+import { BtnPredecir } from '../components/ModalPredecir'
 import '../styles/inicio.css'
 
 function Bandera({ codigo, size = 32 }) {
@@ -92,11 +93,11 @@ export default function Inicio() {
     })
     .slice(0, 6)
 
-  // Próximos: solo partidos sin resultado que tienen fecha/hora cargada manualmente
+  // Próximos: solo partidos sin resultado que tienen fecha/hora cargada manualmente por el admin
   const proximos = partidos
-    .filter(p => p.resultado === null && p.horaUTC && p.horaManual)
+    .filter(p => p.resultado === null && p.horaUTC && p.horaManual && new Date(p.horaUTC) > new Date())
     .sort((a, b) => new Date(a.horaUTC) - new Date(b.horaUTC))
-    .slice(0, 3)
+    .slice(0, 4)
 
   return (
     <div className="inicio">
@@ -105,34 +106,50 @@ export default function Inicio() {
           <h1>Copa Mundial 2026</h1>
           <p className="hero-sub">Fixture oficial interactivo, simulador de partidos y estadísticas en tiempo real</p>
         </div>
+
+        {proximos.length > 0 && (
+          <div className="hero-proximos">
+            {/* Próximo más reciente - destacado */}
+            <div className="hero-prox-principal">
+              <span className="proximo-badge">Próximo</span>
+              <p className="proximo-fase">{proximos[0].fase}</p>
+              <div className="proximo-equipos">
+                <div className="proximo-equipo">
+                  <Bandera codigo={proximos[0].codigoLocal} size={36} />
+                  <span>{proximos[0].local}</span>
+                </div>
+                <span className="vs">VS</span>
+                <div className="proximo-equipo">
+                  <Bandera codigo={proximos[0].codigoVisitante} size={36} />
+                  <span>{proximos[0].visitante}</span>
+                </div>
+              </div>
+              <p className="proximo-hora">{formatFechaHora(proximos[0].horaUTC)}</p>
+              <BtnPredecir partido={proximos[0]} />
+            </div>
+
+            {/* Próximos 3 siguientes - mini */}
+            {proximos.slice(1).length > 0 && (
+              <div className="hero-prox-mini-lista">
+                {proximos.slice(1).map(p => (
+                  <div key={p.id} className="hero-prox-mini-item">
+                    <div className="hero-prox-mini-equipos">
+                      <Bandera codigo={p.codigoLocal} size={16} />
+                      <span>{p.local}</span>
+                      <span className="hero-prox-mini-vs">vs</span>
+                      <span>{p.visitante}</span>
+                      <Bandera codigo={p.codigoVisitante} size={16} />
+                    </div>
+                    <span className="hero-prox-mini-hora">{formatFechaHora(p.horaUTC)}</span>
+                    <BtnPredecir partido={p} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
-      {/* Próximos partidos — solo si el admin cargó fecha/hora */}
-      {proximos.length > 0 && (
-        <section className="proximos-section">
-          <h2>Próximos partidos</h2>
-          <div className="proximos-grid">
-            {proximos.map(p => (
-              <div key={p.id} className="proximo-card">
-                <span className="proximo-badge">Próximo</span>
-                <p className="proximo-fase">{p.fase}</p>
-                <div className="proximo-equipos">
-                  <div className="proximo-equipo">
-                    <Bandera codigo={p.codigoLocal} size={36} />
-                    <span>{p.local}</span>
-                  </div>
-                  <span className="vs">VS</span>
-                  <div className="proximo-equipo">
-                    <Bandera codigo={p.codigoVisitante} size={36} />
-                    <span>{p.visitante}</span>
-                  </div>
-                </div>
-                <p className="proximo-hora">{formatFechaHora(p.horaUTC)}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* Últimos resultados */}
       {jugados.length > 0 && (

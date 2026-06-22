@@ -83,7 +83,7 @@ function FormularioGol({ golLocal, golVisitante, onAgregar, onQuitar, goles }) {
   )
 }
 
-function FilaPartido({ partido, onCargar, onBorrar }) {
+function FilaPartido({ partido, onCargar, onBorrar, onGuardarFecha }) {
   const [editando, setEditando] = useState(false)
   const [golLocal, setGolLocal] = useState(partido.resultado?.local ?? 0)
   const [golVisitante, setGolVisitante] = useState(partido.resultado?.visitante ?? 0)
@@ -151,20 +151,36 @@ function FilaPartido({ partido, onCargar, onBorrar }) {
             <span style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.35)' }}>
               📅 Fecha y hora del partido (hora local)
             </span>
-            <input
-              type="datetime-local"
-              value={fechaHora}
-              onChange={e => setFechaHora(e.target.value)}
-              style={{
-                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.14)',
-                borderRadius: 9, color: '#fff', fontSize: 14, fontFamily: 'inherit',
-                padding: '9px 12px', outline: 'none', colorScheme: 'dark',
-                maxWidth: 280,
-              }}
-            />
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              <input
+                type="datetime-local"
+                value={fechaHora}
+                onChange={e => setFechaHora(e.target.value)}
+                style={{
+                  background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.14)',
+                  borderRadius: 9, color: '#fff', fontSize: 14, fontFamily: 'inherit',
+                  padding: '9px 12px', outline: 'none', colorScheme: 'dark',
+                  maxWidth: 260,
+                }}
+              />
+              {fechaHora && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (fechaHora) onGuardarFecha(partido.id, new Date(fechaHora).toISOString())
+                    setEditando(false)
+                  }}
+                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: 9, padding: '9px 16px', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.15s' }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+                >
+                  💾 Solo guardar fecha
+                </button>
+              )}
+            </div>
             {fechaHora && (
               <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>
-                Este partido aparecerá en "Próximos partidos" en el inicio
+                Guardá solo la fecha para que los usuarios puedan predecir antes de que empiece.
               </span>
             )}
           </div>
@@ -275,7 +291,7 @@ function TabPill({ label, activo, onClick, count, countCargado }) {
 
 export default function PanelAdmin() {
   const { usuario } = useAuth()
-  const { partidos, cargarResultado, borrarResultado, reiniciarTorneo, generarTorneoAleatorio, exportarTorneo, importarTorneo } = useTorneo()
+  const { partidos, cargarResultado, borrarResultado, guardarFecha, reiniciarTorneo, generarTorneoAleatorio, exportarTorneo, importarTorneo } = useTorneo()
   const [filtroPrincipal, setFiltroPrincipal] = useState('Grupos')
   const [grupoActivo, setGrupoActivo]         = useState('A')
   const [playoffActivo, setPlayoffActivo]     = useState('Dieciseisavos')
@@ -441,7 +457,7 @@ export default function PanelAdmin() {
           </p>
         ) : (
           filtrados.map(p => (
-            <FilaPartido key={p.id} partido={p} onCargar={cargarResultado} onBorrar={borrarResultado} />
+            <FilaPartido key={p.id} partido={p} onCargar={cargarResultado} onBorrar={borrarResultado} onGuardarFecha={guardarFecha} />
           ))
         )}
       </div>

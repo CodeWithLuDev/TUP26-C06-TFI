@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import '../styles/header.css'
@@ -9,6 +9,7 @@ function Header() {
   const [modo, setModo] = useState('login')
   const [form, setForm] = useState({ nombre: '', apellido: '', correo: '', contrasena: '' })
   const [error, setError] = useState('')
+  const navigate = useNavigate()
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -62,7 +63,13 @@ function Header() {
         <div className="auth-panel">
           <p className="auth-bienvenida">Hola, <strong>{usuario.nombre}</strong></p>
           <p className="auth-rol">{usuario.rol === 'admin' ? '🔧 Administrador' : '👤 Usuario'}</p>
-          <button className="auth-submit" onClick={() => { cerrarSesion(); setPanelAbierto(false) }}>
+          <button
+            className="auth-submit auth-pred-btn"
+            onClick={() => { navigate('/predicciones'); setPanelAbierto(false) }}
+          >
+            🔮 Mis predicciones
+          </button>
+          <button className="auth-submit auth-logout-btn" onClick={() => { cerrarSesion(); setPanelAbierto(false) }}>
             Cerrar sesión
           </button>
         </div>

@@ -28,6 +28,61 @@
 }
 
 /* Próximo partido */
+.hero-proximos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 300px;
+  max-width: 340px;
+}
+
+.hero-prox-principal {
+  background: #0a1628;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 1.2rem 1.5rem;
+  text-align: center;
+}
+
+.hero-prox-mini-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hero-prox-mini-item {
+  background: rgba(10,22,40,0.7);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 0.5rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.hero-prox-mini-equipos {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex: 1;
+  white-space: nowrap;
+}
+
+.hero-prox-mini-vs {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.35);
+  font-weight: 400;
+}
+
+.hero-prox-mini-hora {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.4);
+  white-space: nowrap;
+}
+
 .proximo-partido {
   background: #0a1628;
   border: 1px solid rgba(255,255,255,0.1);

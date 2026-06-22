@@ -5,6 +5,7 @@ import { useTorneo } from '../context/TorneoContext'
 import { calcularPosiciones } from '../logic/posiciones'
 import { calcularGoleadores, calcularAsistidores } from '../logic/estadisticas'
 import Bracket from '../components/Bracket'
+import { BtnPredecir } from '../components/ModalPredecir'
 import '../styles/grupos.css'
 
 const GRUPOS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
@@ -77,6 +78,7 @@ function TablaGrupo({ grupo, partidos }) {
               </span>
             </div>
             <p className="gp-fecha">{p.fecha} · {new Date(p.horaUTC).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })} hs local</p>
+            <BtnPredecir partido={p} />
           </div>
         ))}
       </div>
