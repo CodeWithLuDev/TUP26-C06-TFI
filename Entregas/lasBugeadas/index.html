@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fixture Mundial Qatar 2022 ⚽</title>
+  <meta name="description" content="Gestión completa del fixture del Mundial de Fútbol en tiempo real" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     LOADING SCREEN
+══════════════════════════════════════ -->
+<div id="loading-screen">
+  <div class="loading-logo">⚽ Mundial 2022</div>
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Cargando fixture...</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     APP PRINCIPAL
+══════════════════════════════════════ -->
+<div id="app" style="display:none">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-logo">⚽</div>
+      <div>
+        <div class="navbar-title">Mundial 2022</div>
+        <div class="navbar-subtitle">Qatar · Fixture</div>
+      </div>
+    </div>
+
+    <div class="nav-links">
+      <button class="nav-link" data-page="equipos">
+        <span class="nav-icon">🌍</span>
+        <span>Equipos</span>
+      </button>
+      <button class="nav-link" data-page="grupos">
+        <span class="nav-icon">📊</span>
+        <span>Grupos</span>
+      </button>
+      <button class="nav-link" data-page="fixture">
+        <span class="nav-icon">📅</span>
+        <span>Fixture</span>
+      </button>
+      <button class="nav-link" data-page="playoffs">
+        <span class="nav-icon">🏆</span>
+        <span>Playoffs</span>
+      </button>
+      <button class="nav-link" data-page="estadisticas">
+        <span class="nav-icon">📈</span>
+        <span>Estadísticas</span>
+      </button>
+    </div>
+
+    <div class="nav-actions">
+      <button class="btn-reset-data" id="btn-reset-data" title="Resetear todos los datos">
+        🗑️ Resetear
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       PÁGINA: EQUIPOS
+  ══════════════════════════════════════ -->
+  <div id="page-equipos" class="page">
+    <div class="page-header">
+      <div class="page-header-content">
+        <div class="page-eyebrow">Mundial Qatar 2022</div>
+        <h1 class="page-title">Los 32 Equipos</h1>
+        <p class="page-desc">Todos los seleccionados participantes del torneo, organizados por grupos.</p>
+      </div>
+    </div>
+    <div class="container">
+      <div id="equipos-summary"></div>
+      <div id="equipos-filtro" class="mb-6"></div>
+      <div id="equipos-grid"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PÁGINA: GRUPOS
+  ══════════════════════════════════════ -->
+  <div id="page-grupos" class="page">
+    <div class="page-header">
+      <div class="page-header-content">
+        <div class="page-eyebrow">Fase de Grupos</div>
+        <h1 class="page-title">Tablas de Posiciones</h1>
+        <p class="page-desc">Posiciones actualizadas en tiempo real. Los dos primeros de cada grupo clasifican a octavos.</p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="alert alert-info mb-6">
+        <span class="alert-icon">ℹ️</span>
+        <div>
+          <strong>Desempate FIFA:</strong>
+          Puntos → Diferencia de goles → Goles a favor → Enfrentamiento directo.
+          <span style="display:block;margin-top:4px;font-size:var(--text-xs)">
+            🟢 1° lugar — clasifica directo &nbsp;|&nbsp; 🔵 2° lugar — clasifica como segundo
+          </span>
+        </div>
+      </div>
+      <div class="groups-grid" id="grupos-grid"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PÁGINA: FIXTURE
+  ══════════════════════════════════════ -->
+  <div id="page-fixture" class="page">
+    <div class="page-header">
+      <div class="page-header-content">
+        <div class="page-eyebrow">Calendario</div>
+        <h1 class="page-title">Fixture Interactivo</h1>
+        <p class="page-desc">Ingresá los resultados de cada partido. Los datos se actualizan en tiempo real.</p>
+      </div>
+    </div>
+    <div class="container">
+      <div id="fixture-filtros-container" class="mb-6"></div>
+      <div id="fixture-lista"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PÁGINA: PLAYOFFS
+  ══════════════════════════════════════ -->
+  <div id="page-playoffs" class="page">
+    <div class="page-header">
+      <div class="page-header-content">
+        <div class="page-eyebrow">Eliminación Directa</div>
+        <h1 class="page-title">Bracket de Playoffs</h1>
+        <p class="page-desc">Desde octavos de final hasta la gran final. El bracket se actualiza automáticamente.</p>
+      </div>
+    </div>
+    <div class="container">
+      <div id="playoff-banner" class="mb-6"></div>
+      <div id="bracket-visual"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PÁGINA: ESTADÍSTICAS
+  ══════════════════════════════════════ -->
+  <div id="page-estadisticas" class="page">
+    <div class="page-header">
+      <div class="page-header-content">
+        <div class="page-eyebrow">Estadísticas del Torneo</div>
+        <h1 class="page-title">Goleadores &amp; Asistidores</h1>
+        <p class="page-desc">Rankings actualizados con cada resultado ingresado.</p>
+      </div>
+    </div>
+    <div class="container">
+      <div id="stats-summary" class="mb-6"></div>
+      <div class="stats-grid">
+        <div id="stats-goleadores"></div>
+        <div id="stats-asistidores"></div>
+        <div id="stats-equipos"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- ══════════════════════════════════════
+     TOAST CONTAINER
+══════════════════════════════════════ -->
+<div id="toast-container"></div>
+
+<!-- ══════════════════════════════════════
+     MODAL: PARTIDO DE GRUPOS
+══════════════════════════════════════ -->
+<div id="modal-partido" class="modal-overlay">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-partido-title">Partido</h2>
+      <button class="modal-close" id="modal-partido-close" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="modal-body" id="modal-partido-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" id="btn-borrar-resultado" style="display:none;margin-right:auto">
+        🗑️ Borrar resultado
+      </button>
+      <button class="btn btn-secondary" id="btn-cerrar-modal-partido">Cancelar</button>
+      <button class="btn btn-primary" id="btn-guardar-resultado">✅ Guardar resultado</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MODAL: CONFIRMACIÓN
+══════════════════════════════════════ -->
+<div id="modal-confirm" class="modal-overlay">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header">
+      <h2 class="modal-title">Confirmar resultado</h2>
+      <button class="modal-close" id="modal-confirm-cancel" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="modal-body" id="modal-confirm-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="btn-confirm-cancel">Cancelar</button>
+      <button class="btn btn-primary" id="btn-confirm-ok">✅ Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MODAL: PARTIDO DE PLAYOFF
+══════════════════════════════════════ -->
+<div id="modal-playoff" class="modal-overlay">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-playoff-title">Partido de Playoff</h2>
+      <button class="modal-close" id="modal-playoff-close" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="modal-body" id="modal-playoff-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" id="btn-borrar-playoff" style="display:none;margin-right:auto">
+        🗑️ Borrar
+      </button>
+      <button class="btn btn-secondary" id="btn-cerrar-modal-playoff">Cancelar</button>
+      <button class="btn btn-primary" id="btn-guardar-playoff">✅ Guardar resultado</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCRIPTS — orden de carga importante
+══════════════════════════════════════ -->
+
+<!-- 1. Datos -->
+<script src="src/data/equipos.js"></script>
+<script src="src/data/partidos.js"></script>
+
+<!-- 2. Persistencia -->
+<script src="src/storage.js"></script>
+
+<!-- 3. Lógica de negocio -->
+<script src="src/logic/posiciones.js"></script>
+<script src="src/logic/playoffs.js"></script>
+<script src="src/logic/estadisticas.js"></script>
+
+<!-- 4. Helpers de UI -->
+<script src="src/ui/ui.js"></script>
+
+<!-- 5. Renderizado de páginas -->
+<script src="src/ui/grupos.js"></script>
+<script src="src/ui/fixture.js"></script>
+<script src="src/ui/bracket.js"></script>
+
+<!-- 6. Punto de entrada -->
+<script src="src/main.js"></script>
+
+</body>
+</html>
