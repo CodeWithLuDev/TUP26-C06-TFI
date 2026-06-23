@@ -48,15 +48,18 @@ def inicializar_db():
 
     # Tabla de partidos de playoffs
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS playoffs (
-            id          TEXT PRIMARY KEY,
-            ronda       TEXT NOT NULL,
-            equipo_a    TEXT,
-            equipo_b    TEXT,
-            goles_a     INTEGER,
-            goles_b     INTEGER,
-            ganador     TEXT,
-            definido_en TEXT
+    CREATE TABLE IF NOT EXISTS playoffs (
+        id          TEXT PRIMARY KEY,
+        ronda       TEXT NOT NULL,
+        equipo_a    TEXT,
+        equipo_b    TEXT,
+        goles_a     INTEGER,
+        goles_b     INTEGER,
+        ganador     TEXT,
+        definido_en TEXT,
+        fecha       TEXT,
+        hora        TEXT,
+        sede        TEXT
         )
     """)
 
@@ -68,6 +71,16 @@ def inicializar_db():
             equipo      TEXT NOT NULL,
             goles       INTEGER DEFAULT 0,
             asistencias INTEGER DEFAULT 0
+        )
+    """)
+    # Tabla de usuarios
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS usuarios (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        username    TEXT NOT NULL UNIQUE,
+        email       TEXT NOT NULL UNIQUE,
+        password    TEXT NOT NULL,
+        created_at  TEXT DEFAULT CURRENT_TIMESTAMP
         )
     """)
 

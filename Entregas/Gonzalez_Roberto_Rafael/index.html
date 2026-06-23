@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixture Mundial 2026 </title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+    <!-- PANTALLA DE CARGA -->
+<div id="pantalla-carga">
+    <video autoplay muted loop width="400">
+        <source src="assets/copa.mp4" type="video/mp4">
+    </video>
+    <p class="carga-texto">CARGANDO...</p>
+</div>
+
+   <!-- PANTALLA DE BIENVENIDA -->
+<div id="pantalla-inicio">
+    <img src="assets/inicio_fixture.PNG" alt="Fixture Mundial 2026" id="imagen-inicio">
+    <div id="inicio-overlay">
+
+          <!-- FORMULARIO LOGIN -->
+        <div id="form-login">
+            <h1> Fixture Mundial 2026</h1>
+            <div class="auth-tabs">
+                <button class="auth-tab activo" onclick="mostrarTab('login')">Iniciar sesión</button>
+                <button class="auth-tab" onclick="mostrarTab('registro')">Registrarse</button>
+            </div>
+
+            <div id="tab-login">
+                <input class="input-auth" type="text" id="login-username" placeholder="Usuario" maxlength="20">
+                <input class="input-auth" type="password" id="login-password" placeholder="Contraseña">
+                <p id="login-error" class="auth-error"></p>
+                <button class="btn-entrar" onclick="iniciarSesion()">Entrar</button>
+            </div>
+
+            <div id="tab-registro" style="display:none">
+                <input class="input-auth" type="text" id="reg-username" placeholder="Usuario (3-20 caracteres)" maxlength="20">
+                <input class="input-auth" type="email" id="reg-email" placeholder="Email">
+                <input class="input-auth" type="password" id="reg-password" placeholder="Contraseña (mín. 8 caracteres)">
+                <p id="reg-error" class="auth-error"></p>
+                <p id="reg-exito" class="auth-exito"></p>
+                <button class="btn-entrar" onclick="registrarse()">Registrarse</button>
+            </div>
+
+            <button class="btn-invitado" onclick="entrarAlFixture()">Continuar sin registrarse</button>
+
+        </div>
+
+    </div>
+</div>
+
+    <!-- APLICACIÓN PRINCIPAL (oculta al inicio) -->
+    <div id="app" style="display: none;">
+
+        <!-- ENCABEZADO -->
+        <header>
+    <h1>Mundial 2026</h1>
+    <nav>
+        <button class="btn-nav activo" onclick="mostrarSeccion('grupos')">Grupos</button>
+        <button class="btn-nav" onclick="mostrarSeccion('fixture')">Fixture</button>
+        <button class="btn-nav" onclick="mostrarSeccion('playoffs')">Playoffs</button>
+        <button class="btn-nav" onclick="mostrarSeccion('estadisticas')">Estadísticas</button>
+    </nav>
+    <div id="usuario-info">
+        <span id="usuario-nombre"></span>
+        <button class="btn-cerrar-sesion" onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+    </header>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main>
+
+            <!-- SECCIÓN GRUPOS -->
+            <section id="seccion-grupos" class="seccion activa">
+                <h2>Fase de Grupos</h2>
+                <div id="contenedor-grupos"></div>
+            </section>
+
+            <!-- SECCIÓN FIXTURE -->
+            <section id="seccion-fixture" class="seccion">
+                <h2>Fixture — Cargar Resultados</h2>
+                <div class="filtros">
+                    <label>Filtrar por grupo:
+                        <select id="filtro-grupo" onchange="filtrarPartidos()">
+                            <option value="todos">Todos</option>
+                            <option value="A">Grupo A</option>
+                            <option value="B">Grupo B</option>
+                            <option value="C">Grupo C</option>
+                            <option value="D">Grupo D</option>
+                            <option value="E">Grupo E</option>
+                            <option value="F">Grupo F</option>
+                            <option value="G">Grupo G</option>
+                            <option value="H">Grupo H</option>
+                            <option value="I">Grupo I</option>
+                            <option value="J">Grupo J</option>
+                            <option value="K">Grupo K</option>
+                            <option value="L">Grupo L</option>
+                        </select>
+                    </label>
+                </div>
+                <div id="contenedor-fixture"></div>
+            </section>
+
+            <!-- SECCIÓN PLAYOFFS -->
+            <section id="seccion-playoffs" class="seccion">
+                <h2>Fase Eliminatoria</h2>
+                <div id="contenedor-playoffs"></div>
+            </section>
+
+            <!-- SECCIÓN ESTADÍSTICAS -->
+            <section id="seccion-estadisticas" class="seccion">
+                <h2>Estadísticas del Torneo</h2>
+                <div class="estadisticas-grid">
+                    <div>
+                        <h3> Goleadores</h3>
+                        <div id="contenedor-goleadores"></div>
+                    </div>
+                    <div>
+                        <h3> Asistidores</h3>
+                        <div id="contenedor-asistidores"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="frontend/main.js"></script>
