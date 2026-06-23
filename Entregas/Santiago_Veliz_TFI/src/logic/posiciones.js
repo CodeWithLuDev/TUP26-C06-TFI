@@ -1,80 +1,98 @@
 /**
  * Módulo de Posiciones
- * Lógica pura para calcular las estadísticas y ordenar la tabla 
- * según los criterios oficiales de la FIFA.
+ * Lógica pura para calcular estadísticas, ordenar la tabla (FIFA)
+ * y calcular la racha de los últimos 3 partidos por equipo.
  */
 
 /**
+ * Calcula la racha de los últimos 3 partidos jugados por cada equipo.
+ * @param {Array} listaPartidos
+ * @param {string} equipoId
+ * @returns {Array<'G'|'E'|'P'>} hasta 3 resultados, más reciente primero
+ */
+export function calcularRacha(listaPartidos, equipoId) {
+  const jugados = listaPartidos
+    .filter(p => p.estado === 'jugado' &&
+      (p.equipoLocal === equipoId || p.equipoVisitante === equipoId));
+
+  // Los últimos 3 (al final del array = más recientes)
+  const ultimos = jugados.slice(-3).reverse();
+
+  return ultimos.map(p => {
+    const esLocal = p.equipoLocal === equipoId;
+    const gF = esLocal ? p.golesLocal : p.golesVisitante;
+    const gC = esLocal ? p.golesVisitante : p.golesLocal;
+    if (gF > gC) return 'G';
+    if (gF < gC) return 'P';
+    return 'E';
+  });
+}
+
+/**
  * Calcula estadísticas (puntos, goles, etc.) leyendo los partidos jugados.
- * @param {Array} listaPartidos - Array de objetos de partidos.
- * @param {Array} listaEquipos - Array de objetos de equipos.
- * @returns {Array} Tabla de posiciones con los datos acumulados (sin ordenar).
+ * @param {Array} listaPartidos
+ * @param {Array} listaEquipos
+ * @returns {Array} Tabla de posiciones con datos acumulados (sin ordenar).
  */
 export function calcularPosiciones(listaPartidos, listaEquipos) {
-    // 1. Inicializar las estadísticas de cada equipo en 0
-    let tabla = listaEquipos.map(equipo => ({
-        ...equipo,
-        pj: 0, // Partidos Jugados
-        pg: 0, // Partidos Ganados
-        pe: 0, // Partidos Empatados
-        pp: 0, // Partidos Perdidos
-        gf: 0, // Goles a Favor
-        gc: 0, // Goles en Contra
-        dg: 0, // Diferencia de Gol
-        pts: 0 // Puntos
-    }));
+  let tabla = listaEquipos.map(equipo => ({
+    ...equipo,
+    pj: 0, pg: 0, pe: 0, pp: 0,
+    gf: 0, gc: 0, dg: 0, pts: 0,
+    racha: calcularRacha(listaPartidos, equipo.id),
+  }));
 
-    // 2. Filtrar solo los partidos finalizados y calcular
-    listaPartidos.filter(p => p.estado === 'jugado').forEach(partido => {
-        let local = tabla.find(e => e.id === partido.equipoLocal);
-        let visitante = tabla.find(e => e.id === partido.equipoVisitante);
+  listaPartidos.filter(p => p.estado === 'jugado').forEach(partido => {
+    let local     = tabla.find(e => e.id === partido.equipoLocal);
+    let visitante = tabla.find(e => e.id === partido.equipoVisitante);
+    if (!local || !visitante) return;
 
-        if (!local || !visitante) return; // Validación de seguridad
+    local.pj++;     visitante.pj++;
+    local.gf     += partido.golesLocal;
+    local.gc     += partido.golesVisitante;
+    visitante.gf += partido.golesVisitante;
+    visitante.gc += partido.golesLocal;
 
-        // Sumar PJ y Goles
-        local.pj++;
-        visitante.pj++;
-        local.gf += partido.golesLocal;
-        local.gc += partido.golesVisitante;
-        visitante.gf += partido.golesVisitante;
-        visitante.gc += partido.golesLocal;
+    if (partido.golesLocal > partido.golesVisitante) {
+      local.pg++; local.pts += 3; visitante.pp++;
+    } else if (partido.golesLocal < partido.golesVisitante) {
+      visitante.pg++; visitante.pts += 3; local.pp++;
+    } else {
+      local.pe++; visitante.pe++;
+      local.pts += 1; visitante.pts += 1;
+    }
 
-        // Determinar ganador, perdedor o empate para asignar puntos
-        if (partido.golesLocal > partido.golesVisitante) {
-            local.pg++;
-            local.pts += 3;
-            visitante.pp++;
-        } else if (partido.golesLocal < partido.golesVisitante) {
-            visitante.pg++;
-            visitante.pts += 3;
-            local.pp++;
-        } else {
-            local.pe++;
-            visitante.pe++;
-            local.pts += 1;
-            visitante.pts += 1;
-        }
+    local.dg     = local.gf - local.gc;
+    visitante.dg = visitante.gf - visitante.gc;
+  });
 
-        // Calcular Diferencia de Gol (GF - GC)
-        local.dg = local.gf - local.gc;
-        visitante.dg = visitante.gf - visitante.gc;
-    });
-
-    return tabla;
+  return tabla;
 }
 
 /**
  * Ordena la tabla aplicando criterios FIFA.
- * @param {Array} tabla - Array de equipos con estadísticas ya calculadas.
- * @returns {Array} Tabla ordenada.
  */
 export function ordenarTabla(tabla) {
-    return tabla.sort((a, b) => {
-        // Criterio 1: Mayor cantidad de puntos
-        if (b.pts !== a.pts) return b.pts - a.pts;
-        // Criterio 2: Mayor diferencia de goles
-        if (b.dg !== a.dg) return b.dg - a.dg;
-        // Criterio 3: Mayor cantidad de goles a favor
-        return b.gf - a.gf;
-    });
+  return tabla.sort((a, b) => {
+    if (b.pts !== a.pts) return b.pts - a.pts;
+    if (b.dg  !== a.dg)  return b.dg  - a.dg;
+    return b.gf - a.gf;
+  });
+}
+
+/**
+ * Genera el HTML para los círculos de racha (G/E/P).
+ * @param {Array<'G'|'E'|'P'>} racha
+ * @returns {string} HTML string
+ */
+export function renderRacha(racha) {
+  if (!racha || racha.length === 0) {
+    return '<span class="racha-vacia">—</span>';
+  }
+  return racha.map(r => {
+    const clase = r === 'G' ? 'racha-circulo--g'
+                : r === 'P' ? 'racha-circulo--p'
+                : 'racha-circulo--e';
+    return `<span class="racha-circulo ${clase}">${r}</span>`;
+  }).join('');
 }

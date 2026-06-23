@@ -10,54 +10,80 @@ export function renderEquipos() {
   const contenedor = document.getElementById('grid-equipos');
   if (!contenedor) return;
 
-  contenedor.innerHTML = '';
+  // ── Controles: reusar si ya existen (evita pérdida de foco) ──
+  let controles = contenedor.querySelector('.equipos-controles');
+  let grid      = contenedor.querySelector('.grid-equipos__items');
+  let msgVacio  = contenedor.querySelector('.mensaje-vacio');
 
-  // ── Controles ────────────────────────────────────────────
-  const controles = document.createElement('div');
-  controles.className = 'equipos-controles';
+  if (!controles) {
+    controles = document.createElement('div');
+    controles.className = 'equipos-controles';
 
-  const input = document.createElement('input');
-  input.type        = 'text';
-  input.placeholder = '🔍 Buscar equipo…';
-  input.value       = busqueda;
-  input.className   = 'equipos-busqueda';
-  input.addEventListener('input', e => { busqueda = e.target.value.toLowerCase(); renderEquipos(); });
+    const input = document.createElement('input');
+    input.type        = 'text';
+    input.placeholder = '🔍 Buscar equipo…';
+    input.value       = busqueda;
+    input.className   = 'equipos-busqueda';
+    input.setAttribute('id', 'equipos-busqueda-input');
+    input.addEventListener('input', e => {
+      busqueda = e.target.value.toLowerCase();
+      renderGrid();
+    });
 
-  const select = document.createElement('select');
-  select.className = 'fixture-filtro__select';
-  select.innerHTML = '<option value="">Todos los grupos</option>';
-  obtenerListaDeGrupos().forEach(g => {
-    const opt = document.createElement('option');
-    opt.value = g; opt.textContent = `Grupo ${g}`;
-    if (g === grupoFiltro) opt.selected = true;
-    select.appendChild(opt);
-  });
-  select.addEventListener('change', e => { grupoFiltro = e.target.value; renderEquipos(); });
+    const select = document.createElement('select');
+    select.className = 'fixture-filtro__select';
+    select.innerHTML = '<option value="">Todos los grupos</option>';
+    obtenerListaDeGrupos().forEach(g => {
+      const opt = document.createElement('option');
+      opt.value = g; opt.textContent = `Grupo ${g}`;
+      if (g === grupoFiltro) opt.selected = true;
+      select.appendChild(opt);
+    });
+    select.addEventListener('change', e => { grupoFiltro = e.target.value; renderGrid(); });
 
-  controles.appendChild(input);
-  controles.appendChild(select);
-  contenedor.appendChild(controles);
-
-  // ── Filtrar ───────────────────────────────────────────────
-  const filtrados = equipos.filter(e => {
-    const matchGrupo  = !grupoFiltro || e.grupo === grupoFiltro;
-    const matchNombre = !busqueda || e.nombre.toLowerCase().includes(busqueda) || e.nombreCorto.toLowerCase().includes(busqueda);
-    return matchGrupo && matchNombre;
-  });
-
-  if (filtrados.length === 0) {
-    const msg = document.createElement('p');
-    msg.className = 'mensaje-vacio';
-    msg.textContent = 'No se encontraron equipos.';
-    contenedor.appendChild(msg);
-    return;
+    controles.appendChild(input);
+    controles.appendChild(select);
+    contenedor.appendChild(controles);
+  } else {
+    // Sync select value in case grupoFiltro changed externally
+    const select = controles.querySelector('select');
+    if (select) select.value = grupoFiltro;
   }
 
-  // ── Grid ─────────────────────────────────────────────────
-  const grid = document.createElement('div');
-  grid.className = 'grid-equipos__items';
+  renderGrid();
 
-  filtrados.forEach(equipo => {
+  function renderGrid() {
+
+    // ── Filtrar ─────────────────────────────────────────────
+    // Read current busqueda from the input (in case called programmatically)
+    const inputEl = contenedor.querySelector('#equipos-busqueda-input');
+    if (inputEl && busqueda !== inputEl.value.toLowerCase()) {
+      busqueda = inputEl.value.toLowerCase();
+    }
+
+    const filtrados = equipos.filter(e => {
+      const matchGrupo  = !grupoFiltro || e.grupo === grupoFiltro;
+      const matchNombre = !busqueda || e.nombre.toLowerCase().includes(busqueda) || e.nombreCorto.toLowerCase().includes(busqueda);
+      return matchGrupo && matchNombre;
+    });
+
+    // Remove old grid / empty message
+    contenedor.querySelector('.grid-equipos__items')?.remove();
+    contenedor.querySelector('.mensaje-vacio')?.remove();
+
+    if (filtrados.length === 0) {
+      const msg = document.createElement('p');
+      msg.className = 'mensaje-vacio';
+      msg.textContent = 'No se encontraron equipos.';
+      contenedor.appendChild(msg);
+      return;
+    }
+
+    // ── Grid ───────────────────────────────────────────────
+    const grid = document.createElement('div');
+    grid.className = 'grid-equipos__items';
+
+    filtrados.forEach(equipo => {
     const card = document.createElement('article');
     card.className = 'tarjeta-equipo';
     card.setAttribute('role', 'button');
@@ -71,17 +97,18 @@ export function renderEquipos() {
       <p class="tarjeta-equipo__confederacion">${equipo.confederacion}</p>
     `;
 
-    const abrir = () => mostrarModalEquipo(equipo);
-    card.addEventListener('click', abrir);
-    card.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' '){e.preventDefault();abrir();} });
-    grid.appendChild(card);
-  });
+      const abrir = () => mostrarModalEquipo(equipo);
+      card.addEventListener('click', abrir);
+      card.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' '){e.preventDefault();abrir();} });
+      grid.appendChild(card);
+    });
 
-  contenedor.appendChild(grid);
+    contenedor.appendChild(grid);
+  } // end renderGrid
 }
 
 // ── Modal de equipo ───────────────────────────────────────────
-function mostrarModalEquipo(equipo) {
+export function mostrarModalEquipo(equipo) {
   const overlay   = document.getElementById('modal-overlay');
   const contenido = document.getElementById('modal-contenido');
   if (!overlay || !contenido) return;

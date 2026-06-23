@@ -26,8 +26,8 @@
       <nav class="nav-principal" role="navigation" aria-label="Navegación principal">
         <ul class="nav-principal__lista" role="tablist">
           <li role="presentation">
-            <button type="button" class="nav-principal__link nav-principal__link--activo"
-              role="tab" data-view="equipos" aria-controls="vista-equipos" aria-current="page">Equipos</button>
+            <button type="button" class="nav-principal__link"
+              role="tab" data-view="equipos" aria-controls="vista-equipos">Equipos</button>
           </li>
           <li role="presentation">
             <button type="button" class="nav-principal__link"
@@ -63,8 +63,57 @@
 
   <main id="contenido-principal" class="contenido-principal">
 
+    <!-- ══ VISTA 0: INICIO / DASHBOARD (accesible solo desde el logo) ══ -->
+    <section id="vista-inicio" class="vista vista--activa" data-view="inicio"
+      role="tabpanel" aria-labelledby="titulo-inicio" tabindex="-1">
+      <div class="contenedor">
+        <h1 id="titulo-inicio" class="titulo-vista">Panel del Mundial 26</h1>
+        <p class="subtitulo-vista">Equipos, tabla de posiciones y máximos goleadores/asistidores, todo en un vistazo.</p>
+
+        <div class="dashboard-grid">
+          <div class="dashboard-col">
+            <div class="dashboard-box">
+              <h2 class="dashboard-box__titulo">⚽ Equipos participantes</h2>
+              <div id="dashboard-equipos" class="dashboard-equipos" aria-live="polite">
+                <p class="mensaje-vacio">Cargando equipos…</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-col">
+            <div class="dashboard-box">
+              <h2 class="dashboard-box__titulo">📊 Tabla de posiciones</h2>
+              <div id="dashboard-tablas" class="dashboard-tablas" aria-live="polite">
+                <p class="mensaje-vacio">Cargando tablas…</p>
+              </div>
+            </div>
+
+            <div class="dashboard-box">
+              <h2 class="dashboard-box__titulo">🥇 Máximos goleadores</h2>
+              <table class="tabla-datos" aria-label="Máximos goleadores">
+                <thead><tr><th>#</th><th>Jugador</th><th>Goles</th></tr></thead>
+                <tbody id="dashboard-goleadores">
+                  <tr><td colspan="3" class="mensaje-vacio">Sin datos aún.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="dashboard-box">
+              <h2 class="dashboard-box__titulo">🎯 Máximos asistidores</h2>
+              <table class="tabla-datos" aria-label="Máximos asistidores">
+                <thead><tr><th>#</th><th>Jugador</th><th>Asist.</th></tr></thead>
+                <tbody id="dashboard-asistidores">
+                  <tr><td colspan="3" class="mensaje-vacio">Sin datos aún.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ══ VISTA 1: EQUIPOS ══ -->
-    <section id="vista-equipos" class="vista vista--activa" data-view="equipos"
+    <section id="vista-equipos" class="vista" data-view="equipos"
       role="tabpanel" aria-labelledby="titulo-equipos" tabindex="-1">
       <div class="contenedor">
         <h1 id="titulo-equipos" class="titulo-vista">Equipos participantes</h1>
@@ -93,13 +142,6 @@
       <div class="contenedor">
         <h1 id="titulo-fixture" class="titulo-vista">Fixture</h1>
         <p class="subtitulo-vista">Resultados reales del Mundial 2026 o simulación aleatoria.</p>
-
-        <div class="pestanas-internas" role="tablist" aria-label="Tipo de fixture">
-          <button type="button" class="pestana-interna pestana-interna--activa"
-            data-pestana="fixture-real" role="tab" aria-selected="true">🌍 Mundial Real</button>
-          <button type="button" class="pestana-interna"
-            data-pestana="fixture-simulacion" role="tab" aria-selected="false">🎲 Simulación</button>
-        </div>
 
         <!-- Panel: Mundial Real -->
         <div id="fixture-real" class="panel-pestana panel-pestana--activo">
@@ -134,9 +176,6 @@
                 <button type="submit" class="boton boton--primario">Guardar resultado</button>
               </form>
             </div>
-          </div>
-          <div class="btn-reset-wrapper" style="margin-top:var(--espacio-xl)">
-            <button id="btn-reset" class="boton--reset" type="button">🗑️ Resetear torneo</button>
           </div>
         </div>
 

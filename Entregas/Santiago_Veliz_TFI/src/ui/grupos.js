@@ -7,8 +7,9 @@ import { partidos }  from '../data/partidos.js';
 import { calcularPosiciones, ordenarTabla } from '../logic/posiciones.js';
 
 export function renderGrupos() {
-  // Renderiza en ambos contenedores (tabla posiciones + eliminatorias)
-  ['contenedor-tablas-grupos', 'contenedor-grupos-elim'].forEach(id => {
+  // Renderiza en todos los contenedores que muestran la tabla de posiciones
+  // (vista "Tabla de Posiciones", vista "Eliminatorias" y el dashboard de inicio)
+  ['contenedor-tablas-grupos', 'contenedor-grupos-elim', 'dashboard-tablas'].forEach(id => {
     const contenedor = document.getElementById(id);
     if (!contenedor) return;
     contenedor.innerHTML = '';

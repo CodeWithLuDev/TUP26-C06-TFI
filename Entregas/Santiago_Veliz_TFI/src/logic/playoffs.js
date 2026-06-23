@@ -1,21 +1,3 @@
-/**
- * /src/logic/playoffs.js
- * ─────────────────────────────────────────────────────────────
- * Lógica pura del bracket del Mundial 2026.
- *
- * FORMATO MUNDIAL 2026:
- *   - 12 grupos (A–L) de 4 equipos cada uno.
- *   - Clasifican: 1° y 2° de cada grupo (24 equipos) +
- *     los 8 mejores terceros = 32 equipos en Octavos.
- *   - Rondas: Octavos (16 cruces) → Cuartos (8) →
- *             Semis (4) → Final + 3er puesto.
- *
- * ESTADO DEL BRACKET EN LOCALSTORAGE:
- *   Clave: 'mundial26_bracket'
- *   Valor: objeto con las rondas y sus partidos.
- * ─────────────────────────────────────────────────────────────
- */
-
 import { partidos }                   from '../data/partidos.js';
 import { equipos }                    from '../data/equipos.js';
 import { calcularPosiciones, ordenarTabla } from './posiciones.js';
@@ -24,7 +6,13 @@ const LS_BRACKET = 'mundial26_bracket';
 
 // ── Constantes ────────────────────────────────────────────────
 
-export const RONDAS = ['Octavos', 'Cuartos', 'Semis', 'Final'];
+export const RONDAS = [
+  'Dieciseisavos',
+  'Octavos',
+  'Cuartos',
+  'Semis',
+  'Final'
+];
 
 // Cuántos clasificados por grupo avanzan directamente
 const CLASIFICADOS_POR_GRUPO = 2;
@@ -63,6 +51,16 @@ function clasificadosDeGrupo(grupo, cantidad = CLASIFICADOS_POR_GRUPO) {
 }
 
 /**
+ * Devuelve true si todos los partidos del fixture tienen resultado.
+ */
+export function fixtureCompleto() {
+  return partidos.every(p =>
+    p.golesLocal !== null &&
+    p.golesVisitante !== null
+  );
+}
+
+/**
  * Obtiene todos los terceros de todos los grupos y devuelve los
  * 8 mejores ordenados por pts → dg → gf (criterio FIFA simplificado).
  * @returns {Array} 8 mejores terceros.
@@ -90,49 +88,46 @@ function mejoresTerceros() {
  * Si un equipo no está definido aún, usa POR_DEFINIR.
  * @returns {Array<{local, visitante, golesLocal, golesVisitante, estado}>}
  */
-export function armarOctavos() {
+export function armarDieciseisavos() {
+
+  if (!fixtureCompleto()) {
+    return Array(16)
+      .fill(null)
+      .map(() => cruce(POR_DEFINIR, POR_DEFINIR));
+  }
+
   const grupos = [...new Set(equipos.map(e => e.grupo))].sort();
 
-  // Obtener 1° y 2° de cada grupo disponible
-  const primeros  = {};
-  const segundos  = {};
-  grupos.forEach(g => {
-    [primeros[g], segundos[g]] = clasificadosDeGrupo(g);
+  const primeros = [];
+  const segundos = [];
+
+  grupos.forEach(grupo => {
+    const tabla = tablaDeGrupo(grupo);
+
+    if (tabla[0]) primeros.push(tabla[0]);
+    if (tabla[1]) segundos.push(tabla[1]);
   });
 
-  const mt = mejoresTerceros();
-  const t  = (i) => mt[i] ?? POR_DEFINIR;
+  const terceros = mejoresTerceros();
 
-  // Cruce oficial Mundial 2026 (simplificado para el simulador).
-  // Con los grupos que existan; el resto queda como POR_DEFINIR.
-  const letras = 'ABCDEFGHIJKL'.split('').filter(l => grupos.includes(l));
+  const clasificados = [
+    ...primeros,
+    ...segundos,
+    ...terceros
+  ];
 
   const cruces = [];
 
-  // Generamos cruces por pares de grupos: A↔B, C↔D, E↔F, …
-  // Si hay grupos impares al final, el último queda vs mejor tercero.
-  for (let i = 0; i < letras.length; i += 2) {
-    const g1 = letras[i];
-    const g2 = letras[i + 1];
-
-    cruces.push(cruce(
-      primeros[g1]  ?? POR_DEFINIR,
-      segundos[g2]  ?? POR_DEFINIR
-    ));
-    cruces.push(cruce(
-      primeros[g2]  ?? POR_DEFINIR,
-      segundos[g1]  ?? POR_DEFINIR
-    ));
+  for (let i = 0; i < 32; i += 2) {
+    cruces.push(
+      cruce(
+        clasificados[i],
+        clasificados[i + 1]
+      )
+    );
   }
 
-  // Rellenar hasta 16 cruces con mejores terceros si faltan
-  const tercerosIdx = [0, 1, 2, 3, 4, 5, 6, 7];
-  while (cruces.length < 16) {
-    const idx = tercerosIdx.shift() ?? 0;
-    cruces.push(cruce(t(idx), POR_DEFINIR));
-  }
-
-  return cruces.slice(0, 16);
+  return cruces;
 }
 
 /** Crea un objeto de cruce vacío. */
@@ -153,12 +148,24 @@ function cruce(local, visitante) {
  */
 export function bracketInicial() {
   return {
-    Octavos:  armarOctavos(),
-    Cuartos:  Array(8).fill(null).map(() => cruce(POR_DEFINIR, POR_DEFINIR)),
-    Semis:    Array(4).fill(null).map(() => cruce(POR_DEFINIR, POR_DEFINIR)),
-    Final:    [cruce(POR_DEFINIR, POR_DEFINIR)],
-    tercerPuesto: [cruce(POR_DEFINIR, POR_DEFINIR)],
-  };
+  Dieciseisavos: armarDieciseisavos(),
+
+  Octavos: Array(8)
+    .fill(null)
+    .map(() => cruce(POR_DEFINIR, POR_DEFINIR)),
+
+  Cuartos: Array(4)
+    .fill(null)
+    .map(() => cruce(POR_DEFINIR, POR_DEFINIR)),
+
+  Semis: Array(2)
+    .fill(null)
+    .map(() => cruce(POR_DEFINIR, POR_DEFINIR)),
+
+  Final: [cruce(POR_DEFINIR, POR_DEFINIR)],
+
+  tercerPuesto: [cruce(POR_DEFINIR, POR_DEFINIR)],
+};
 }
 
 // ── Persistencia ──────────────────────────────────────────────
@@ -201,10 +208,11 @@ export function registrarResultadoBracket(bracket, ronda, indice, golesL, golesV
 
   // Avanzar ganador a siguiente ronda
   const siguienteRonda = {
-    Octavos: 'Cuartos',
-    Cuartos: 'Semis',
-    Semis:   'Final',
-  }[ronda];
+  Dieciseisavos: 'Octavos',
+  Octavos: 'Cuartos',
+  Cuartos: 'Semis',
+  Semis: 'Final',
+}[ronda];
 
   if (siguienteRonda && bracket[siguienteRonda]) {
     const destino = Math.floor(indice / 2);

@@ -44,25 +44,18 @@ html { scroll-behavior: smooth; font-size: 16px; }
 img  { display: block; max-width: 100%; }
 a    { color: var(--color-acento); text-decoration: none; }
 
-/* ── 3. Fondo con patrón diagonal ────────────────────────── */
+/* ── 3. Fondo con patrón geométrico (cuadrícula de puntos) ── */
 body {
   font-family: var(--fuente-cuerpo);
-  background-color: var(--color-fondo);
+  background-color: #060e1c;
+  /* Cuadrícula de puntos tipo blueprint, igual a la referencia */
   background-image:
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 40px,
-      rgba(212,175,55,0.025) 40px,
-      rgba(212,175,55,0.025) 41px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 40px,
-      rgba(255,255,255,0.012) 40px,
-      rgba(255,255,255,0.012) 41px
+    radial-gradient(
+      circle,
+      rgba(255,255,255,0.07) 1px,
+      transparent 1px
     );
+  background-size: 40px 40px;
   color: var(--color-texto);
   line-height: 1.6;
   min-height: 100vh;
@@ -266,7 +259,48 @@ body {
   margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em;
 }
 
-/* ── 10. Modal ────────────────────────────────────────────── */
+/* ── 9.1 Dashboard de inicio ───────────────────────────────── */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: var(--espacio-2xl);
+  align-items: start;
+}
+.dashboard-col { display: flex; flex-direction: column; gap: var(--espacio-xl); }
+.dashboard-box {
+  background: var(--color-panel); border-radius: var(--radio-card);
+  border: 1px solid var(--color-borde-suave); box-shadow: var(--sombra-card);
+  padding: var(--espacio-lg); overflow: hidden;
+}
+.dashboard-box__titulo {
+  font-family: var(--fuente-titulo); font-size: 0.95rem;
+  color: var(--color-acento); text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: var(--espacio-md); padding-bottom: var(--espacio-sm);
+  border-bottom: 1px solid var(--color-borde);
+}
+.dashboard-tablas {
+  max-height: 560px; overflow-y: auto; padding-right: var(--espacio-xs);
+}
+.dashboard-tablas .grupos-grid { grid-template-columns: 1fr; gap: var(--espacio-md); }
+.dashboard-equipos {
+  max-height: 720px; overflow-y: auto; padding-right: var(--espacio-xs);
+}
+.dashboard-tablas::-webkit-scrollbar,
+.dashboard-equipos::-webkit-scrollbar { width: 6px; }
+.dashboard-tablas::-webkit-scrollbar-thumb,
+.dashboard-equipos::-webkit-scrollbar-thumb { background: var(--color-borde); border-radius: 4px; }
+
+.grid-equipos__items--mini {
+  grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+  gap: var(--espacio-sm);
+}
+.tarjeta-equipo--mini {
+  padding: var(--espacio-md) var(--espacio-sm) var(--espacio-sm);
+}
+.tarjeta-equipo--mini .tarjeta-equipo__escudo { width: 38px; height: 38px; margin-top: 2px; }
+.tarjeta-equipo--mini .tarjeta-equipo__nombre { font-size: 0.7rem; margin-top: var(--espacio-sm); }
+.tarjeta-equipo--mini .tarjeta-equipo__grupo { font-size: 0.6rem; padding: 1px 5px; }
+
 .modal-overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.8); backdrop-filter: blur(6px);
@@ -481,15 +515,39 @@ body {
 .boton--simular:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 32px rgba(14,143,78,0.55); }
 
 /* ── 15. Estadísticas ─────────────────────────────────────── */
-.estadisticas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: var(--espacio-xl); }
-.panel-estadistica { background: var(--color-panel); border-radius: var(--radio-card); overflow: hidden; box-shadow: var(--sombra-card); border: 1px solid var(--color-borde-suave); }
+.estadisticas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: var(--espacio-2xl);
+}
+.panel-estadistica {
+  background: var(--color-panel); border-radius: var(--radio-card);
+  overflow: hidden; box-shadow: var(--sombra-card);
+  border: 1px solid var(--color-borde-suave);
+  display: flex; flex-direction: column;
+}
 .panel-estadistica h2 {
-  font-family: var(--fuente-titulo); font-size: 0.9rem;
+  font-family: var(--fuente-titulo); font-size: 1.15rem;
   color: var(--color-fondo);
   background: linear-gradient(90deg, var(--color-acento), var(--color-acento-dim));
-  padding: var(--espacio-sm) var(--espacio-md);
+  padding: var(--espacio-md) var(--espacio-lg);
   text-transform: uppercase; letter-spacing: 0.08em;
 }
+.panel-estadistica .tabla-datos { font-size: 1rem; }
+.panel-estadistica .tabla-datos th {
+  font-size: 0.78rem; padding: var(--espacio-md) var(--espacio-lg);
+}
+.panel-estadistica .tabla-datos td {
+  padding: var(--espacio-md) var(--espacio-lg); font-size: 1rem;
+}
+.panel-estadistica .tabla-datos td:nth-child(2) { font-family: var(--fuente-cuerpo); font-weight: 600; }
+.panel-estadistica .tabla-datos td:first-child { font-size: 1.2rem; text-align: center; width: 48px; }
+.panel-estadistica .tabla-datos td:last-child {
+  font-family: var(--fuente-numero); font-weight: 700;
+  color: var(--color-acento); font-size: 1.1rem;
+}
+.panel-estadistica .tabla-datos tbody tr:nth-child(1) td { background: rgba(212,175,55,0.1); }
+.panel-estadistica .tabla-datos tbody tr:nth-child(2) td { background: rgba(212,175,55,0.05); }
 
 /* ── 16. Predicciones (estilo tarjeta) ────────────────────── */
 .prode-banner {
@@ -508,6 +566,7 @@ body {
 .prode-banner__stat { display: flex; flex-direction: column; align-items: center; }
 .prode-banner__stat--info { margin-left: auto; gap: var(--espacio-xs); align-items: flex-start; }
 
+.prode-seccion { margin-bottom: var(--espacio-2xl); }
 .prode-seccion__titulo {
   font-family: var(--fuente-titulo); font-size: 0.9rem;
   color: var(--color-acento); text-transform: uppercase;
@@ -541,6 +600,7 @@ body {
   display: flex; flex-direction: column; align-items: center;
   gap: var(--espacio-sm);
 }
+.prode-card__equipo--visitante { flex-direction: column-reverse; } 
 .prode-card__escudo { width: 52px; height: 52px; object-fit: contain; }
 .prode-card__nombre { font-weight: 700; font-size: 0.88rem; text-align: center; }
 .prode-card__centro { display: flex; flex-direction: column; align-items: center; gap: var(--espacio-sm); }
@@ -583,7 +643,12 @@ body {
 .prode-resultado--exacto   { background: rgba(212,175,55,0.15); color: var(--color-acento); }
 .prode-resultado--tendencia { background: rgba(14,143,78,0.15); color: #4ade80; }
 .prode-resultado--error    { background: rgba(192,57,43,0.15); color: #f87171; }
-.prode-resultado--pendiente { color: var(--color-texto-suave); }
+.prode-resultado--pendiente { color: var(--color-texto-suave); background: rgba(255,255,255,0.05); }
+
+.prode-card__puntos {
+  font-family: var(--fuente-numero); font-weight: 700;
+  color: var(--color-acento); font-size: 0.85rem; margin-left: auto;
+}
 
 /* ── 17. Bracket / Eliminatorias ──────────────────────────── */
 .bracket-wrapper {
@@ -786,6 +851,8 @@ body {
 @media (max-width: 960px) {
   .fixture-layout { grid-template-columns: 1fr; }
   .panel-carga-resultado { position: static; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .dashboard-equipos { max-height: 420px; }
 }
 @media (max-width: 700px) {
   :root { --alto-header: 54px; }
@@ -837,3 +904,159 @@ body {
   font-size: 1rem; text-transform: uppercase; letter-spacing: 0.06em;
   margin-bottom: var(--espacio-lg); padding-right: var(--espacio-xl);
 }
+/* ── 23. Racha (columna de posiciones) ───────────────────── */
+.racha-circulo {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%;
+  font-size: 0.62rem; font-weight: 800; font-family: var(--fuente-titulo);
+  letter-spacing: 0; margin-inline: 1px;
+}
+.racha-circulo--g { background: var(--color-positivo); color: #fff; }
+.racha-circulo--e { background: #4a5568; color: #e2e8f0; }
+.racha-circulo--p { background: var(--color-negativo); color: #fff; }
+.racha-vacia { color: var(--color-texto-suave); }
+
+/* ── 24. Selector de Modo (Real vs Simulación) ───────────── */
+.modo-selector {
+  display: flex; gap: var(--espacio-xs);
+  background: var(--color-panel-alt);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: calc(var(--radio-boton) + 2px);
+  padding: 3px; margin-bottom: var(--espacio-lg);
+  width: fit-content;
+}
+.modo-btn {
+  background: transparent; border: none;
+  color: var(--color-texto-suave);
+  font-family: var(--fuente-cuerpo); font-size: 0.82rem;
+  font-weight: 600; padding: var(--espacio-xs) var(--espacio-md);
+  border-radius: var(--radio-boton); cursor: pointer;
+  transition: all var(--transicion); white-space: nowrap;
+}
+.modo-btn:hover { color: var(--color-texto); background: rgba(255,255,255,0.06); }
+.modo-btn--activo {
+  background: var(--color-acento); color: var(--color-fondo);
+  box-shadow: 0 2px 8px rgba(212,175,55,0.3);
+}
+.modo-btn--activo:hover { background: var(--color-acento-dim); color: var(--color-fondo); }
+
+/* ── 25. Barra de simulación ─────────────────────────────── */
+.sim-barra {
+  display: flex; gap: var(--espacio-md); flex-wrap: wrap;
+  margin-bottom: var(--espacio-lg);
+  padding: var(--espacio-md) var(--espacio-lg);
+  background: rgba(14,143,78,0.08);
+  border: 1px dashed rgba(14,143,78,0.35);
+  border-radius: var(--radio-card);
+}
+.sim-btn { font-size: 0.82rem; padding: var(--espacio-xs) var(--espacio-md); }
+.sim-btn--reset {
+  background: transparent; border: 1px solid var(--color-negativo);
+  color: var(--color-negativo);
+}
+.sim-btn--reset:hover { background: rgba(192,57,43,0.15); }
+.sim-btn--aleatorio {
+  background: var(--color-positivo); color: #fff;
+  border: none; box-shadow: 0 2px 10px rgba(14,143,78,0.35);
+}
+.sim-btn--aleatorio:hover { background: #0a7a42; }
+
+.bracket-columna--final {
+  min-width: 200px; align-self: center;
+  display: flex; flex-direction: column; align-items: center; gap: var(--espacio-md);
+}
+.bracket-columna__titulo--tercero {
+  font-size: 0.7rem; color: var(--color-texto-suave);
+  margin-top: var(--espacio-lg);
+}
+
+/* ── 27. Prode form centrada ─────────────────────────────── */
+.prode-card__pie--form {
+  justify-content: center;
+}
+.prode-form--centrada {
+  flex-direction: column; align-items: center; gap: var(--espacio-sm);
+  flex: unset; width: 100%;
+}
+.prode-form__marcador {
+  display: flex; align-items: center; gap: var(--espacio-sm);
+  justify-content: center;
+}
+
+/* ── 28. Buscador de estadísticas ────────────────────────── */
+.estadistica-buscador {
+  display: flex; align-items: center; gap: var(--espacio-sm);
+  padding: var(--espacio-sm) var(--espacio-lg);
+  background: var(--color-panel-alt);
+  border-bottom: 1px solid var(--color-borde-suave);
+}
+.estadistica-buscador__icono { font-size: 0.9rem; flex-shrink: 0; }
+.estadistica-buscador__input {
+  flex: 1; background: transparent; border: none;
+  color: var(--color-texto); font-family: var(--fuente-cuerpo);
+  font-size: 0.85rem; outline: none;
+}
+.estadistica-buscador__input::placeholder { color: var(--color-texto-suave); }
+
+.bracket-centro{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.bracket-columna--final{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.bracket-columna--final .bracket-columna__titulo{
+  text-align:center;
+}
+
+
+/* =========================================
+
+DISEÑO CONVERGENTE - FASE ELIMINATORIA HORIZONTAL
+
+========================================= */
+
+.bracket-wrapper--convergente {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start; /* LA MAGIA: Evita que se corte la izquierda */
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+  min-width: max-content; /* LA MAGIA 2: Se estira perfecto sin aplastarse */
+  overflow-x: auto;
+  padding: 40px 20px;
+}
+
+.bracket-mitad {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.bracket-mitad--der {
+  flex-direction: row; /* LA MAGIA 3: Mantiene el orden Semi -> Cuartos -> Octavos */
+}
+
+.bracket-columna {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 1.5rem;
+  min-width: 180px;
+}
+
+.bracket-centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  min-width: 280px;
+} 
