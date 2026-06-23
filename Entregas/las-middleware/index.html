@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mundial 2026 — Fixture en Tiempo Real</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <h1>🏆 Mundial 2026</h1>
+      <p class="subtitulo">EE.UU. · México · Canadá — Fixture interactivo</p>
+    </div>
+  </header>
+
+  <nav>
+    <button class="nav-btn activo" data-seccion="equipos">Equipos</button>
+    <button class="nav-btn" data-seccion="grupos">Fase de Grupos</button>
+    <button class="nav-btn" data-seccion="bracket">Eliminación</button>
+    <button class="nav-btn" data-seccion="fixture">Cargar Resultados</button>
+    <button class="nav-btn" data-seccion="estadisticas">Estadísticas</button>
+  </nav>
+
+  <main id="contenido-principal"></main>
+
+  <footer>
+    <p>Programación III — Trabajo Final Integrador</p>
+  </footer>
+
+  <script src="src/data/equipos.js"></script>
+  <script src="src/data/partidos.js"></script>
+  <script src="src/logic/posiciones.js"></script>
+  <script src="src/logic/playoffs.js"></script>
+  <script src="src/logic/estadisticas.js"></script>
+  <script src="src/ui/grupos.js"></script>
+  <script src="src/ui/bracket.js"></script>
+  <script src="src/ui/fixture.js"></script>
+  <script src="src/main.js"></script>
+</body>
+</html>
