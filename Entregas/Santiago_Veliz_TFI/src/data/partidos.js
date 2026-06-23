@@ -1,8 +1,3 @@
-/**
- * /src/data/partidos.js
- * Base de datos del Fixture en blanco.
- */
-
 const partidosBase = [
   // ── GRUPO A ──
   { id:1, grupo:'A', equipoLocal:'mex', equipoVisitante:'rsa', golesLocal:null, golesVisitante:null, estado:'pendiente', goleadores:[], asistidores:[] },

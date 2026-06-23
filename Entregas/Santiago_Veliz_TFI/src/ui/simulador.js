@@ -1,5 +1,4 @@
 /**
- * /src/ui/simulador.js
  * Simula aleatoriamente todos los partidos pendientes,
  * recalcula posiciones y arma el bracket hasta el campeón.
  */

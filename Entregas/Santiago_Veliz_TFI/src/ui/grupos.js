@@ -1,5 +1,4 @@
 /**
- * /src/ui/grupos.js
  * Renderiza las tablas de posiciones en grilla.
  */
 import { equipos }   from '../data/equipos.js';

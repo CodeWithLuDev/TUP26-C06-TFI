@@ -1,6 +1,3 @@
-/**
- * /src/ui/renderEquipos.js
- */
 import { equipos, obtenerListaDeGrupos } from '../data/equipos.js';
 
 let grupoFiltro = '';

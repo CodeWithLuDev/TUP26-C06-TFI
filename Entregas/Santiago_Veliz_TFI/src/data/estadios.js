@@ -1,8 +1,3 @@
-/**
- * /src/data/estadios.js
- * Las 16 sedes oficiales del Mundial 2026
- * (EE.UU. × 11, México × 3, Canadá × 2).
- */
 export const estadios = [
   // ── ESTADOS UNIDOS ───────────────────────────────────────
   {

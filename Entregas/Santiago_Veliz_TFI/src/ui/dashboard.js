@@ -1,5 +1,4 @@
 /**
- * /src/ui/dashboard.js
  * ─────────────────────────────────────────────────────────────
  * Panel de inicio ("Dashboard"), accesible al hacer clic en el
  * logo MUNDIAL26. Muestra de un vistazo:

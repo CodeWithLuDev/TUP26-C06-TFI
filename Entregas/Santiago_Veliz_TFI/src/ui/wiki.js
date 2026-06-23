@@ -1,5 +1,4 @@
 /**
- * /src/ui/wiki.js
  * ─────────────────────────────────────────────────────────────
  * Renderiza las fichas de equipos en #contenedor-wiki-equipos
  * y gestiona el modal de detalle al hacer clic en una tarjeta.

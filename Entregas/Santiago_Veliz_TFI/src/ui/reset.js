@@ -1,5 +1,4 @@
 /**
- * /src/ui/reset.js
  * ─────────────────────────────────────────────────────────────
  * Botón "Resetear torneo": limpia todo el LocalStorage y
  * recarga la app a su estado inicial (partidos todos pendientes).

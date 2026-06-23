@@ -1,5 +1,5 @@
 /**
- * /src/main.js — Punto de entrada principal. Versión rediseñada.
+ * Punto de entrada principal. Versión rediseñada.
  */
 import { renderFixture }       from './ui/fixture.js';
 import { renderGrupos }        from './ui/grupos.js';

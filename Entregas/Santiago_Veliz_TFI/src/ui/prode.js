@@ -1,5 +1,4 @@
 /**
- * /src/ui/prode.js
  * Sistema de predicciones sincronizado en vivo con el Fixture.
  */
 import { partidos as partidosBase } from '../data/partidos.js';
