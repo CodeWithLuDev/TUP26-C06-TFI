@@ -83,7 +83,7 @@ function FormularioGol({ golLocal, golVisitante, onAgregar, onQuitar, goles }) {
   )
 }
 
-function FilaPartido({ partido, onCargar, onBorrar, onGuardarFecha }) {
+function FilaPartido({ partido, onCargar, onBorrar, onGuardarFecha, onToggleEnVivo, onGuardarGoles }) {
   const [editando, setEditando] = useState(false)
   const [golLocal, setGolLocal] = useState(partido.resultado?.local ?? 0)
   const [golVisitante, setGolVisitante] = useState(partido.resultado?.visitante ?? 0)
@@ -185,6 +185,34 @@ function FilaPartido({ partido, onCargar, onBorrar, onGuardarFecha }) {
             )}
           </div>
 
+          {/* En vivo toggle */}
+          {!cargado && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <button
+                type="button"
+                onClick={() => onToggleEnVivo(partido.id)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '8px 16px', borderRadius: 9, cursor: 'pointer',
+                  fontFamily: 'inherit', fontSize: 13, fontWeight: 700,
+                  border: partido.enVivo ? '1px solid #e74c3c' : '1px solid rgba(255,255,255,0.15)',
+                  background: partido.enVivo ? 'rgba(231,76,60,0.18)' : 'rgba(255,255,255,0.05)',
+                  color: partido.enVivo ? '#e74c3c' : 'rgba(255,255,255,0.5)',
+                  transition: 'all 0.15s',
+                }}
+              >
+                <span style={{
+                  width: 8, height: 8, borderRadius: '50%',
+                  background: partido.enVivo ? '#e74c3c' : 'rgba(255,255,255,0.2)',
+                  boxShadow: partido.enVivo ? '0 0 6px #e74c3c' : 'none',
+                  animation: partido.enVivo ? 'pulseRojo 1.2s infinite' : 'none',
+                  flexShrink: 0,
+                }} />
+                {partido.enVivo ? '🔴 EN VIVO — Click para desactivar' : 'Marcar como EN VIVO'}
+              </button>
+            </div>
+          )}
+
           {/* Scoreboard */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24, background: '#020810', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: '16px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, justifyContent: 'flex-end' }}>
@@ -227,12 +255,19 @@ function FilaPartido({ partido, onCargar, onBorrar, onGuardarFecha }) {
           <FormularioGol golLocal={partido.local} golVisitante={partido.visitante}
             goles={goles} onAgregar={g => setGoles([...goles, g])} onQuitar={i => setGoles(goles.filter((_, idx) => idx !== i))} />
 
-          <div style={{ display: 'flex', gap: 10, paddingTop: 8, borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+          <div style={{ display: 'flex', gap: 10, paddingTop: 8, borderTop: '1px solid rgba(255,255,255,0.07)', flexWrap: 'wrap' }}>
             <button type="button" disabled={penalesEnEmpate} onClick={confirmar}
               style={{ background: penalesEnEmpate ? 'rgba(192,57,43,0.3)' : '#c0392b', border: 'none', borderRadius: 9, padding: '10px 22px', color: '#fff', fontWeight: 700, fontSize: 14, cursor: penalesEnEmpate ? 'not-allowed' : 'pointer', fontFamily: 'inherit', letterSpacing: '0.3px', boxShadow: penalesEnEmpate ? 'none' : '0 3px 14px rgba(192,57,43,0.4)', transition: 'filter 0.15s' }}
               onMouseEnter={e => { if (!penalesEnEmpate) e.currentTarget.style.filter = 'brightness(1.12)' }}
               onMouseLeave={e => { e.currentTarget.style.filter = 'none' }}
             >{cargado ? 'Actualizar resultado' : 'Confirmar resultado'}</button>
+            {partido.enVivo && !cargado && (
+              <button type="button" onClick={() => { onGuardarGoles(partido.id, goles); setEditando(false) }}
+                style={{ background: 'rgba(52,152,219,0.15)', border: '1px solid rgba(52,152,219,0.45)', borderRadius: 9, padding: '10px 18px', color: '#3498db', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: 6 }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(52,152,219,0.25)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(52,152,219,0.15)' }}
+              >💾 Guardar goles en vivo</button>
+            )}
             {cargado && (
               <button type="button" onClick={() => { onBorrar(partido.id); setEditando(false) }}
                 style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.14)', borderRadius: 9, padding: '10px 18px', color: 'rgba(255,255,255,0.55)', fontSize: 14, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s' }}
@@ -291,7 +326,7 @@ function TabPill({ label, activo, onClick, count, countCargado }) {
 
 export default function PanelAdmin() {
   const { usuario } = useAuth()
-  const { partidos, cargarResultado, borrarResultado, guardarFecha, reiniciarTorneo, generarTorneoAleatorio, exportarTorneo, importarTorneo } = useTorneo()
+  const { partidos, cargarResultado, borrarResultado, guardarFecha, guardarGoles, toggleEnVivo, reiniciarTorneo, generarTorneoAleatorio, exportarTorneo, importarTorneo } = useTorneo()
   const [filtroPrincipal, setFiltroPrincipal] = useState('Grupos')
   const [grupoActivo, setGrupoActivo]         = useState('A')
   const [playoffActivo, setPlayoffActivo]     = useState('Dieciseisavos')
@@ -457,7 +492,7 @@ export default function PanelAdmin() {
           </p>
         ) : (
           filtrados.map(p => (
-            <FilaPartido key={p.id} partido={p} onCargar={cargarResultado} onBorrar={borrarResultado} onGuardarFecha={guardarFecha} />
+            <FilaPartido key={p.id} partido={p} onCargar={cargarResultado} onBorrar={borrarResultado} onGuardarFecha={guardarFecha} onToggleEnVivo={toggleEnVivo} onGuardarGoles={guardarGoles} />
           ))
         )}
       </div>

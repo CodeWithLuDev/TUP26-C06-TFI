@@ -150,6 +150,18 @@ export function TorneoProvider({ children }) {
 
   const partidosCompletos = useMemo(() => construirPartidosCompletos(partidos), [partidos])
 
+  function toggleEnVivo(idPartido) {
+    setPartidos(prev => {
+      const partidoBase = construirPartidosCompletos(prev).find(p => p.id === idPartido)
+      if (!partidoBase) return prev
+      const actualizado = { ...partidoBase, enVivo: !partidoBase.enVivo }
+      const yaExistia = prev.some(p => p.id === idPartido)
+      return yaExistia
+        ? prev.map(p => p.id === idPartido ? actualizado : p)
+        : [...prev, actualizado]
+    })
+  }
+
   function cargarResultado(idPartido, { golesLocal, golesVisitante, penales = null, tiempoExtra = false, goles = [], horaUTC, horaManual }) {
     setPartidos(prev => {
       const partidoBase = construirPartidosCompletos(prev).find(p => p.id === idPartido)
@@ -160,6 +172,7 @@ export function TorneoProvider({ children }) {
         ...partidoBase,
         resultado: { local: golesLocal, visitante: golesVisitante },
         penales, tiempoExtra, goles,
+        enVivo: false,
         fechaFin: horaFinal || new Date().toISOString(),
         ...(horaUTC ? { horaUTC, horaManual: !!horaManual } : {})
       }
@@ -173,6 +186,20 @@ export function TorneoProvider({ children }) {
         siguientes = siguientes.filter(p => !aBorrar.includes(p.ronda))
       }
       return siguientes
+    })
+  }
+
+
+  // Guarda goles en un partido en vivo sin finalizarlo
+  function guardarGoles(idPartido, goles) {
+    setPartidos(prev => {
+      const partidoBase = construirPartidosCompletos(prev).find(p => p.id === idPartido)
+      if (!partidoBase) return prev
+      const actualizado = { ...partidoBase, goles }
+      const yaExistia = prev.some(p => p.id === idPartido)
+      return yaExistia
+        ? prev.map(p => p.id === idPartido ? actualizado : p)
+        : [...prev, actualizado]
     })
   }
 
@@ -268,7 +295,7 @@ export function TorneoProvider({ children }) {
     })
   }
 
-  const value = { partidos: partidosCompletos, cargarResultado, borrarResultado, guardarFecha, reiniciarTorneo, generarTorneoAleatorio, exportarTorneo, importarTorneo }
+  const value = { partidos: partidosCompletos, cargarResultado, borrarResultado, guardarFecha, guardarGoles, toggleEnVivo, reiniciarTorneo, generarTorneoAleatorio, exportarTorneo, importarTorneo }
   return <TorneoContext.Provider value={value}>{children}</TorneoContext.Provider>
 }
 

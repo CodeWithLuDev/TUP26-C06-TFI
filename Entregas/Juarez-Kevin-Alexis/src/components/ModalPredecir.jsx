@@ -16,9 +16,8 @@ export function BtnPredecir({ partido }) {
   const { usuario } = useAuth()
   const { predecir, miPrediccion } = usePredicciones()
 
-  // Solo se puede predecir si el partido todavía no empezó
-  const yaEmpezó = partido.horaUTC ? new Date(partido.horaUTC) <= new Date() : false
-  if (yaEmpezó) return null
+  // Solo se puede predecir si el partido no tiene resultado todavía
+  if (partido.resultado) return null
 
   const pred = miPrediccion(partido.id)
 
@@ -28,13 +27,12 @@ export function BtnPredecir({ partido }) {
         className={`btn-predecir ${pred ? 'tiene-pred' : ''}`}
         onClick={() => setAbierto(true)}
       >
-        🔮 {pred ? `Mi pred: ${pred.local}-${pred.visitante}` : 'Predecir'}
+         {pred ? `Mi pred: ${pred.local}-${pred.visitante}` : 'Predecir'}
       </button>
 
       {abierto && (
         <ModalPredecir
           partido={partido}
-          usuario={usuario}
           predExistente={pred}
           onPredecir={predecir}
           onCerrar={() => setAbierto(false)}
@@ -44,9 +42,10 @@ export function BtnPredecir({ partido }) {
   )
 }
 
-function ModalPredecir({ partido, usuario, predExistente, onPredecir, onCerrar }) {
-  const [local, setLocal] = useState(predExistente?.local ?? '')
-  const [visitante, setVisitante] = useState(predExistente?.visitante ?? '')
+function ModalPredecir({ partido, predExistente, onPredecir, onCerrar }) {
+  const { usuario } = useAuth()
+  const [local, setLocal] = useState(predExistente?.local ?? 0)
+  const [visitante, setVisitante] = useState(predExistente?.visitante ?? 0)
   const [exito, setExito] = useState(false)
 
   // Sin cuenta: mostrar aviso
@@ -66,7 +65,6 @@ function ModalPredecir({ partido, usuario, predExistente, onPredecir, onCerrar }
   }
 
   function confirmar() {
-    if (local === '' || visitante === '') return
     onPredecir(partido.id, Number(local), Number(visitante))
     setExito(true)
     setTimeout(onCerrar, 900)
@@ -82,7 +80,7 @@ function ModalPredecir({ partido, usuario, predExistente, onPredecir, onCerrar }
           </div>
         ) : (
           <>
-            <h3>🔮 Predecir resultado</h3>
+            <h3> Predecir resultado</h3>
             <p className="pred-modal-sub">{partido.fecha} · {partido.fase || partido.grupo}</p>
 
             <div className="pred-modal-equipos">
@@ -95,7 +93,6 @@ function ModalPredecir({ partido, usuario, predExistente, onPredecir, onCerrar }
                   max="99"
                   value={local}
                   onChange={e => setLocal(e.target.value)}
-                  placeholder="0"
                 />
               </div>
 
@@ -124,7 +121,6 @@ function ModalPredecir({ partido, usuario, predExistente, onPredecir, onCerrar }
               <button
                 className="pred-modal-confirmar"
                 onClick={confirmar}
-                disabled={local === '' || visitante === ''}
               >
                 {predExistente ? 'Actualizar' : 'Confirmar'}
               </button>

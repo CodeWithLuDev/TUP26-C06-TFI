@@ -48,19 +48,37 @@ function EquipoFila({ nombre, codigo, goles, esGanador }) {
   )
 }
 
+function formatFechaCorta(horaUTC) {
+  if (!horaUTC) return null
+  const d = new Date(horaUTC)
+  const fecha = d.toLocaleDateString('es-AR', { day: '2-digit', month: 'short', timeZone: 'UTC' })
+  const hora = d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' })
+  return `${fecha} · ${hora} UTC`
+}
+
 function PartidoCard({ p, delayMs = 0 }) {
   const ganId = ganadorId(p)
   const conRes = !!p?.resultado
+  const fechaTexto = p ? formatFechaCorta(p.horaUTC) : null
   return (
-    <div className="bracket-card bracket-anim-in" style={{
-      width: '100%', borderRadius: 7, overflow: 'hidden',
-      border: `1px solid ${conRes ? 'rgba(46,204,113,0.25)' : 'rgba(255,255,255,0.1)'}`,
-      boxShadow: conRes ? '0 0 10px rgba(46,204,113,0.06)' : 'none',
-      animationDelay: `${delayMs}ms`,
-    }}>
-      <EquipoFila nombre={p?.local}     codigo={p?.codigoLocal}     goles={conRes ? p.resultado.local     : undefined} esGanador={!!p && ganId === p.localId} />
-      <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
-      <EquipoFila nombre={p?.visitante} codigo={p?.codigoVisitante} goles={conRes ? p.resultado.visitante : undefined} esGanador={!!p && ganId === p.visitanteId} />
+    <div className="bracket-anim-in" style={{ width: '100%', animationDelay: `${delayMs}ms` }}>
+      {fechaTexto && (
+        <div style={{
+          fontSize: 9, fontWeight: 700, letterSpacing: '0.5px', color: 'rgba(255,255,255,0.35)',
+          textAlign: 'center', marginBottom: 3, textTransform: 'uppercase',
+        }}>
+          📅 {fechaTexto}
+        </div>
+      )}
+      <div className="bracket-card" style={{
+        width: '100%', borderRadius: 7, overflow: 'hidden',
+        border: `1px solid ${conRes ? 'rgba(46,204,113,0.25)' : 'rgba(255,255,255,0.1)'}`,
+        boxShadow: conRes ? '0 0 10px rgba(46,204,113,0.06)' : 'none',
+      }}>
+        <EquipoFila nombre={p?.local}     codigo={p?.codigoLocal}     goles={conRes ? p.resultado.local     : undefined} esGanador={!!p && ganId === p.localId} />
+        <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        <EquipoFila nombre={p?.visitante} codigo={p?.codigoVisitante} goles={conRes ? p.resultado.visitante : undefined} esGanador={!!p && ganId === p.visitanteId} />
+      </div>
     </div>
   )
 }
@@ -110,6 +128,11 @@ function CentroCol({ fin, tp }) {
         </div>
         {fin ? (
           <>
+            {fin.horaUTC && (
+              <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.35)', textAlign: 'center', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                📅 {formatFechaCorta(fin.horaUTC)}
+              </div>
+            )}
             <div className={`bracket-anim-in ${ganFin ? 'bracket-card-campeon' : ''}`} style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(231,76,60,0.35)', boxShadow: '0 0 20px rgba(231,76,60,0.1)' }}>
               <EquipoFila nombre={fin.local}     codigo={fin.codigoLocal}     goles={conFin ? fin.resultado.local     : undefined} esGanador={conFin && ganFin === fin.localId} />
               <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />

@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { TorneoProvider } from './context/TorneoContext'
+import { PrediccionesProvider } from './context/PrediccionesContext'
 import { NoticiasProvider } from './context/NoticiasContext'
 import App from './App.jsx'
 import './styles/main.css'
@@ -13,7 +14,9 @@ createRoot(document.getElementById('root')).render(
       <AuthProvider>
         <TorneoProvider>
           <NoticiasProvider>
-            <App />
+            <PrediccionesProvider>
+              <App />
+            </PrediccionesProvider>
           </NoticiasProvider>
         </TorneoProvider>
       </AuthProvider>

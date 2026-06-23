@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { useAuth } from './AuthContext'
 
 const PrediccionesContext = createContext()
 
@@ -26,7 +25,13 @@ export function PrediccionesProvider({ children }) {
     try { return JSON.parse(localStorage.getItem('mundial2026_predicciones') || '{}') }
     catch { return {} }
   })
-  const { usuario } = useAuth()
+
+  // Lee el usuario actual directo del localStorage en cada llamada
+  // Esto evita el bug donde useAuth() queda desactualizado al montarse el Provider
+  function getUsuarioActual() {
+    try { return JSON.parse(localStorage.getItem('usuario') || 'null') }
+    catch { return null }
+  }
 
   useEffect(() => {
     localStorage.setItem('mundial2026_predicciones', JSON.stringify(todas))
@@ -34,6 +39,7 @@ export function PrediccionesProvider({ children }) {
 
   // Guardar o actualizar predicción
   function predecir(partidoId, local, visitante) {
+    const usuario = getUsuarioActual()
     if (!usuario) return { error: 'Debés iniciar sesión para predecir' }
     const uid = String(usuario.id)
     setTodas(prev => ({
@@ -45,12 +51,14 @@ export function PrediccionesProvider({ children }) {
 
   // Predicción del usuario actual para un partido
   function miPrediccion(partidoId) {
+    const usuario = getUsuarioActual()
     if (!usuario) return null
     return todas[String(usuario.id)]?.[partidoId] || null
   }
 
   // Mis predicciones con puntos calculados (necesita lista de partidos)
   function misPrediccionesConPuntos(partidos) {
+    const usuario = getUsuarioActual()
     if (!usuario) return []
     const uid = String(usuario.id)
     const misP = todas[uid] || {}
