@@ -11,6 +11,7 @@ import NoticiaDetalle from './pages/NoticiaDetalle'
 import PanelAdmin from './pages/PanelAdmin'
 import Predicciones from './pages/Predicciones'
 import { PrediccionesProvider } from './context/PrediccionesContext'
+import Playoffs from './pages/Playoffs'
 
 function App() {
   const [introVista, setIntroVista] = useState(false)
@@ -29,6 +30,7 @@ function App() {
             <Route path="/"           element={<Inicio />} />
             <Route path="/grupos"     element={<Grupos />} />
             <Route path="/equipos"    element={<Equipos />} />
+            <Route path="/playoffs" element={<Playoffs />} />
             <Route path="/noticias"   element={<Noticias />} />
             <Route path="/noticias/:slug" element={<NoticiaDetalle />} />
             <Route path="/admin"      element={<PanelAdmin />} />

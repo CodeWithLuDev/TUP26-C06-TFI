@@ -1,15 +1,18 @@
-/* ── Intro overlay ── */
+/* ══════════════════════════════════════════
+   INTRO  –  Copa Mundial 2026
+   Paleta: azul oscuro #0a1628 + rojo #c0392b + dorado #f1c40f
+   ══════════════════════════════════════════ */
+
 .intro-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #8B0000;
+  background: #060e1c;
   overflow: hidden;
-  transition: opacity 0.8s ease;
+  transition: opacity 1s ease;
 }
 
 .intro-overlay.fade-out {
@@ -17,7 +20,74 @@
   pointer-events: none;
 }
 
-/* ── Anillos de expansión ── */
+/* ── Fondo: imagen del mundial con blur + zoom ── */
+.intro-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('/fondo-m26.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(3px) brightness(0.3);
+  animation: introBgZoom 4s ease-out forwards;
+  transform-origin: center center;
+}
+
+@keyframes introBgZoom {
+  from { transform: scale(1.15); }
+  to   { transform: scale(1.02); }
+}
+
+/* ── Partículas de luz ── */
+.intro-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.intro-particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: particleFloat linear infinite;
+  opacity: 0;
+}
+
+.intro-particle:nth-child(1)  { width:3px;  height:3px;  background:#f1c40f; left:10%; animation-duration:3.2s; animation-delay:0.1s; }
+.intro-particle:nth-child(2)  { width:2px;  height:2px;  background:#c0392b; left:22%; animation-duration:2.8s; animation-delay:0.4s; }
+.intro-particle:nth-child(3)  { width:4px;  height:4px;  background:#fff;    left:35%; animation-duration:3.5s; animation-delay:0.2s; }
+.intro-particle:nth-child(4)  { width:2px;  height:2px;  background:#f1c40f; left:48%; animation-duration:2.6s; animation-delay:0.7s; }
+.intro-particle:nth-child(5)  { width:3px;  height:3px;  background:#3498db; left:62%; animation-duration:3.1s; animation-delay:0.3s; }
+.intro-particle:nth-child(6)  { width:2px;  height:2px;  background:#f1c40f; left:75%; animation-duration:2.9s; animation-delay:0.6s; }
+.intro-particle:nth-child(7)  { width:4px;  height:4px;  background:#c0392b; left:88%; animation-duration:3.4s; animation-delay:0.1s; }
+.intro-particle:nth-child(8)  { width:2px;  height:2px;  background:#fff;    left:15%; animation-duration:3.0s; animation-delay:0.9s; }
+.intro-particle:nth-child(9)  { width:3px;  height:3px;  background:#f1c40f; left:55%; animation-duration:2.7s; animation-delay:0.5s; }
+.intro-particle:nth-child(10) { width:2px;  height:2px;  background:#3498db; left:92%; animation-duration:3.3s; animation-delay:0.2s; }
+.intro-particle:nth-child(11) { width:3px;  height:3px;  background:#fff;    left:5%;  animation-duration:3.6s; animation-delay:0.8s; }
+.intro-particle:nth-child(12) { width:2px;  height:2px;  background:#f1c40f; left:42%; animation-duration:2.5s; animation-delay:0.4s; }
+
+@keyframes particleFloat {
+  0%   { transform: translateY(110vh) scale(0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.8; }
+  100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+}
+
+/* ── Línea horizontal que barre la pantalla ── */
+.intro-scanline {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(241,196,15,0.6), transparent);
+  animation: scanline 1.2s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+@keyframes scanline {
+  0%   { top: 0%;   opacity: 0; }
+  10%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* ── Anillos –  solo 2, azul oscuro + rojo, elegantes ── */
 .intro-rings {
   position: absolute;
   inset: 0;
@@ -29,28 +99,37 @@
 
 .intro-ring {
   position: absolute;
-  border-radius: 18%;
-  animation: ringExpand 2.8s ease-out forwards;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  animation: ringPulse 3s ease-out forwards;
   opacity: 0;
 }
 
-.intro-ring:nth-child(1)  { width: 40px;  height: 40px;  background: #e74c3c; animation-delay: 0s; }
-.intro-ring:nth-child(2)  { width: 80px;  height: 80px;  background: #e67e22; animation-delay: 0.08s; }
-.intro-ring:nth-child(3)  { width: 130px; height: 130px; background: #f1c40f; animation-delay: 0.16s; }
-.intro-ring:nth-child(4)  { width: 190px; height: 190px; background: #2ecc71; animation-delay: 0.24s; }
-.intro-ring:nth-child(5)  { width: 260px; height: 260px; background: #1abc9c; animation-delay: 0.32s; }
-.intro-ring:nth-child(6)  { width: 340px; height: 340px; background: #3498db; animation-delay: 0.40s; }
-.intro-ring:nth-child(7)  { width: 430px; height: 430px; background: #9b59b6; animation-delay: 0.48s; }
-.intro-ring:nth-child(8)  { width: 530px; height: 530px; background: #e74c3c; animation-delay: 0.56s; }
-.intro-ring:nth-child(9)  { width: 640px; height: 640px; background: #e67e22; animation-delay: 0.64s; }
-.intro-ring:nth-child(10) { width: 760px; height: 760px; background: #2ecc71; animation-delay: 0.72s; }
-.intro-ring:nth-child(11) { width: 900px; height: 900px; background: #3498db; animation-delay: 0.80s; }
-.intro-ring:nth-child(12) { width: 1060px;height: 1060px;background: #c0392b; animation-delay: 0.88s; }
+.intro-ring:nth-child(1) {
+  width: 200px; height: 200px;
+  border-color: rgba(192,57,43,0.5);
+  animation-delay: 0.3s;
+}
+.intro-ring:nth-child(2) {
+  width: 380px; height: 380px;
+  border-color: rgba(52,152,219,0.3);
+  animation-delay: 0.5s;
+}
+.intro-ring:nth-child(3) {
+  width: 580px; height: 580px;
+  border-color: rgba(241,196,15,0.15);
+  animation-delay: 0.7s;
+}
+.intro-ring:nth-child(4) {
+  width: 800px; height: 800px;
+  border-color: rgba(192,57,43,0.08);
+  animation-delay: 0.9s;
+}
 
-@keyframes ringExpand {
-  0%   { transform: scale(0.1); opacity: 0; }
-  20%  { opacity: 1; }
-  100% { transform: scale(1);   opacity: 0.85; }
+@keyframes ringPulse {
+  0%   { transform: scale(0.3); opacity: 0; }
+  30%  { opacity: 1; }
+  100% { transform: scale(1.1); opacity: 0; }
 }
 
 /* ── Contenido central ── */
@@ -60,50 +139,92 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-  animation: contentAppear 0.6s ease 0.5s both;
-}
-
-@keyframes contentAppear {
-  from { opacity: 0; transform: scale(0.85); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-.intro-logo {
-  width: 130px;
-  height: auto;
-  filter: drop-shadow(0 0 28px rgba(255,255,255,0.5));
-  animation: logoPulse 1.5s ease-in-out 1s infinite alternate;
-}
-
-@keyframes logoPulse {
-  from { filter: drop-shadow(0 0 20px rgba(255,255,255,0.4)); }
-  to   { filter: drop-shadow(0 0 40px rgba(255,215,0,0.8)); }
-}
-
-.intro-titulo {
-  font-size: clamp(2rem, 5vw, 3.2rem);
-  font-weight: 900;
-  letter-spacing: 0.04em;
+  gap: 1.2rem;
   text-align: center;
+}
+
+/* Logo: aparece primero */
+.intro-logo {
+  width: 120px;
+  height: auto;
+  animation: logoEntrada 0.7s cubic-bezier(0.22,1,0.36,1) 0.4s both;
+  filter: drop-shadow(0 0 30px rgba(241,196,15,0.45));
+}
+
+@keyframes logoEntrada {
+  from { opacity: 0; transform: scale(0.5) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Título: letra por letra con clip */
+.intro-titulo {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
   color: #ffffff;
   text-transform: uppercase;
-  font-family: 'Georgia', 'Times New Roman', serif;
-  text-shadow:
-    0 0 20px rgba(255,215,0,0.7),
-    0 2px 8px rgba(0,0,0,0.8),
-    0 4px 24px rgba(192,57,43,0.5);
   line-height: 1.1;
+  animation: tituloEntrada 0.8s cubic-bezier(0.22,1,0.36,1) 0.85s both;
+  text-shadow: 0 0 40px rgba(192,57,43,0.6), 0 2px 12px rgba(0,0,0,0.9);
 }
 
 .intro-titulo span {
   color: #f1c40f;
+  text-shadow: 0 0 30px rgba(241,196,15,0.7), 0 2px 12px rgba(0,0,0,0.9);
 }
 
+@keyframes tituloEntrada {
+  from { opacity: 0; transform: translateY(24px); letter-spacing: 0.2em; }
+  to   { opacity: 1; transform: translateY(0);    letter-spacing: 0.06em; }
+}
+
+/* Línea divisora dorada */
+.intro-divider {
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #f1c40f, #c0392b, transparent);
+  border-radius: 2px;
+  animation: dividerExpand 0.6s ease-out 1.5s both;
+}
+
+@keyframes dividerExpand {
+  from { width: 0; opacity: 0; }
+  to   { width: 180px; opacity: 1; }
+}
+
+/* Subtítulo */
 .intro-subtitulo {
-  font-size: 0.95rem;
-  color: rgba(255,255,255,0.55);
-  letter-spacing: 3px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 4px;
   text-transform: uppercase;
   font-weight: 500;
+  animation: subtituloEntrada 0.6s ease 1.7s both;
+}
+
+@keyframes subtituloEntrada {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Barra de carga */
+.intro-loader {
+  width: 160px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  animation: subtituloEntrada 0.4s ease 1.9s both;
+}
+
+.intro-loader-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #c0392b, #f1c40f);
+  border-radius: 2px;
+  animation: loaderFill 1.6s ease-out 1.9s both;
+}
+
+@keyframes loaderFill {
+  from { width: 0%; }
+  to   { width: 100%; }
 }

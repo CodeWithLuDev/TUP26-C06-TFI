@@ -41,7 +41,11 @@ export default function NoticiaDetalle() {
       <article className="noticia-detalle-page">
         {/* Portada */}
         {noticia.portada
-          ? <img src={noticia.portada} alt={noticia.titulo} className="nd-portada" />
+          ? (
+            <div className="nd-portada-wrap">
+              <img src={noticia.portada} alt={noticia.titulo} className="nd-portada" />
+            </div>
+          )
           : <div className="nd-portada-placeholder">⚽</div>
         }
 

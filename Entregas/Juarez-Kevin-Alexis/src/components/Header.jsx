@@ -44,6 +44,7 @@ function Header() {
           <nav className="header-nav">
             <Link to="/">Inicio</Link>
             <Link to="/grupos">Clasificatoria y Grupos</Link>
+            <Link to="/playoffs">Eliminatoria</Link>
             <Link to="/equipos">Equipos</Link>
             <Link to="/noticias">Noticias</Link>
             {usuario?.rol === 'admin' && <Link to="/admin">Panel Admin</Link>}
@@ -67,7 +68,7 @@ function Header() {
             className="auth-submit auth-pred-btn"
             onClick={() => { navigate('/predicciones'); setPanelAbierto(false) }}
           >
-            🔮 Mis predicciones
+             Mis predicciones
           </button>
           <button className="auth-submit auth-logout-btn" onClick={() => { cerrarSesion(); setPanelAbierto(false) }}>
             Cerrar sesión

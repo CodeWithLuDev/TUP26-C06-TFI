@@ -1,12 +1,9 @@
 .grupos-page {
   padding: 2rem;
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
-/* El bracket vive fuera de .grupos-page para poder estirarse de punta
-   a punta de la pantalla en vez de quedar atado a la columna de 900px
-   de lectura. Tope generoso para no deformarse en monitores ultra anchos. */
 .bracket-section-full {
   max-width: 1700px;
   margin: 0 auto;
@@ -25,37 +22,44 @@
   margin-bottom: 1.5rem;
 }
 
-/* Tabs */
+/* ── Tabs ── */
 .grupos-tabs {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0.4rem;
   margin-bottom: 1.5rem;
 }
 
 .grupo-tab {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 8px;
-  color: rgba(255,255,255,0.6);
-  padding: 0.5rem 1rem;
+  color: rgba(255,255,255,0.55);
+  padding: 0.55rem 0;
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+  transition: background 0.18s, color 0.18s, border-color 0.18s, transform 0.1s;
+  width: 100%;
 }
 
 .grupo-tab:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.15);
   color: var(--blanco);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
 }
 
 .grupo-tab.active {
   background: var(--rojo);
   border-color: var(--rojo);
   color: var(--blanco);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220,38,38,0.35);
 }
 
-/* Card del grupo */
+/* ── Card ── */
 .grupo-card {
   background: #0a1628;
   border: 1px solid rgba(255,255,255,0.08);
@@ -64,15 +68,15 @@
 }
 
 .grupo-titulo {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--blanco);
-  padding: 1.2rem 1.5rem;
+  padding: 1rem 1.5rem;
   border-bottom: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.03);
 }
 
-/* Tabla */
+/* ── Tabla posiciones ── */
 .tabla-posiciones {
   width: 100%;
   border-collapse: collapse;
@@ -81,11 +85,12 @@
 .tabla-posiciones th {
   background: rgba(255,255,255,0.05);
   color: rgba(255,255,255,0.4);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
-  padding: 0.6rem 0.8rem;
+  padding: 0.55rem 0.6rem;
   text-align: center;
+  white-space: nowrap;
 }
 
 .tabla-posiciones th:nth-child(2) {
@@ -93,15 +98,15 @@
 }
 
 .tabla-posiciones td {
-  padding: 0.7rem 0.8rem;
+  padding: 0.65rem 0.6rem;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--blanco);
   border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
 .tabla-posiciones tbody tr:hover {
-  background: rgba(255,255,255,0.03);
+  background: rgba(255,255,255,0.04);
 }
 
 .tabla-posiciones tbody tr.clasificado {
@@ -111,30 +116,127 @@
 .pos-num {
   color: rgba(255,255,255,0.4);
   font-weight: 700;
-  width: 30px;
+  width: 28px;
 }
 
 .pos-equipo {
   display: flex !important;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
   text-align: left !important;
   font-weight: 600;
+  min-width: 130px;
 }
 
-.pts {
+.col-pts {
+  font-weight: 800 !important;
+  color: var(--blanco) !important;
+}
+
+.col-ultimos {
+  padding-left: 0.8rem !important;
+}
+
+/* ── Íconos últimos 5 ── */
+.ultimos-iconos {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.ultimo-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 0.7rem;
   font-weight: 800;
-  color: var(--blanco);
+  flex-shrink: 0;
 }
 
-/* Partidos del grupo */
+.icono-w {
+  background: #16a34a;
+  color: #fff;
+}
+
+.icono-l {
+  background: #dc2626;
+  color: #fff;
+}
+
+.icono-d {
+  background: #d97706;
+  color: #fff;
+}
+
+.icono-vacio {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.25);
+  font-size: 0.6rem;
+}
+
+/* ── Leyenda ── */
+.tabla-leyenda {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0.7rem 1.2rem;
+  background: rgba(255,255,255,0.02);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.leyenda-izq {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.leyenda-clasificado {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: #2ecc71;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.leyenda-texto {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.45);
+}
+
+.leyenda-der {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.leyenda-label {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.35);
+  margin-right: 0.3rem;
+}
+
+.leyenda-txt-icono {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.4);
+  margin-right: 0.4rem;
+}
+
+/* ── Partidos del grupo ── */
 .grupo-partidos {
   padding: 1.2rem 1.5rem;
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 
 .grupo-partidos h4 {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: rgba(255,255,255,0.4);
   text-transform: uppercase;
@@ -163,7 +265,7 @@
   align-items: center;
   gap: 0.4rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   width: 140px;
 }
 
@@ -180,12 +282,12 @@
 }
 
 .gp-fecha {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: rgba(255,255,255,0.3);
   text-align: center;
 }
 
-/* Estadísticas (goleadores / asistidores) */
+/* ── Estadísticas ── */
 .estadisticas-titulo {
   margin-top: 2.5rem;
   margin-bottom: 1rem;
@@ -219,9 +321,25 @@
   font-style: italic;
 }
 
+/* ── Responsive ── */
 @media (max-width: 700px) {
+  .grupos-tabs {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
   .estadisticas-grid {
     grid-template-columns: 1fr;
+  }
+
+  .col-ultimos,
+  .tabla-posiciones th.col-ultimos {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .grupos-tabs {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 

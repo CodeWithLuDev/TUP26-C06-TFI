@@ -1,11 +1,5 @@
 import { useState } from 'react'
 
-function youtubeEmbedUrl(url) {
-  if (!url) return null
-  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/)
-  return m ? `https://www.youtube.com/embed/${m[1]}` : null
-}
-
 const smallBtn = {
   background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
   color: 'rgba(255,255,255,0.6)', width: 24, height: 24, borderRadius: 5,
@@ -15,7 +9,11 @@ const smallBtn = {
 const inputStyle = {
   background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)',
   borderRadius: 10, color: '#fff', fontSize: '0.95rem', fontFamily: 'inherit',
-  padding: '0.65rem 0.9rem', outline: 'none', width: '100%',
+  padding: '0.65rem 0.9rem', outline: 'none', width: '100%', boxSizing: 'border-box',
+}
+
+function esYoutube(url) {
+  return url && (url.includes('youtube.com') || url.includes('youtu.be'))
 }
 
 export default function ModalNoticia({ noticia, onGuardar, onCerrar }) {
@@ -43,9 +41,9 @@ export default function ModalNoticia({ noticia, onGuardar, onCerrar }) {
   }
 
   function agregarBloque(tipo) {
-    const nuevo = tipo === 'texto'   ? { tipo: 'texto',   valor: '' }
-               : tipo === 'imagen'  ? { tipo: 'imagen',  valor: '', preview: '' }
-               :                      { tipo: 'youtube', valor: '' }
+    const nuevo = tipo === 'texto'  ? { tipo: 'texto',   valor: '' }
+               : tipo === 'imagen' ? { tipo: 'imagen',  valor: '', preview: '' }
+               :                     { tipo: 'youtube', valor: '' }
     setBloques(prev => [...prev, nuevo])
   }
 
@@ -57,7 +55,9 @@ export default function ModalNoticia({ noticia, onGuardar, onCerrar }) {
     const file = e.target.files[0]
     if (!file) return
     const r = new FileReader()
-    r.onload = ev => setBloques(prev => prev.map((b, idx) => idx === i ? { ...b, valor: ev.target.result, preview: ev.target.result } : b))
+    r.onload = ev => setBloques(prev => prev.map((b, idx) =>
+      idx === i ? { ...b, valor: ev.target.result, preview: ev.target.result } : b
+    ))
     r.readAsDataURL(file)
   }
 
@@ -77,7 +77,17 @@ export default function ModalNoticia({ noticia, onGuardar, onCerrar }) {
 
   function guardar() {
     if (!titulo.trim()) { setError('El título es obligatorio.'); return }
-    onGuardar({ titulo: titulo.trim(), subtitulo: subtitulo.trim(), texto: texto.trim(), portada, bloques })
+    // preview no va al store (el contexto lo limpia igual, pero mejor no enviarlo)
+    const bloquesSinPreview = bloques.map(b =>
+      b.tipo === 'imagen' ? { ...b, preview: '' } : b
+    )
+    onGuardar({
+      titulo: titulo.trim(),
+      subtitulo: subtitulo.trim(),
+      texto: texto.trim(),
+      portada,
+      bloques: bloquesSinPreview,
+    })
   }
 
   return (
@@ -131,9 +141,9 @@ export default function ModalNoticia({ noticia, onGuardar, onCerrar }) {
                     {b.tipo === 'texto' ? '📄 Texto adicional' : b.tipo === 'imagen' ? '🖼️ Imagen' : '▶️ Video YouTube'}
                   </span>
                   <div style={{ display: 'flex', gap: 4 }}>
-                    <button onClick={() => moverBloque(i, -1)} style={{ ...smallBtn, opacity: i === 0 ? 0.3 : 1 }}>↑</button>
-                    <button onClick={() => moverBloque(i, 1)} style={{ ...smallBtn, opacity: i === bloques.length - 1 ? 0.3 : 1 }}>↓</button>
-                    <button className="nm-extra-quitar" onClick={() => quitarBloque(i)}>✕</button>
+                    <button type="button" onClick={() => moverBloque(i, -1)} style={{ ...smallBtn, opacity: i === 0 ? 0.3 : 1 }}>↑</button>
+                    <button type="button" onClick={() => moverBloque(i, 1)} style={{ ...smallBtn, opacity: i === bloques.length - 1 ? 0.3 : 1 }}>↓</button>
+                    <button type="button" className="nm-extra-quitar" onClick={() => quitarBloque(i)}>✕</button>
                   </div>
                 </div>
 
@@ -156,14 +166,29 @@ export default function ModalNoticia({ noticia, onGuardar, onCerrar }) {
                   </>
                 )}
 
+                {/* YouTube: solo link, sin iframe en el modal para no reventar localStorage */}
                 {b.tipo === 'youtube' && (
                   <>
-                    <input value={b.valor} onChange={e => actualizarBloque(i, 'valor', e.target.value)}
-                      placeholder="https://www.youtube.com/watch?v=..." style={inputStyle} />
-                    {youtubeEmbedUrl(b.valor) && (
-                      <div style={{ width: '100%', aspectRatio: '16/9', borderRadius: 8, overflow: 'hidden', marginTop: 8 }}>
-                        <iframe src={youtubeEmbedUrl(b.valor)} title="yt-preview"
-                          style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen />
+                    <input
+                      value={b.valor}
+                      onChange={e => actualizarBloque(i, 'valor', e.target.value)}
+                      placeholder="https://www.youtube.com/watch?v=..."
+                      style={inputStyle}
+                    />
+                    {esYoutube(b.valor) && (
+                      <div style={{
+                        marginTop: 8, padding: '10px 14px',
+                        background: 'rgba(255,0,0,0.08)', border: '1px solid rgba(255,0,0,0.2)',
+                        borderRadius: 8, display: 'flex', alignItems: 'center', gap: 10,
+                      }}>
+                        <span style={{ fontSize: 20 }}>▶️</span>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>Link de YouTube guardado</span>
+                          <a href={b.valor} target="_blank" rel="noreferrer"
+                            style={{ fontSize: 12, color: '#e74c3c', wordBreak: 'break-all' }}>
+                            {b.valor}
+                          </a>
+                        </div>
                       </div>
                     )}
                   </>
@@ -177,15 +202,15 @@ export default function ModalNoticia({ noticia, onGuardar, onCerrar }) {
         <div style={{ marginBottom: '0.5rem' }}>
           <span className="nm-label" style={{ display: 'block', marginBottom: '0.5rem' }}>+ Añadir bloque de contenido</span>
           <div className="nm-add-bloques">
-            <button className="nm-add-btn" onClick={() => agregarBloque('texto')}>📄 Texto</button>
-            <button className="nm-add-btn" onClick={() => agregarBloque('imagen')}>🖼️ Imagen</button>
-            <button className="nm-add-btn" onClick={() => agregarBloque('youtube')}>▶️ Link YouTube</button>
+            <button type="button" className="nm-add-btn" onClick={() => agregarBloque('texto')}>📄 Texto</button>
+            <button type="button" className="nm-add-btn" onClick={() => agregarBloque('imagen')}>🖼️ Imagen</button>
+            <button type="button" className="nm-add-btn" onClick={() => agregarBloque('youtube')}>▶️ Link YouTube</button>
           </div>
         </div>
 
         <div className="nm-acciones">
-          <button className="nm-btn-cancelar" onClick={onCerrar}>Cancelar</button>
-          <button className="nm-btn-guardar" onClick={guardar}>{editar ? 'Guardar cambios' : 'Publicar noticia'}</button>
+          <button type="button" className="nm-btn-cancelar" onClick={onCerrar}>Cancelar</button>
+          <button type="button" className="nm-btn-guardar" onClick={guardar}>{editar ? 'Guardar cambios' : 'Publicar noticia'}</button>
         </div>
       </div>
     </div>

@@ -21,10 +21,10 @@ function tiempoTranscurrido(fechaFin) {
 function formatFechaHora(horaUTC) {
   if (!horaUTC) return ''
   const d = new Date(horaUTC)
-  return d.toLocaleString('es-AR', {
-    weekday: 'short', day: '2-digit', month: 'short',
-    hour: '2-digit', minute: '2-digit',
-  }) + ' hs'
+  const fecha = d.toLocaleDateString('es-AR', { weekday: 'short', day: '2-digit', month: 'short' })
+  const utc = d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' })
+  const local = d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
+  return `${fecha} · ${utc} UTC · ${local} local`
 }
 
 function ModalSede({ sede, onCerrar }) {

@@ -31,7 +31,6 @@ function MisPredicciones() {
   if (lista.length === 0) {
     return (
       <div className="pred-vacio">
-        <span className="pred-vacio-icon">🔮</span>
         <p>Todavía no hiciste ninguna predicción.</p>
         <p className="pred-vacio-sub">Andá a <strong>Grupos</strong> y predecí los resultados antes de que empiecen los partidos.</p>
       </div>
@@ -93,7 +92,7 @@ function MisPredicciones() {
       </div>
 
       <p className="pred-sistema">
-        🔮 Sistema de puntos: <strong>+3</strong> resultado exacto · <strong>+1</strong> solo el ganador · <strong>+0</strong> fallo
+         Sistema de puntos: <strong>+3</strong> resultado exacto · <strong>+1</strong> solo el ganador · <strong>+0</strong> fallo
       </p>
     </div>
   )
@@ -160,7 +159,7 @@ function Predicciones() {
 
   return (
     <div className="pred-page">
-      <h1>🔮 Predicciones</h1>
+      <h1> Predicciones</h1>
       <p className="pred-sub">Predecí los resultados antes de que empiecen los partidos y compará con los demás.</p>
 
       <div className="pred-tabs">
