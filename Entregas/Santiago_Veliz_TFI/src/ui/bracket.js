@@ -12,13 +12,14 @@ let bracket = null;
 function simularBracketAleatorio() {
   if (!bracket) return;
   const rondas = [
-  'Dieciseisavos',
-  'Octavos',
-  'Cuartos',
-  'Semis',
-  'Final',
-  'tercerPuesto'
-];
+    'Dieciseisavos',
+    'Octavos',
+    'Cuartos',
+    'Semis',
+    'Final',
+    'tercerPuesto'
+  ];
+  
   rondas.forEach(ronda => {
     (bracket[ronda] ?? []).forEach((cruce, idx) => {
       if (cruce.estado === 'pendiente' && cruce.local?.id && cruce.visitante?.id) {
@@ -29,8 +30,17 @@ function simularBracketAleatorio() {
       }
     });
   });
+  
   guardarBracket(bracket);
   renderBracket();
+  
+  const finalJugada = bracket['Final']?.[0];
+  if (finalJugada && finalJugada.estado === 'jugado') {
+    const campeon = finalJugada.golesLocal > finalJugada.golesVisitante 
+      ? finalJugada.local 
+      : finalJugada.visitante;
+    mostrarBannerCampeon(campeon);
+  }
 }
 
 function restablecerBracket() {

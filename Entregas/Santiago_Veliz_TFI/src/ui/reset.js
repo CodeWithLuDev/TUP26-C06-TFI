@@ -12,6 +12,7 @@ import { renderEstadisticas } from './renderEstadisticas.js';
 import { renderProde }     from './prode.js';
 import { initBracket }     from './bracket.js';
 import { poblarSelectPartidos } from './scoreForm.js';
+import { ocultarBannerCampeon } from './campeon.js';
 
 const LS_KEYS = [
   'mundial26_partidos',
