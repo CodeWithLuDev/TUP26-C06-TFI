@@ -1,0 +1,137 @@
+/* ============================================================
+   VARIABLES.CSS — Design Tokens · Fixture Mundial
+   ============================================================ */
+
+:root {
+  /* ── Brand Colors ── */
+  --color-primary:        #2563EB;
+  --color-primary-dark:   #1D4ED8;
+  --color-primary-light:  #3B82F6;
+  --color-primary-muted:  #DBEAFE;
+
+  --color-secondary:      #1E293B;
+  --color-secondary-dark: #0F172A;
+  --color-secondary-light:#334155;
+
+  --color-accent:         #06B6D4;
+  --color-accent-dark:    #0891B2;
+  --color-accent-light:   #67E8F9;
+  --color-accent-muted:   #CFFAFE;
+
+  --color-success:        #22C55E;
+  --color-success-dark:   #16A34A;
+  --color-success-muted:  #DCFCE7;
+
+  --color-warning:        #F59E0B;
+  --color-warning-dark:   #D97706;
+  --color-warning-muted:  #FEF3C7;
+
+  --color-danger:         #EF4444;
+  --color-danger-dark:    #DC2626;
+  --color-danger-muted:   #FEE2E2;
+
+  /* ── Neutrals ── */
+  --color-bg:             #F8FAFC;
+  --color-surface:        #FFFFFF;
+  --color-surface-alt:    #F1F5F9;
+  --color-border:         #E2E8F0;
+  --color-border-dark:    #CBD5E1;
+
+  --color-text:           #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-muted:     #94A3B8;
+  --color-text-inverse:   #FFFFFF;
+
+  /* ── Gradients ── */
+  --gradient-primary:     linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+  --gradient-dark:        linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+  --gradient-pitch:       linear-gradient(135deg, #166534 0%, #15803D 50%, #166534 100%);
+  --gradient-gold:        linear-gradient(135deg, #F59E0B 0%, #FCD34D 50%, #F59E0B 100%);
+
+  /* ── Typography ── */
+  --font-display:  'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-body:     'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:     'JetBrains Mono', 'Fira Code', monospace;
+
+  --text-xs:    0.75rem;
+  --text-sm:    0.875rem;
+  --text-base:  1rem;
+  --text-lg:    1.125rem;
+  --text-xl:    1.25rem;
+  --text-2xl:   1.5rem;
+  --text-3xl:   1.875rem;
+  --text-4xl:   2.25rem;
+
+  --weight-normal:  400;
+  --weight-medium:  500;
+  --weight-semibold:600;
+  --weight-bold:    700;
+  --weight-black:   900;
+
+  --leading-tight:  1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed:1.625;
+
+  /* ── Spacing ── */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* ── Borders ── */
+  --radius-sm:   0.25rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   0.75rem;
+  --radius-xl:   1rem;
+  --radius-2xl:  1.5rem;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-xs:  0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:  0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg:  0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+  --shadow-xl:  0 20px 25px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.04);
+  --shadow-2xl: 0 25px 50px rgba(0,0,0,0.25);
+  --shadow-inner:inset 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-glow:0 0 20px rgba(37,99,235,0.3);
+
+  /* ── Transitions ── */
+  --transition-fast:   150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow:   400ms ease;
+
+  /* ── Z-index ── */
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+
+  /* ── Layout ── */
+  --max-width:    1400px;
+  --nav-height:   64px;
+  --sidebar-width:260px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg:           #0F172A;
+    --color-surface:      #1E293B;
+    --color-surface-alt:  #1E293B;
+    --color-border:       #334155;
+    --color-border-dark:  #475569;
+    --color-text:         #F1F5F9;
+    --color-text-secondary:#94A3B8;
+    --color-text-muted:   #64748B;
+  }
+}

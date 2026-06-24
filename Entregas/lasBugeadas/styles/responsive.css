@@ -1,0 +1,140 @@
+/* ============================================================
+   RESPONSIVE.CSS — Mobile First · Fixture Mundial
+   ============================================================ */
+
+/* ── Mobile Base (< 640px) ── */
+@media (max-width: 639px) {
+  :root { --nav-height: 56px; }
+
+  .navbar {
+    padding: 0 var(--space-4);
+    gap: var(--space-4);
+  }
+
+  .navbar-subtitle { display: none; }
+  .navbar-title { font-size: var(--text-base); }
+
+  .nav-links {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-secondary-dark);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: var(--space-2) var(--space-4);
+    justify-content: space-around;
+    z-index: var(--z-sticky);
+    gap: 0;
+  }
+
+  .nav-link {
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--space-2);
+    font-size: 10px;
+    flex: 1;
+    justify-content: center;
+    border-radius: var(--radius-md);
+  }
+
+  .nav-link .nav-icon { font-size: 1.25rem; }
+
+  .nav-actions { display: none; }
+
+  body { padding-bottom: 68px; }
+
+  .page-header { padding: var(--space-8) var(--space-4); }
+  .page-title { font-size: var(--text-2xl); }
+
+  .container { padding: var(--space-4); }
+
+  .teams-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+  .team-card { padding: var(--space-4); }
+  .team-flag { font-size: 2rem; }
+
+  .groups-grid { grid-template-columns: 1fr; }
+
+  .match-card {
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--space-2);
+    padding: var(--space-3);
+  }
+
+  .match-team-flag { font-size: 1.5rem; }
+  .match-team-name { font-size: var(--text-xs); }
+
+  .summary-cards { grid-template-columns: repeat(2, 1fr); }
+
+  .stats-grid { grid-template-columns: 1fr; }
+
+  .score-inputs { gap: var(--space-2); }
+  .score-input { width: 64px; height: 64px; font-size: var(--text-2xl); }
+
+  .bracket-round { min-width: 170px; }
+
+  .scorer-entry { grid-template-columns: 1fr; }
+
+  .modal { border-radius: var(--radius-xl) var(--radius-xl) 0 0; max-height: 95vh; position: fixed; bottom: 0; left: 0; right: 0; }
+  .modal-overlay { align-items: flex-end; }
+
+  .filter-bar { gap: var(--space-2); }
+
+  #toast-container {
+    bottom: 76px;
+    right: var(--space-3);
+    left: var(--space-3);
+  }
+
+  .toast { min-width: unset; }
+
+  .data-table { font-size: var(--text-xs); }
+  .data-table th, .data-table td { padding: var(--space-2) var(--space-2); }
+  .table-team-name { max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+/* ── Small Tablet (640px – 767px) ── */
+@media (min-width: 640px) and (max-width: 767px) {
+  .teams-grid { grid-template-columns: repeat(3, 1fr); }
+  .groups-grid { grid-template-columns: 1fr; }
+  .summary-cards { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Tablet (768px – 1023px) ── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .teams-grid { grid-template-columns: repeat(4, 1fr); }
+  .groups-grid { grid-template-columns: 1fr; }
+  .summary-cards { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Desktop (1024px+) ── */
+@media (min-width: 1024px) {
+  .teams-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .groups-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Large Desktop (1280px+) ── */
+@media (min-width: 1280px) {
+  .teams-grid { grid-template-columns: repeat(8, 1fr); }
+  .summary-cards { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .team-card:hover { transform: none; }
+  .btn-primary:hover { transform: none; }
+}
+
+/* ── High Contrast ── */
+@media (prefers-contrast: high) {
+  .card { border-width: 2px; }
+  .btn { border: 2px solid currentColor; }
+  .data-table th, .data-table td { border: 1px solid var(--color-text); }
+}
