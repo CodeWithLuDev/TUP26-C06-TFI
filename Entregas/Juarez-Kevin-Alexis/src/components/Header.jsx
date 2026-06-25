@@ -6,6 +6,7 @@ import '../styles/header.css'
 function Header() {
   const { usuario, iniciarSesion, registrarse, cerrarSesion } = useAuth()
   const [panelAbierto, setPanelAbierto] = useState(false)
+  const [navAbierto, setNavAbierto] = useState(false)
   const [modo, setModo] = useState('login')
   const [form, setForm] = useState({ nombre: '', apellido: '', correo: '', contrasena: '' })
   const [error, setError] = useState('')
@@ -41,13 +42,21 @@ function Header() {
         </Link>
 
         <div className="header-right">
-          <nav className="header-nav">
-            <Link to="/">Inicio</Link>
-            <Link to="/grupos">Clasificatoria y Grupos</Link>
-            <Link to="/playoffs">Eliminatoria</Link>
-            <Link to="/equipos">Equipos</Link>
-            <Link to="/noticias">Noticias</Link>
-            {usuario?.rol === 'admin' && <Link to="/admin">Panel Admin</Link>}
+          <button
+            className={`header-menu-btn${navAbierto ? ' abierto' : ''}`}
+            onClick={() => setNavAbierto(!navAbierto)}
+            aria-label="Menú"
+          >
+            <span /><span /><span />
+          </button>
+
+          <nav className={`header-nav${navAbierto ? ' nav-abierto' : ''}`}>
+            <Link to="/" onClick={() => setNavAbierto(false)}>Inicio</Link>
+            <Link to="/grupos" onClick={() => setNavAbierto(false)}>Clasificatoria y Grupos</Link>
+            <Link to="/playoffs" onClick={() => setNavAbierto(false)}>Eliminatoria</Link>
+            <Link to="/equipos" onClick={() => setNavAbierto(false)}>Equipos</Link>
+            <Link to="/noticias" onClick={() => setNavAbierto(false)}>Noticias</Link>
+            {usuario?.rol === 'admin' && <Link to="/admin" onClick={() => setNavAbierto(false)}>Panel Admin</Link>}
           </nav>
 
           <button className="header-user-btn" onClick={() => setPanelAbierto(!panelAbierto)}>
@@ -61,19 +70,23 @@ function Header() {
       </header>
 
       {panelAbierto && usuario && (
-        <div className="auth-panel">
-          <p className="auth-bienvenida">Hola, <strong>{usuario.nombre}</strong></p>
-          <p className="auth-rol">{usuario.rol === 'admin' ? '🔧 Administrador' : '👤 Usuario'}</p>
-          <button
-            className="auth-submit auth-pred-btn"
-            onClick={() => { navigate('/predicciones'); setPanelAbierto(false) }}
-          >
-             Mis predicciones
-          </button>
-          <button className="auth-submit auth-logout-btn" onClick={() => { cerrarSesion(); setPanelAbierto(false) }}>
-            Cerrar sesión
-          </button>
-        </div>
+        <>
+          <div className="auth-panel-overlay" onClick={() => setPanelAbierto(false)} />
+          <div className="auth-panel">
+            <button className="auth-panel-cerrar" onClick={() => setPanelAbierto(false)}>✕</button>
+            <p className="auth-bienvenida">Hola, <strong>{usuario.nombre}</strong></p>
+            <p className="auth-rol">{usuario.rol === 'admin' ? '🔧 Administrador' : '👤 Usuario'}</p>
+            <button
+              className="auth-submit auth-pred-btn"
+              onClick={() => { navigate('/predicciones'); setPanelAbierto(false) }}
+            >
+               Mis predicciones
+            </button>
+            <button className="auth-submit auth-logout-btn" onClick={() => { cerrarSesion(); setPanelAbierto(false) }}>
+              Cerrar sesión
+            </button>
+          </div>
+        </>
       )}
 
       {panelAbierto && !usuario && (

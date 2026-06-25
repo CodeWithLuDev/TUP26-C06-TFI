@@ -426,3 +426,68 @@
 .proximo-card .proximo-equipo { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; font-size: 0.9rem; font-weight: 700; }
 .proximo-card .vs { color: var(--rojo); font-size: 1rem; font-weight: 800; }
 .proximo-card .proximo-hora { color: rgba(255,255,255,0.75); font-size: 0.85rem; font-weight: 600; margin-top: 0.5rem; }
+
+/* ══════════════════════════════
+   RESPONSIVE — inicio.css
+   ══════════════════════════════ */
+
+@media (max-width: 700px) {
+  /* Hero apila verticalmente */
+  .hero {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem 1rem 1rem;
+    min-height: unset;
+  }
+
+  .hero-texto h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  .hero-sub {
+    font-size: 0.9rem;
+  }
+
+  .hero-proximos {
+    min-width: unset;
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-left: 0;
+    padding-top: 1rem;
+  }
+
+  /* Grid de últimos resultados: minmax más chico */
+  .ultimos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Sedes en columna */
+  .sedes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Próximos partidos en columna */
+  .proximos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .seccion-titulo {
+    font-size: 1.2rem;
+  }
+
+  .ultimo-card {
+    padding: 1rem;
+  }
+
+  .resultado-marcador {
+    font-size: 2rem;
+  }
+
+  .proximo-card {
+    padding: 1rem 1rem;
+  }
+}

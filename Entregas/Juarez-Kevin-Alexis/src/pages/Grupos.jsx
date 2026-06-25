@@ -67,11 +67,11 @@ function TablaGrupo({ grupo, partidos }) {
             <th>#</th>
             <th>Equipo</th>
             <th>PJ</th>
-            <th>G</th>
-            <th>E</th>
-            <th>P</th>
-            <th>GF</th>
-            <th>GC</th>
+            <th className="col-g">G</th>
+            <th className="col-e">E</th>
+            <th className="col-p">P</th>
+            <th className="col-gf">GF</th>
+            <th className="col-gc">GC</th>
             <th>DG</th>
             <th className="col-pts">Pts</th>
             <th className="col-ultimos">Últimos 5</th>
@@ -86,11 +86,11 @@ function TablaGrupo({ grupo, partidos }) {
                 <span>{eq.nombre}</span>
               </td>
               <td>{eq.PJ}</td>
-              <td>{eq.PG}</td>
-              <td>{eq.PE}</td>
-              <td>{eq.PP}</td>
-              <td>{eq.GF}</td>
-              <td>{eq.GC}</td>
+              <td className="col-g">{eq.PG}</td>
+              <td className="col-e">{eq.PE}</td>
+              <td className="col-p">{eq.PP}</td>
+              <td className="col-gf">{eq.GF}</td>
+              <td className="col-gc">{eq.GC}</td>
               <td>{eq.DG > 0 ? `+${eq.DG}` : eq.DG}</td>
               <td className="pts col-pts">{eq.PTS}</td>
               <td className="col-ultimos">

@@ -1,4 +1,14 @@
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
+
+function useIsMobile(bp = 600) {
+  const [mobile, setMobile] = useState(() => window.innerWidth < bp)
+  useEffect(() => {
+    const fn = () => setMobile(window.innerWidth < bp)
+    window.addEventListener('resize', fn)
+    return () => window.removeEventListener('resize', fn)
+  }, [bp])
+  return mobile
+}
 import * as Flags from 'country-flag-icons/react/3x2'
 import { useAuth } from '../context/AuthContext'
 import { useTorneo } from '../context/TorneoContext'
@@ -84,6 +94,7 @@ function FormularioGol({ golLocal, golVisitante, onAgregar, onQuitar, goles }) {
 }
 
 function FilaPartido({ partido, onCargar, onBorrar, onGuardarFecha, onToggleEnVivo, onGuardarGoles }) {
+  const isMobile = useIsMobile()
   const [editando, setEditando] = useState(false)
   const [golLocal, setGolLocal] = useState(partido.resultado?.local ?? 0)
   const [golVisitante, setGolVisitante] = useState(partido.resultado?.visitante ?? 0)
@@ -129,7 +140,7 @@ function FilaPartido({ partido, onCargar, onBorrar, onGuardarFecha, onToggleEnVi
         style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', cursor: 'pointer', width: '100%', background: 'none', border: 'none', textAlign: 'left', fontFamily: 'inherit', color: 'inherit' }}
       >
         <span style={{ width: 7, height: 7, borderRadius: '50%', background: cargado ? '#2ecc71' : 'rgba(192,57,43,0.7)', flexShrink: 0, display: 'block' }} />
-        <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'rgba(255,255,255,0.3)', fontWeight: 700, width: 110, flexShrink: 0 }}>
+        <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'rgba(255,255,255,0.3)', fontWeight: 700, width: isMobile ? 0 : 110, flexShrink: 0, overflow: 'hidden', display: isMobile ? 'none' : 'block' }}>
           {partido.fase}
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.85)', minWidth: 0 }}>
@@ -214,17 +225,21 @@ function FilaPartido({ partido, onCargar, onBorrar, onGuardarFecha, onToggleEnVi
           )}
 
           {/* Scoreboard */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24, background: '#020810', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: '16px 20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, justifyContent: 'flex-end' }}>
-              <Bandera codigo={partido.codigoLocal} size={26} />
-              <span style={{ fontWeight: 700, color: 'rgba(255,255,255,0.85)', fontSize: 14 }}>{partido.local}</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: isMobile ? 8 : 24, background: '#020810', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: isMobile ? '12px 10px' : '16px 20px', flexDirection: isMobile ? 'column' : 'row' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: isMobile ? 'unset' : 1, justifyContent: isMobile ? 'space-between' : 'flex-end', width: isMobile ? '100%' : 'auto' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Bandera codigo={partido.codigoLocal} size={26} />
+                <span style={{ fontWeight: 700, color: 'rgba(255,255,255,0.85)', fontSize: 14 }}>{partido.local}</span>
+              </div>
               <Stepper valor={golLocal} onChange={setGolLocal} />
             </div>
-            <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: 22, fontWeight: 300 }}>:</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, justifyContent: 'flex-start' }}>
+            {!isMobile && <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: 22, fontWeight: 300 }}>:</span>}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: isMobile ? 'unset' : 1, justifyContent: isMobile ? 'space-between' : 'flex-start', width: isMobile ? '100%' : 'auto', flexDirection: isMobile ? 'row-reverse' : 'row' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Bandera codigo={partido.codigoVisitante} size={26} />
+                <span style={{ fontWeight: 700, color: 'rgba(255,255,255,0.85)', fontSize: 14 }}>{partido.visitante}</span>
+              </div>
               <Stepper valor={golVisitante} onChange={setGolVisitante} />
-              <span style={{ fontWeight: 700, color: 'rgba(255,255,255,0.85)', fontSize: 14 }}>{partido.visitante}</span>
-              <Bandera codigo={partido.codigoVisitante} size={26} />
             </div>
           </div>
 
@@ -285,7 +300,7 @@ function FilaPartido({ partido, onCargar, onBorrar, onGuardarFecha, onToggleEnVi
 function BotonHerramienta({ onClick, color, children, disabled }) {
   return (
     <button type="button" onClick={onClick} disabled={disabled}
-      style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 10, fontWeight: 700, fontSize: 13.5, cursor: disabled ? 'not-allowed' : 'pointer', fontFamily: 'inherit', border: `1px solid ${color}55`, background: `${color}1a`, color, transition: 'filter 0.15s', opacity: disabled ? 0.5 : 1 }}
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '10px 18px', borderRadius: 10, fontWeight: 700, fontSize: 13.5, cursor: disabled ? 'not-allowed' : 'pointer', fontFamily: 'inherit', border: `1px solid ${color}55`, background: `${color}1a`, color, transition: 'filter 0.15s', opacity: disabled ? 0.5 : 1, flex: 1 }}
       onMouseEnter={e => { if (!disabled) e.currentTarget.style.filter = 'brightness(1.25)' }}
       onMouseLeave={e => { e.currentTarget.style.filter = 'none' }}
     >{children}</button>
@@ -326,6 +341,7 @@ function TabPill({ label, activo, onClick, count, countCargado }) {
 
 export default function PanelAdmin() {
   const { usuario } = useAuth()
+  const isMobile = useIsMobile()
   const { partidos, cargarResultado, borrarResultado, guardarFecha, guardarGoles, toggleEnVivo, reiniciarTorneo, generarTorneoAleatorio, exportarTorneo, importarTorneo } = useTorneo()
   const [filtroPrincipal, setFiltroPrincipal] = useState('Grupos')
   const [grupoActivo, setGrupoActivo]         = useState('A')
@@ -393,24 +409,24 @@ export default function PanelAdmin() {
 
   return (
     <div style={{
-      maxWidth: 1000, margin: '2.5rem auto 4rem', padding: '2.5rem 2rem 3rem',
+      maxWidth: 1000, margin: isMobile ? '1rem auto 3rem' : '2.5rem auto 4rem', padding: isMobile ? '1.2rem 0.75rem 2rem' : '2.5rem 2rem 3rem',
       background: 'rgba(8,18,34,0.94)', border: '1px solid rgba(255,255,255,0.08)',
       borderRadius: 22, boxShadow: '0 20px 60px rgba(0,0,0,0.45)',
     }}>
 
       {/* Encabezado */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, marginBottom: 28, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, marginBottom: 28, flexWrap: 'wrap', flexDirection: isMobile ? 'column' : 'row' }}>
         <div>
           <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#c0392b', display: 'block', marginBottom: 6 }}>Sala de control · Mundial 2026</span>
           <h1 style={{ color: '#fff', fontSize: 28, fontWeight: 800, margin: 0, letterSpacing: '-0.5px' }}>Panel de Administración</h1>
           <p style={{ color: 'rgba(255,255,255,0.45)', marginTop: 6, fontSize: 14 }}>Cargá resultados. Tablas, bracket y estadísticas se actualizan solos.</p>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 5, minWidth: 160 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: isMobile ? 'flex-start' : 'flex-end', gap: 5, minWidth: isMobile ? '100%' : 160 }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
             <strong style={{ fontSize: 28, fontWeight: 800, color: '#fff', lineHeight: 1 }}>{totalCargados}</strong>
             <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)' }}>/ {partidos.length}</span>
           </div>
-          <div style={{ width: 160, height: 5, background: 'rgba(255,255,255,0.08)', borderRadius: 99, overflow: 'hidden' }}>
+          <div style={{ width: isMobile ? '100%' : 160, height: 5, background: 'rgba(255,255,255,0.08)', borderRadius: 99, overflow: 'hidden' }}>
             <div style={{ width: `${pct}%`, height: '100%', background: '#2ecc71', borderRadius: 99, transition: 'width 0.4s', minWidth: pct > 0 ? 4 : 0 }} />
           </div>
           <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>partidos cargados</span>
@@ -418,14 +434,14 @@ export default function PanelAdmin() {
       </div>
 
       {/* Herramientas */}
-      <div style={{ display: 'flex', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap', flexDirection: isMobile ? 'column' : 'row' }}>
         <BotonHerramienta onClick={manejarAleatorio} color="#9b59b6">🎲 Aleatorio</BotonHerramienta>
         <BotonHerramienta onClick={exportarTorneo} color="#2ecc71">⬇ Exportar</BotonHerramienta>
         <BotonHerramienta onClick={() => inputArchivoRef.current?.click()} color="#3498db">⬆ Importar</BotonHerramienta>
         <input ref={inputArchivoRef} type="file" accept="application/json" onChange={manejarArchivoSeleccionado} style={{ display: 'none' }} />
         <button
           onClick={() => confirm('¿Reiniciar todos los resultados?') && reiniciarTorneo()}
-          style={{ marginLeft: 'auto', padding: '10px 16px', borderRadius: 10, fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', background: 'none', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.35)', transition: 'all 0.15s' }}
+          style={{ marginLeft: isMobile ? 0 : 'auto', padding: '10px 16px', width: isMobile ? '100%' : 'auto', borderRadius: 10, fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', background: 'none', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.35)', transition: 'all 0.15s' }}
           onMouseEnter={e => { e.currentTarget.style.color = '#e74c3c'; e.currentTarget.style.borderColor = 'rgba(192,57,43,0.5)' }}
           onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.35)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
         >↺ Reiniciar</button>
@@ -454,31 +470,49 @@ export default function PanelAdmin() {
 
       {/* ── Sub-tabs según filtro principal ── */}
       {filtroPrincipal === 'Grupos' ? (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20, padding: '12px 14px', background: 'rgba(255,255,255,0.055)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.12)' }}>
-          <span style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.25)', width: '100%', marginBottom: 4 }}>Seleccionar grupo</span>
-          {GRUPOS_TABS.map(g => (
-            <TabPill
-              key={g} label={`Grupo ${g}`} activo={grupoActivo === g}
-              onClick={() => setGrupoActivo(g)}
-              count={statsPorGrupo[g]?.total}
-              countCargado={statsPorGrupo[g]?.cargados}
-            />
-          ))}
+        <div style={{ marginBottom: 20, padding: '12px 14px', background: 'rgba(255,255,255,0.055)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.12)' }}>
+          <span style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.25)', display: 'block', marginBottom: 8 }}>Seleccionar grupo</span>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(3, 1fr)' : 'repeat(6, 1fr)', gap: 6 }}>
+            {GRUPOS_TABS.map(g => (
+              <button key={g} onClick={() => setGrupoActivo(g)}
+                style={{
+                  padding: '7px 4px', borderRadius: 8, fontWeight: 700, fontSize: isMobile ? 11 : 12,
+                  cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s', textAlign: 'center',
+                  background: grupoActivo === g ? '#c0392b' : 'rgba(255,255,255,0.05)',
+                  border: grupoActivo === g ? '1px solid #c0392b' : '1px solid rgba(255,255,255,0.1)',
+                  color: grupoActivo === g ? '#fff' : 'rgba(255,255,255,0.6)',
+                }}
+              >
+                <div>Gr. {g}</div>
+                <div style={{ fontSize: 9, fontWeight: 800, color: grupoActivo === g ? 'rgba(255,255,255,0.75)' : (statsPorGrupo[g]?.cargados === statsPorGrupo[g]?.total ? '#2ecc71' : 'rgba(255,255,255,0.35)'), marginTop: 2 }}>
+                  {statsPorGrupo[g]?.cargados}/{statsPorGrupo[g]?.total}
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20, padding: '12px 14px', background: 'rgba(255,255,255,0.055)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.12)' }}>
-          <span style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.25)', width: '100%', marginBottom: 4 }}>Fase eliminatoria</span>
-          {PLAYOFFS_TABS.map(fase => {
-            const s = statsPorPlayoff[fase]
-            return (
-              <TabPill
-                key={fase} label={fase} activo={playoffActivo === fase}
-                onClick={() => setPlayoffActivo(fase)}
-                count={s?.total || undefined}
-                countCargado={s?.cargados || 0}
-              />
-            )
-          })}
+        <div style={{ marginBottom: 20, padding: '12px 14px', background: 'rgba(255,255,255,0.055)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.12)' }}>
+          <span style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.25)', display: 'block', marginBottom: 8 }}>Fase eliminatoria</span>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)', gap: 6 }}>
+            {PLAYOFFS_TABS.map(fase => {
+              const s = statsPorPlayoff[fase]
+              return (
+                <button key={fase} onClick={() => setPlayoffActivo(fase)}
+                  style={{
+                    padding: '8px 6px', borderRadius: 8, fontWeight: 700, fontSize: isMobile ? 10 : 12,
+                    cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s', textAlign: 'center',
+                    background: playoffActivo === fase ? '#c0392b' : 'rgba(255,255,255,0.05)',
+                    border: playoffActivo === fase ? '1px solid #c0392b' : '1px solid rgba(255,255,255,0.1)',
+                    color: playoffActivo === fase ? '#fff' : 'rgba(255,255,255,0.6)',
+                  }}
+                >
+                  <div>{fase}</div>
+                  {s?.total > 0 && <div style={{ fontSize: 9, color: playoffActivo === fase ? 'rgba(255,255,255,0.75)' : (s.cargados === s.total ? '#2ecc71' : 'rgba(255,255,255,0.35)'), marginTop: 2 }}>{s.cargados}/{s.total}</div>}
+                </button>
+              )
+            })}
+          </div>
         </div>
       )}
 

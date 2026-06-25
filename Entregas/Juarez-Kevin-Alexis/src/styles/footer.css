@@ -137,3 +137,33 @@
   background: #25d366;
   color: #fff;
 }
+
+/* ══════════════════════════════
+   RESPONSIVE — footer.css
+   ══════════════════════════════ */
+
+@media (max-width: 600px) {
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 1.2rem 1rem;
+  }
+
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .footer-right {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer img {
+    display: none;
+  }
+}

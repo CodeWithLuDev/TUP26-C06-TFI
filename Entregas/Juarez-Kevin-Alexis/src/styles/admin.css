@@ -604,3 +604,50 @@
     display: none;
   }
 }
+
+/* ══════════════════════════════
+   RESPONSIVE — admin.css
+   ══════════════════════════════ */
+
+@media (max-width: 600px) {
+  /* Scoreboard: achica gap y permite wrap de nombres */
+  .scoreboard {
+    gap: 0.8rem;
+    padding: 1rem;
+  }
+
+  .scoreboard-nombre {
+    white-space: normal;
+    text-align: center;
+    font-size: 0.82rem;
+  }
+
+  .scoreboard-equipo {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  /* Stepper más compacto */
+  .stepper-btn {
+    width: 28px;
+    height: 38px;
+  }
+
+  .stepper-input {
+    width: 40px;
+    font-size: 1.2rem;
+  }
+
+  /* Panel admin general */
+  .admin-container {
+    padding: 0 0.5rem;
+  }
+
+  .admin-acciones {
+    flex-direction: column;
+  }
+
+  .admin-acciones button {
+    width: 100%;
+  }
+}

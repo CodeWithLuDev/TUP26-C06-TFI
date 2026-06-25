@@ -295,3 +295,146 @@
   font-weight: 400;
   margin-left: 3px;
 }
+
+/* ── Botón hamburguesa (solo mobile) ── */
+.header-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--blanco);
+  cursor: pointer;
+  padding: 0.3rem;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-menu-btn span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--blanco);
+  border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+}
+
+.header-menu-btn.abierto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.header-menu-btn.abierto span:nth-child(2) { opacity: 0; }
+.header-menu-btn.abierto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .header {
+    flex-wrap: wrap;
+    padding: 0.7rem 1rem;
+    gap: 0;
+  }
+
+  .header-menu-btn {
+    display: flex;
+  }
+
+  .header-right {
+    gap: 0.6rem;
+  }
+
+  /* Ocultar próximos partidos en mobile (demasiado para el header) */
+  .header-proximos {
+    display: none;
+  }
+
+  /* Nav colapsa debajo del header */
+  .header-nav {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    order: 3;
+    padding: 0.4rem 0 0.6rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 0.5rem;
+  }
+
+  .header-nav.nav-abierto {
+    display: flex;
+  }
+
+  .header-nav a {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    white-space: normal;
+  }
+
+  .header-nav a:last-child {
+    border-bottom: none;
+  }
+
+  /* Panel auth: ocupa pantalla completa en mobile */
+  .auth-panel {
+    right: 0.5rem;
+    left: 0.5rem;
+    width: auto;
+    top: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-titulo-anio {
+    font-size: 1.2rem;
+  }
+
+  .header-logo img {
+    height: 42px;
+  }
+}
+
+/* Ocultar botón de perfil cuando el nav móvil está abierto */
+@media (max-width: 768px) {
+  .header-right:has(.nav-abierto) .header-user-btn {
+    display: none;
+  }
+}
+
+/* ── Panel usuario: overlay para cerrar al tocar afuera ── */
+.auth-panel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+}
+
+.auth-panel-cerrar {
+  display: none;
+  position: absolute;
+  top: 0.6rem;
+  right: 0.8rem;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+}
+
+@media (max-width: 768px) {
+  .auth-panel {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    padding: 1.5rem 1.2rem 2rem;
+    z-index: 200;
+  }
+
+  .auth-panel-cerrar {
+    display: block;
+  }
+
+  .auth-panel-overlay {
+    background: rgba(0,0,0,0.5);
+  }
+}
