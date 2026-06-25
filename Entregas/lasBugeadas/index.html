@@ -13,6 +13,43 @@
 <body>
 
 <!-- ══════════════════════════════════════
+     PANTALLA DE BIENVENIDA
+══════════════════════════════════════ -->
+<div id="welcome-screen">
+  <div class="welcome-card">
+
+    <span class="welcome-ball">⚽</span>
+
+    <h1 class="welcome-title">
+      Bienvenido al<br><span>Fixture Mundial</span>
+    </h1>
+    <p class="welcome-subtitle">Qatar 2022 · Programación III</p>
+
+    <p class="welcome-greeting">¿Cuál es tu nombre?</p>
+
+    <div class="welcome-input-wrap">
+      <span class="welcome-input-icon">👤</span>
+      <input
+        type="text"
+        id="welcome-name-input"
+        class="welcome-input"
+        placeholder="Ingresá tu nombre..."
+        maxlength="30"
+        autocomplete="off"
+        autocapitalize="words"
+      />
+    </div>
+    <p class="welcome-error-msg" id="welcome-error">Por favor ingresá tu nombre para continuar.</p>
+
+    <button class="welcome-btn" id="welcome-btn" onclick="ingresarAlFixture()">
+      Ingresar al Fixture ⚽
+    </button>
+
+    <p class="welcome-footer">TECNICATURA EN PROGRAMACIÓN</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
      LOADING SCREEN
 ══════════════════════════════════════ -->
 <div id="loading-screen">
@@ -63,6 +100,12 @@
       <button class="btn-reset-data" id="btn-reset-data" title="Resetear todos los datos">
         🗑️ Resetear
       </button>
+    </div>
+
+    <!-- Usuario logueado -->
+    <div id="navbar-user" style="display:none">
+      <div id="navbar-user-avatar">?</div>
+      <span id="navbar-user-name"></span>
     </div>
   </nav>
 
