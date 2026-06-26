@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mundial United States|Canada|Mexico 2026 — Fixture en Tiempo Real</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <div id="welcome-overlay" class="welcome-overlay">
+    <div class="welcome-backdrop"></div>
+    <div class="welcome-content">
+      <img src="img/mesi levantado la copa.jpg" alt="Mundial 2026" class="welcome-logo">
+      <h1 class="welcome-title">Bienvenido al Mundial 2026</h1>
+      <p class="welcome-subtitle">United States · Canada · Mexico</p>
+      <p class="welcome-hint">Hacé clic para comenzar</p>
+    </div>
+  </div>
+  <header class="app-header">
+    <div class="header-content">
+      <div class="header-logo">
+        <img src="img/logo chico.jpg" alt="Logo del Mundial">
+      </div>
+      <div class="header-text">
+        <h1>Mundial United States|Canada|Mexico 2026</h1>
+        <p>Fixture en Tiempo Real</p>
+      </div>
+    </div>
+    <nav class="tabs-nav">
+      <button class="tab-btn activa" data-tab="inicio"> Inicio</button>
+      <button class="tab-btn" data-tab="equipos"> Equipos</button>
+      <button class="tab-btn" data-tab="fixture"> Fixture</button>
+      <button class="tab-btn" data-tab="grupos"> Grupos</button>
+      <button class="tab-btn" data-tab="bracket"> Bracket</button>
+      <button class="tab-btn" data-tab="estadisticas"> Estadísticas</button>
+    </nav>
+    <button id="btn-reset" class="btn-reset" title="Borrar todos los resultados">↺ Reset</button>
+  </header>
+
+  <main class="app-main">
+    <section id="seccion-inicio"        class="seccion"></section>
+    <section id="seccion-equipos"      class="seccion oculto"></section>
+    <section id="seccion-fixture"      class="seccion oculto"></section>
+    <section id="seccion-grupos"       class="seccion oculto"></section>
+    <section id="seccion-bracket"      class="seccion oculto"></section>
+    <section id="seccion-estadisticas" class="seccion oculto"></section>
+  </main>
+
+  <footer class="app-footer">
+    <span>Datos zona horaria: UTC−3 (Argentina)</span>
+    <span>Programación III · Tecnicatura en Programación</span>
+  </footer>
+
+  <audio id="player-audio" preload="auto"></audio>
+
+  <div id="player-bar" class="player-bar oculto">
+    <div class="player-info">
+      <span class="player-icon">♫</span>
+      <span id="player-track" class="player-track">welcome.mp3</span>
+    </div>
+    <div class="player-controls">
+      <button id="player-prev" class="player-btn" title="Anterior">⏮</button>
+      <button id="player-rewind" class="player-btn" title="Retroceder 10s">⏪</button>
+      <button id="player-play" class="player-btn" title="Reproducir/Pausar">▶</button>
+      <button id="player-forward" class="player-btn" title="Adelantar 10s">⏩</button>
+      <button id="player-next" class="player-btn" title="Siguiente">⏭</button>
+      <input type="range" id="player-progress" class="player-progress" min="0" max="100" value="0">
+      <span id="player-time" class="player-time">0:00</span>
+    </div>
+    <div class="player-volume">
+      <input type="range" id="player-volume" class="player-volume-slider" min="0" max="1" step="0.05" value="0.5">
+    </div>
+    <button id="player-close" class="player-btn player-close" title="Cerrar reproductor">✕</button>
+  </div>
+
+  <!-- ES Modules: no necesita bundler -->
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
