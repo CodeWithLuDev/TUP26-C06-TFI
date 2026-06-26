@@ -324,6 +324,12 @@ function mostrarNombreEnNavbar(nombre) {
   navUser.style.display = 'flex';
 }
 
+function cerrarSesion() {
+  if (!confirm('¿Querés cerrar sesión? Los resultados no se borrarán.')) return;
+  localStorage.removeItem('mundial_usuario');
+  window.location.reload();
+}
+
 // Ejecutar al cargar
 document.addEventListener('DOMContentLoaded', () => {
   iniciarBienvenida();

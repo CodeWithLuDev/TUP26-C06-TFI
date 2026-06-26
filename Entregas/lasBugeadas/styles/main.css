@@ -1118,7 +1118,7 @@ ul, ol { list-style: none; }
 
 .match-team-flag { font-size: 2rem; line-height: 1; }
 
-.match-team-info { }
+
 
 .match-team-name {
   font-size: var(--text-sm);
@@ -1212,7 +1212,6 @@ ul, ol { list-style: none; }
   background: var(--color-surface-alt);
   color: var(--color-text);
   transition: all var(--transition-fast);
-  -moz-appearance: textfield;
 }
 
 .score-input::-webkit-inner-spin-button,

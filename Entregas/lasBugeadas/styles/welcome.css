@@ -241,3 +241,65 @@
   .welcome-title { font-size: var(--text-2xl); }
   #navbar-user-name { display: none; }
 }
+
+#btn-cerrar-sesion {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid rgba(239, 68, 68, 0.35);
+  background: transparent;
+  color: #EF4444;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  font-family: var(--font-body);
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  margin-left: var(--space-3);
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+#btn-cerrar-sesion::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+#btn-cerrar-sesion span,
+#btn-cerrar-sesion i {
+  position: relative;
+  z-index: 1;
+}
+
+#btn-cerrar-sesion:hover {
+  border-color: #EF4444;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+}
+
+#btn-cerrar-sesion:hover::before { opacity: 1; }
+
+#btn-cerrar-sesion:active {
+  transform: scale(0.97);
+  box-shadow: none;
+}
+
+#btn-cerrar-sesion i {
+  font-size: 15px;
+  transition: transform 200ms ease;
+}
+
+#btn-cerrar-sesion:hover i { transform: translateX(2px); }
+
+@media (max-width: 639px) {
+  #btn-cerrar-sesion span { display: none; }
+  #btn-cerrar-sesion { padding: 7px 10px; margin-left: var(--space-2); }
+}
